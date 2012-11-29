@@ -4,18 +4,41 @@
 	<groupId>org.moten.david</groupId>
 	<artifactId>log-analysis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<description>Parses log lines and persists to orientdb</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>13.0.1</version>
 		</dependency>
+		
+		<!-- orientdb dependencies -->
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orient-commons</artifactId>
+			<version>1.0rc8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-core</artifactId>
+			<version>1.0rc8</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		
+		<!--  test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+
+		
 	</dependencies>
 	<build>
 		<plugins>

@@ -11,12 +11,21 @@ import com.google.common.collect.Maps;
 
 public class LogParser {
 
+	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 	private final Pattern pattern = Pattern
 			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +- (.*)$");
-	private final DateFormat df = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss.SSS Z");
+	private final DateFormat df = new SimpleDateFormat(DATE_FORMAT + " Z");
 
-	public LogEntry parse(String line) {
+	/**
+	 * Returns the parsed line as a {@link LogEntry}. Note that this method is
+	 * synchronized because the {@link DateFormat} object used by it is not
+	 * thread-safe. However, you can safely instantiate multiple
+	 * {@link LogParser} objects and use them concurrently.
+	 * 
+	 * @param line
+	 * @return
+	 */
+	public synchronized LogEntry parse(String line) {
 		if (line == null)
 			return null;
 		else {
