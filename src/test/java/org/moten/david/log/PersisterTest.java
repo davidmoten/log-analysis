@@ -12,7 +12,7 @@ import com.google.common.collect.Maps;
 public class PersisterTest {
 
 	@Test
-	public void testCreateDbAndPersitRecords() {
+	public void testCreateDbAndPersistRecords() {
 		Persister p = new Persister("test1");
 		long t = 0;
 		for (int i = 1; i <= 1000; i++) {
