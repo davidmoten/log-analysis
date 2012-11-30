@@ -13,7 +13,7 @@ public class PersisterTest {
 
 	@Test
 	public void testCreateDbAndPersitRecords() {
-		Persister p = new Persister("test1");
+		Database p = new Database("test1");
 		long t = 0;
 		for (int i = 1; i <= 1000; i++) {
 			Map<String, String> map = Maps.newHashMap();
@@ -28,7 +28,7 @@ public class PersisterTest {
 
 		final String lineMessage = " INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor - fixes queue size = 0";
 		System.out.println("creating database");
-		Persister p = new Persister("test2");
+		Database p = new Database("test2");
 		LogParser parser = new LogParser();
 		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT);
 
@@ -45,7 +45,7 @@ public class PersisterTest {
 		System.out.println("rate=" + (1000 * n2 / ms) + " lines/s");
 	}
 
-	private void persistMessages(final String lineMessage, Persister p,
+	private void persistMessages(final String lineMessage, Database p,
 			LogParser parser, DateFormat df, long n) {
 		for (int i = 1; i <= n; i++) {
 			long t = System.currentTimeMillis() + i;
