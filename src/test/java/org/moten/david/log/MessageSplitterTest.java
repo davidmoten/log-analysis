@@ -1,7 +1,6 @@
 package org.moten.david.log;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.Map;
 
@@ -12,19 +11,19 @@ public class MessageSplitterTest {
 	@Test
 	public void testReturnsNullGivenNull() {
 		MessageSplitter m = new MessageSplitter();
-		assertNull(m.split(null));
+		assertEquals(0, m.split(null).size());
 	}
 
 	@Test
 	public void testReturnsNullGivenBlank() {
 		MessageSplitter m = new MessageSplitter();
-		assertNull(m.split(""));
+		assertEquals(0, m.split("").size());
 	}
 
 	@Test
 	public void testReturnsNullGivenTextWithoutEquals() {
 		MessageSplitter m = new MessageSplitter();
-		assertNull(m.split("abc def"));
+		assertEquals(0, m.split("abc def").size());
 	}
 
 	@Test

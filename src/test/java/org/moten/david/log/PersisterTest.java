@@ -13,7 +13,7 @@ public class PersisterTest {
 
 	@Test
 	public void testCreateDbAndPersistRecords() {
-		Persister p = new Persister("test1");
+		Database p = new Database("test1");
 		long t = 0;
 		for (int i = 1; i <= 1000; i++) {
 			Map<String, String> map = Maps.newHashMap();

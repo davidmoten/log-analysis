@@ -19,7 +19,7 @@ public class OrientDbMain {
 		OGlobalConfiguration.TX_USE_LOG.setValue(false);
 		OGlobalConfiguration.TX_COMMIT_SYNCH.setValue(true);
 		OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(false);
-		OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
+		// OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
 		OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
 
 		String sessionId = "session";// "session-" + (int) (Math.random() *
