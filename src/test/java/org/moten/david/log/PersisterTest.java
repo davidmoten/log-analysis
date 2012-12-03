@@ -43,6 +43,7 @@ public class PersisterTest {
 		long ms = System.currentTimeMillis() - timer;
 		System.out.println("done in " + ms + "ms");
 		System.out.println("rate=" + (1000 * n2 / ms) + " lines/s");
+		p.execute(null);
 	}
 
 	private void persistMessages(final String lineMessage, Database p,
@@ -52,5 +53,6 @@ public class PersisterTest {
 			LogEntry entry = parser.parse(df.format(new Date(t)) + lineMessage);
 			p.persist(entry);
 		}
+
 	}
 }

@@ -2,6 +2,7 @@ package org.moten.david.log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
@@ -12,11 +13,15 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.core.storage.OStorage;
 
 public class Database {
 
-	private static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
+	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
+	private static final String TABLE_ENTRY = "Entry";
+
+	private final ODatabaseDocumentTx db;
 
 	public Database(String name) {
 		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
@@ -34,12 +39,14 @@ public class Database {
 		String workingDirectory = System.getProperty("user.dir");
 		String url = "local:" + workingDirectory + "/target/" + name;
 		System.out.println(url);
-		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).create();
+		db = new ODatabaseDocumentTx(url).create();
 		OClass user = db
 				.getMetadata()
 				.getSchema()
-				.createClass("Entry",
-						db.addCluster("entry", OStorage.CLUSTER_TYPE.PHYSICAL));
+				.createClass(
+						TABLE_ENTRY,
+						db.addCluster(TABLE_ENTRY,
+								OStorage.CLUSTER_TYPE.PHYSICAL));
 		user.createProperty(FIELD_LOG_TIMESTAMP, OType.LONG).setMandatory(true);
 
 		db.getMetadata().getSchema().save();
@@ -49,7 +56,7 @@ public class Database {
 	}
 
 	public void persist(LogEntry entry) {
-		ODocument d = new ODocument("Message");
+		ODocument d = new ODocument(TABLE_ENTRY);
 		d.field(FIELD_LOG_TIMESTAMP, entry.getTime());
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null)
@@ -59,7 +66,13 @@ public class Database {
 	}
 
 	public Iterable<Double> execute(NumericQuery query) {
-
+		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
+				"select count(logTimestamp) from Entry "
+		// + Database.FIELD_LOG_TIMESTAMP
+		// + " > " + 0 + " limit 20"
+		);
+		List<ODocument> result = db.query(sqlQuery);
+		System.out.println(result);
 		return null;
 	}
 }
