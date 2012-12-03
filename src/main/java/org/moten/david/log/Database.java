@@ -66,13 +66,12 @@ public class Database {
 	}
 
 	public Iterable<Double> execute(NumericQuery query) {
+		System.out.println(query);
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
-				"select count(logTimestamp) from Entry "
-		// + Database.FIELD_LOG_TIMESTAMP
-		// + " > " + 0 + " limit 20"
-		);
+				query.getSql());
 		List<ODocument> result = db.query(sqlQuery);
-		System.out.println(result);
+		for (ODocument doc : result)
+			System.out.println(doc);
 		return null;
 	}
 

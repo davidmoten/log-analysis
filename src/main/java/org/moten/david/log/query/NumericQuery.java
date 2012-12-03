@@ -7,17 +7,25 @@ public class NumericQuery {
 	private final Date startTime;
 	private final double intervalSizeMs;
 	private final long numIntervals;
-	private final Metric metric;
-	private final String propertyName;
+	private final String sql;
 
 	public NumericQuery(Date startTime, double intervalSizeMs,
-			long numIntervals, Metric metric, String propertyName) {
+			long numIntervals, String sql) {
 		super();
 		this.startTime = startTime;
 		this.intervalSizeMs = intervalSizeMs;
 		this.numIntervals = numIntervals;
-		this.metric = metric;
-		this.propertyName = propertyName;
+		this.sql = sql;
+		if (true) {
+			sql += " WHERE";
+		} else
+			// TODO put brackets around existing condition
+			sql += " AND";
+
+		sql += " logTimestamp between "
+				+ startTime.getTime()
+				+ " and "
+				+ Math.ceil(startTime.getTime() + intervalSizeMs * numIntervals);
 	}
 
 	public Date getStartTime() {
@@ -32,12 +40,8 @@ public class NumericQuery {
 		return numIntervals;
 	}
 
-	public Metric getMetric() {
-		return metric;
-	}
-
-	public String getPropertyName() {
-		return propertyName;
+	public String getSql() {
+		return sql;
 	}
 
 	@Override
@@ -49,10 +53,9 @@ public class NumericQuery {
 		builder.append(intervalSizeMs);
 		builder.append(", numIntervals=");
 		builder.append(numIntervals);
-		builder.append(", metric=");
-		builder.append(metric);
-		builder.append(", propertyName=");
-		builder.append(propertyName);
+		builder.append(", sql=");
+		builder.append(sql);
+
 		builder.append("]");
 		return builder.toString();
 	}

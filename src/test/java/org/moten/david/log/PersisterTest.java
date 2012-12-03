@@ -4,8 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.junit.Test;
+import org.moten.david.log.query.NumericQuery;
 
 import com.google.common.collect.Maps;
 
@@ -32,6 +34,7 @@ public class PersisterTest {
 		Database p = new Database("test2");
 		LogParser parser = new LogParser();
 		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT);
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		long n1 = 10000;
 		long n2 = 10000;
@@ -40,19 +43,24 @@ public class PersisterTest {
 		persistMessages(lineMessage, p, parser, df, n1);
 		System.out.println("parsing and persisting records");
 		long timer = System.currentTimeMillis();
+
 		persistMessages(lineMessage, p, parser, df, n2);
+
 		long ms = System.currentTimeMillis() - timer;
 		System.out.println("done in " + ms + "ms");
 		System.out.println("rate=" + (1000 * n2 / ms) + " lines/s");
-		p.execute(null);
+		p.execute(new NumericQuery(new Date(0), 1000, 20, "select "
+				+ Database.FIELD_LOG_TIMESTAMP + ", logTimestamp from Entry"));
 		p.close();
 	}
 
 	private void persistMessages(final String lineMessage, Database p,
 			LogParser parser, DateFormat df, long n) {
-		for (int i = 1; i <= n; i++) {
-			long t = System.currentTimeMillis() + i;
-			LogEntry entry = parser.parse(df.format(new Date(t)) + lineMessage);
+
+		for (int i = 0; i < n; i++) {
+			long t = i;
+			String line = df.format(new Date(t)) + lineMessage;
+			LogEntry entry = parser.parse(line);
 			p.persist(entry);
 		}
 
