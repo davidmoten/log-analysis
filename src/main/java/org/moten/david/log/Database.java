@@ -75,4 +75,8 @@ public class Database {
 		System.out.println(result);
 		return null;
 	}
+
+	public void close() {
+		db.close();
+	}
 }

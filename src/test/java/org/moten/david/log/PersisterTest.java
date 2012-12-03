@@ -21,6 +21,7 @@ public class PersisterTest {
 			LogEntry entry = new LogEntry(t + i, map);
 			p.persist(entry);
 		}
+		p.close();
 	}
 
 	@Test
@@ -44,6 +45,7 @@ public class PersisterTest {
 		System.out.println("done in " + ms + "ms");
 		System.out.println("rate=" + (1000 * n2 / ms) + " lines/s");
 		p.execute(null);
+		p.close();
 	}
 
 	private void persistMessages(final String lineMessage, Database p,
