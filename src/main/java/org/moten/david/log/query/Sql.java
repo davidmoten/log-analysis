@@ -1,89 +1,112 @@
 package org.moten.david.log.query;
 
-import java.util.regex.Matcher;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
 public class Sql {
+	private final Map<String, String> clauses;
+
 	// SELECT [<Projections>] FROM <Target> [LET <Assignment>*] [WHERE
 	// <Condition>*] [GROUP BY <Field>] [ORDER BY <Fields>* [ASC|DESC]*] [SKIP
 	// <SkipRecords>] [LIMIT <MaxRecords>]
-	private static final Pattern pattern = Pattern
-			.compile(
-					"^.*(\\bSELECT\\b.*)(\\bFROM\\b.*)(\\bWHERE\\b.*)?(\\bGROUP BY\\b.*)?(\\bORDER BY\\b.*)?(\\bSKIP\\b.*)?(\\bLIMIT\\b.*)?$",
-					Pattern.CASE_INSENSITIVE);
-	private final String select;
-	private final String from;
-	private final String where;
-	private final String groupBy;
-	private final String orderBy;
-	private final String skip;
-	private final String limit;
 
 	public Sql(String sql) {
-		Matcher matcher = pattern.matcher(sql);
-		if (!matcher.find())
-			throw new RuntimeException("parse error, pattern not matched: "
-					+ pattern.pattern());
-		select = matcher.group(1);
-		from = matcher.group(2);
-		where = matcher.group(3);
-		groupBy = matcher.group(4);
-		orderBy = matcher.group(5);
-		skip = matcher.group(6);
-		limit = matcher.group(7);
+		sql = Pattern.compile("group by", Pattern.CASE_INSENSITIVE)
+				.matcher(sql).replaceFirst("group_by");
+		sql = Pattern.compile("order by", Pattern.CASE_INSENSITIVE)
+				.matcher(sql).replaceFirst("order_by");
+		Scanner scan = new Scanner(sql).useDelimiter(" |\\n|\\t");
+		Set<String> keywords = Sets.newHashSet("SELECT", "FROM", "WHERE",
+				"GROUP_BY", "ORDER_BY", "SKIP", "LIMIT", "LET");
+		clauses = Maps.newHashMap();
+		StringBuilder clause = new StringBuilder();
+
+		String currentKeyword = null;
+		while (scan.hasNext()) {
+			String word = scan.next();
+			System.out.println(word);
+			boolean isKeyword = keywords.contains(word.toUpperCase());
+			if (isKeyword) {
+				if (clause.length() > 0)
+					clauses.put(currentKeyword, clause.toString());
+				clause = new StringBuilder();
+				currentKeyword = word.toLowerCase();
+			} else {
+				if (clause.length() > 0)
+					clause.append(' ');
+				clause.append(word);
+			}
+		}
+		if (clause.length() > 0)
+			clauses.put(currentKeyword, clause.toString());
 	}
 
-	public static Pattern getPattern() {
-		return pattern;
+	private Sql(Map<String, String> clauses) {
+		this.clauses = clauses;
 	}
 
 	public String getSelect() {
-		return select;
+		return clauses.get("select");
 	}
 
 	public String getFrom() {
-		return from;
+		return clauses.get("from");
 	}
 
 	public String getWhere() {
-		return where;
+		return clauses.get("where");
 	}
 
 	public String getGroupBy() {
-		return groupBy;
+		return clauses.get("group_by");
 	}
 
 	public String getOrderBy() {
-		return orderBy;
+		return clauses.get("order_by");
 	}
 
 	public String getSkip() {
-		return skip;
+		return clauses.get("skip");
 	}
 
 	public String getLimit() {
-		return limit;
+		return clauses.get("limit");
+	}
+
+	public Sql where(String where) {
+		Map<String, String> m = Maps.newHashMap(clauses);
+		m.put("where", where);
+		return new Sql(m);
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Sql [select=");
-		builder.append(select);
-		builder.append(", from=");
-		builder.append(from);
-		builder.append(", where=");
-		builder.append(where);
-		builder.append(", groupBy=");
-		builder.append(groupBy);
-		builder.append(", orderBy=");
-		builder.append(orderBy);
-		builder.append(", skip=");
-		builder.append(skip);
-		builder.append(", limit=");
-		builder.append(limit);
-		builder.append("]");
-		return builder.toString();
+		StringBuilder s = new StringBuilder();
+		s.append("select ");
+		s.append(clauses.get("select"));
+		s.append(" from ");
+		s.append(clauses.get("from"));
+		appendClause(s, "let");
+		appendClause(s, "where");
+		appendClause(s, "group_by");
+		appendClause(s, "order_by");
+		appendClause(s, "skip");
+		appendClause(s, "limit");
+		return s.toString();
+
 	}
 
+	private void appendClause(StringBuilder s, String keyword) {
+		if (clauses.get(keyword) != null) {
+			s.append(" ");
+			s.append(keyword.replaceAll("_", " "));
+			s.append(" ");
+			s.append(clauses.get(keyword));
+		}
+	}
 }
