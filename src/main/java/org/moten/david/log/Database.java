@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.moten.david.log.query.NumericQuery;
 
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
+import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
@@ -56,6 +57,10 @@ public class Database {
 		user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
 				FIELD_LOG_TIMESTAMP);
 		db.commit();
+	}
+
+	public void useInCurrentThread() {
+		ODatabaseRecordThreadLocal.INSTANCE.set(db);
 	}
 
 	public void persist(LogEntry entry) {
