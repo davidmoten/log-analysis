@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 public class MessageSplitter {
 
 	private final Pattern pattern = Pattern
-			.compile("(\\w+)=([^;^|^,]*)(;|\\||,|$)");
+			.compile("(\\w(?:\\w| )*)=([^;^|^,]*)(;|\\||,|$)");
 
 	public Map<String, String> split(String s) {
 		if (s == null || s.length() == 0)
@@ -19,7 +19,7 @@ public class MessageSplitter {
 			Map<String, String> map = Maps.newHashMap();
 			Matcher matcher = pattern.matcher(s);
 			while (matcher.find()) {
-				map.put(matcher.group(1), matcher.group(2).trim());
+				map.put(matcher.group(1).trim(), matcher.group(2).trim());
 			}
 			return map;
 		}

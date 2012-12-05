@@ -72,4 +72,19 @@ public class MessageSplitterTest {
 		assertEquals("bcd", map.get("a"));
 		assertEquals("hello there", map.get("b"));
 	}
+
+	@Test
+	public void testReturnsMapGivenTwoEqualsStatementsVariableHasSpaces() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split(" run time  = 200");
+		assertEquals("200", map.get("run time"));
+	}
+
+	@Test
+	public void testReturnsMapGivenTwoEqualsStatementsVariableHasSpacesPrecededByStatementThatFinishesWithPeriod() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("Finished run. run time  = 200");
+		assertEquals("200", map.get("run time"));
+		assertEquals(1, map.size());
+	}
 }
