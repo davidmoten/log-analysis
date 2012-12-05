@@ -57,4 +57,19 @@ public class MessageSplitterTest {
 		assertEquals("hello there", map.get("b"));
 	}
 
+	@Test
+	public void testReturnsMapGivenTwoEqualsStatementsDelimitedByCommaValueLeadingAndTrailingSpacesShouldBeIgnored() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("a= bcd    , b= hello there  ,");
+		assertEquals("bcd", map.get("a"));
+		assertEquals("hello there", map.get("b"));
+	}
+
+	@Test
+	public void testReturnsMapGivenTwoEqualsStatementsDelimitedByCommaValueFinalDelimiterEOL() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("a= bcd,b=hello there");
+		assertEquals("bcd", map.get("a"));
+		assertEquals("hello there", map.get("b"));
+	}
 }
