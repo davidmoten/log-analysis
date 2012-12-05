@@ -59,18 +59,27 @@ public class Database {
 	}
 
 	public void persist(LogEntry entry) {
+		// create a new document (row in table)
 		ODocument d = new ODocument(TABLE_ENTRY);
+
+		// persist the full message, timestamp, level and logger
 		d.field(FIELD_LOG_TIMESTAMP, entry.getTime());
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null)
 				d.field(e.getKey(), e.getValue());
 		}
+
+		// persist the split fields from the full message
 		Map<String, String> map = splitter.split(entry.getMessage());
 		for (Entry<String, String> e : map.entrySet()) {
-			if (e.getValue() != null)
+			if (e.getValue() != null) {
+				// field names in orientdb cannot have spaces so replace them
+				// with underscores
 				d.field(e.getKey().replace(" ", "_"), e.getValue());
+			}
 		}
 
+		// persist the document
 		d.save();
 	}
 
