@@ -33,4 +33,28 @@ public class MessageSplitterTest {
 		assertEquals("bcd", map.get("a"));
 	}
 
+	@Test
+	public void testReturnsMapGivenTwoEqualsStatementsDelimitedBySemicolon() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("a=bcd; b=hello there;");
+		assertEquals("bcd", map.get("a"));
+		assertEquals("hello there", map.get("b"));
+	}
+
+	@Test
+	public void testReturnsMapGivenTwoEqualsStatementsDelimitedByPipe() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("a=bcd| b=hello there|");
+		assertEquals("bcd", map.get("a"));
+		assertEquals("hello there", map.get("b"));
+	}
+
+	@Test
+	public void testReturnsMapGivenTwoEqualsStatementsDelimitedByPipeValueLeadingAndTrailingSpacesShouldBeIgnored() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("a= bcd    | b= hello there  |");
+		assertEquals("bcd", map.get("a"));
+		assertEquals("hello there", map.get("b"));
+	}
+
 }
