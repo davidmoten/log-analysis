@@ -15,17 +15,12 @@ public class NumericQuery {
 		this.startTime = startTime;
 		this.intervalSizeMs = intervalSizeMs;
 		this.numIntervals = numIntervals;
-		this.sql = sql;
-		if (true) {
-			sql += " WHERE";
-		} else
-			// TODO put brackets around existing condition
-			sql += " AND";
-
-		sql += " logTimestamp between "
+		String timeClause = "logTimestamp between "
 				+ startTime.getTime()
 				+ " and "
 				+ Math.ceil(startTime.getTime() + intervalSizeMs * numIntervals);
+		Sql sq = new Sql(sql);
+		this.sql = sq.and(timeClause).toString();
 	}
 
 	public Date getStartTime() {
@@ -48,7 +43,7 @@ public class NumericQuery {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("NumericQuery [startTime=");
-		builder.append(startTime);
+		builder.append(startTime.getTime());
 		builder.append(", intervalSizeMs=");
 		builder.append(intervalSizeMs);
 		builder.append(", numIntervals=");

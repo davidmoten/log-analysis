@@ -22,11 +22,12 @@ public class Database {
 
 	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
 	private static final String TABLE_ENTRY = "Entry";
+	private static final String FIELD_VALUE = "value";
 
 	private final ODatabaseDocumentTx db;
 	private final MessageSplitter splitter;
 
-	public Database(String name) {
+	public Database(File location) {
 		splitter = new MessageSplitter();
 		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
 		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
@@ -36,12 +37,12 @@ public class Database {
 		// OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
 		OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
 		try {
-			FileUtils.deleteDirectory(new File("target/" + name));
+			FileUtils.deleteDirectory(location);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		String workingDirectory = System.getProperty("user.dir");
-		String url = "local:" + workingDirectory + "/target/" + name;
+
+		String url = "local:" + getPath(location);
 		System.out.println(url);
 		db = new ODatabaseDocumentTx(url).create();
 		OClass user = db
@@ -57,6 +58,15 @@ public class Database {
 		user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
 				FIELD_LOG_TIMESTAMP);
 		db.commit();
+
+	}
+
+	private static String getPath(File location) {
+		try {
+			return location.getCanonicalPath();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void useInCurrentThread() {
@@ -88,18 +98,27 @@ public class Database {
 		d.save();
 	}
 
-	public Iterable<Double> execute(NumericQuery query) {
+	public Buckets execute(NumericQuery query) {
 		System.out.println(query);
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
 				query.getSql());
 		List<ODocument> result = db.query(sqlQuery);
-		for (ODocument doc : result)
+		Buckets buckets = new Buckets(query);
+		for (ODocument doc : result) {
 			System.out.println(doc);
-		return null;
+			long timestamp = doc.field(FIELD_LOG_TIMESTAMP);
+			Number value = doc.field(FIELD_VALUE);
+			buckets.add(timestamp, value.doubleValue());
+		}
+		return buckets;
 	}
 
 	public long size() {
 		return db.getSize();
+	}
+
+	public long getNumEntries() {
+		return db.countClass(TABLE_ENTRY);
 	}
 
 	public void close() {

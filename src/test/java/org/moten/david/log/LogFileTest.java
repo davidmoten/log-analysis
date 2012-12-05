@@ -1,5 +1,6 @@
 package org.moten.david.log;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -11,14 +12,16 @@ public class LogFileTest {
 	@Test
 	public void testTailingAFilePutsRecordsIntoDatabase()
 			throws InterruptedException {
-		Database db = new Database("test3");
-		long initialSize = db.size();
+		Database db = new Database(new File("target/test3"));
+		assertEquals(0, db.getNumEntries());
 		LogFile log = new LogFile(new File("src/test/resources/test.log"), 300,
 				new LogParser());
 		log.tail(db);
 		Thread.sleep(1000);
 		log.stop();
-		assertTrue(db.size() > initialSize);
+		long numEntries = db.getNumEntries();
+		System.out.println(numEntries);
+		assertTrue(numEntries > 0);
 		db.close();
 	}
 }

@@ -84,6 +84,16 @@ public class Sql {
 		return new Sql(m);
 	}
 
+	public Sql and(String whereClause) {
+		if (getWhere() == null)
+			return where(whereClause);
+		else {
+			String newWhereClause = "(" + getWhere() + ") and (" + whereClause
+					+ ")";
+			return where(newWhereClause);
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();

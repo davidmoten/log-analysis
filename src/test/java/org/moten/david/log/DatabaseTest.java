@@ -1,5 +1,6 @@
 package org.moten.david.log;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,11 +12,11 @@ import org.moten.david.log.query.NumericQuery;
 
 import com.google.common.collect.Maps;
 
-public class PersisterTest {
+public class DatabaseTest {
 
 	@Test
 	public void testCreateDbAndPersistRecords() {
-		Database p = new Database("test1");
+		Database p = new Database(new File("target/test1"));
 		long t = 0;
 		for (int i = 1; i <= 1000; i++) {
 			Map<String, String> map = Maps.newHashMap();
@@ -31,7 +32,7 @@ public class PersisterTest {
 
 		final String lineMessage = " INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor - fixes queue size = 0";
 		System.out.println("creating database");
-		Database p = new Database("test2");
+		Database p = new Database(new File("target/test2"));
 		LogParser parser = new LogParser();
 		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT);
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -49,8 +50,11 @@ public class PersisterTest {
 		long ms = System.currentTimeMillis() - timer;
 		System.out.println("done in " + ms + "ms");
 		System.out.println("rate=" + (1000 * n2 / ms) + " lines/s");
-		p.execute(new NumericQuery(new Date(0), 1000, 20, "select "
-				+ Database.FIELD_LOG_TIMESTAMP + ", logTimestamp from Entry"));
+		Buckets r = p
+				.execute(new NumericQuery(new Date(0), 1000, 20, "select "
+						+ Database.FIELD_LOG_TIMESTAMP
+						+ ", 100.0 as value from Entry"));
+		System.out.println(r);
 		p.close();
 	}
 
