@@ -11,6 +11,10 @@ import com.google.common.collect.Maps;
 
 public class LogParser {
 
+	public static final String FIELD_MSG = "logMsg";
+	public static final String FIELD_LOGGER = "logLogger";
+	public static final String FIELD_LOG_LEVEL = "logLevel";
+
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 	private final Pattern pattern = Pattern
 			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +- (.*)$");
@@ -47,9 +51,9 @@ public class LogParser {
 					time = null;
 
 				Map<String, String> map = Maps.newHashMap();
-				map.put("logLevel", level);
-				map.put("logLogger", logger);
-				map.put("logMsg", msg);
+				map.put(FIELD_LOG_LEVEL, level);
+				map.put(FIELD_LOGGER, logger);
+				map.put(FIELD_MSG, msg);
 
 				return new LogEntry(time, map);
 			} else

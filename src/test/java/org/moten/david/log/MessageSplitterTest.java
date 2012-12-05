@@ -87,4 +87,12 @@ public class MessageSplitterTest {
 		assertEquals("200", map.get("run time"));
 		assertEquals(1, map.size());
 	}
+
+	@Test
+	public void testVariableNameStartsWithALetter() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("Finished run. 1run time  = 200");
+		assertEquals("200", map.get("time"));
+		assertEquals(1, map.size());
+	}
 }

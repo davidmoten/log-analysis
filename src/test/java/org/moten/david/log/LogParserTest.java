@@ -4,7 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import org.junit.Test;
+
+import com.google.common.io.LineReader;
 
 public class LogParserTest {
 
@@ -26,5 +31,23 @@ public class LogParserTest {
 		LogParser p = new LogParser();
 		LogEntry entry = p.parse(null);
 		assertNull(entry);
+	}
+
+	@Test
+	public void testParseMultipleLines() throws IOException {
+		LogParser p = new LogParser();
+		LineReader reader = new LineReader(new InputStreamReader(
+				LogParserTest.class.getResourceAsStream("/test.log")));
+		String line;
+		MessageSplitter splitter = new MessageSplitter();
+		while ((line = reader.readLine()) != null) {
+			System.out.println(line);
+			LogEntry entry = p.parse(line);
+			if (entry != null) {
+				System.out.println(entry);
+				System.out.println(splitter.split(entry.getProperties().get(
+						LogParser.FIELD_MSG)));
+			}
+		}
 	}
 }
