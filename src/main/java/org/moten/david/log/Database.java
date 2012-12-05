@@ -3,6 +3,7 @@ package org.moten.david.log;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
@@ -22,8 +23,10 @@ public class Database {
 	private static final String TABLE_ENTRY = "Entry";
 
 	private final ODatabaseDocumentTx db;
+	private final MessageSplitter splitter;
 
 	public Database(String name) {
+		splitter = new MessageSplitter();
 		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
 		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
 		OGlobalConfiguration.TX_USE_LOG.setValue(false);
@@ -62,6 +65,12 @@ public class Database {
 			if (e.getValue() != null)
 				d.field(e.getKey(), e.getValue());
 		}
+		Map<String, String> map = splitter.split(entry.getMessage());
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getValue() != null)
+				d.field(e.getKey().replace(" ", "_"), e.getValue());
+		}
+
 		d.save();
 	}
 

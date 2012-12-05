@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -44,9 +45,10 @@ public class LogParserTest {
 			System.out.println(line);
 			LogEntry entry = p.parse(line);
 			if (entry != null) {
-				System.out.println(entry);
-				System.out.println(splitter.split(entry.getProperties().get(
-						LogParser.FIELD_MSG)));
+				Map<String, String> map = splitter.split(entry.getProperties()
+						.get(LogParser.FIELD_MSG));
+				if (map.size() > 0)
+					System.out.println(map);
 			}
 		}
 	}

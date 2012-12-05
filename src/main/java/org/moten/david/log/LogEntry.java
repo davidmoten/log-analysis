@@ -21,6 +21,10 @@ public class LogEntry {
 		return properties;
 	}
 
+	public String getMessage() {
+		return properties.get(LogParser.FIELD_MSG);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
