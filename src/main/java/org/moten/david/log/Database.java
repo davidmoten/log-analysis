@@ -98,6 +98,10 @@ public class Database {
 		return null;
 	}
 
+	public long size() {
+		return db.getSize();
+	}
+
 	public void close() {
 		db.close();
 	}
