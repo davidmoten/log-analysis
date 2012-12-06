@@ -21,4 +21,12 @@ public class SqlTest {
 		assertEquals("10", sql.getLimit());
 	}
 
+	@Test
+	public void testAndMethod() {
+		Sql sql = new Sql(
+				"select a1 , a2 from b where c > d group by e order by f skip 5 limit 10");
+
+		assertEquals("(c > d) and (g = h)", sql.and("g = h").getWhere());
+	}
+
 }
