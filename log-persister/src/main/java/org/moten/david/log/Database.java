@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
-import org.moten.david.log.query.Buckets;
 import org.moten.david.log.query.BucketQuery;
+import org.moten.david.log.query.Buckets;
 
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
@@ -107,7 +107,7 @@ public class Database {
 		Buckets buckets = new Buckets(query);
 		for (ODocument doc : result) {
 			System.out.println(doc);
-			long timestamp = doc.field(FIELD_LOG_TIMESTAMP);
+			Long timestamp = doc.field(FIELD_LOG_TIMESTAMP);
 			Number value = doc.field(FIELD_VALUE);
 			buckets.add(timestamp, value.doubleValue());
 		}
