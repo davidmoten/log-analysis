@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
-import org.moten.david.log.query.NumericQuery;
+import org.moten.david.log.query.Buckets;
+import org.moten.david.log.query.BucketQuery;
 
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
@@ -98,7 +99,7 @@ public class Database {
 		d.save();
 	}
 
-	public Buckets execute(NumericQuery query) {
+	public Buckets execute(BucketQuery query) {
 		System.out.println(query);
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
 				query.getSql());
