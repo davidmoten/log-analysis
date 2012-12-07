@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 
 public class LogParser {
@@ -14,11 +16,13 @@ public class LogParser {
 	public static final String FIELD_MSG = "logMsg";
 	public static final String FIELD_LOGGER = "logLogger";
 	public static final String FIELD_LOG_LEVEL = "logLevel";
+	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 	static final String FIELD_THREAD_NAME = "threadName";
 	private final Pattern pattern = Pattern
 			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +(\\S+)? ?- (.*)$");
+	private final BiMap<String, Integer> map = createGroupMap();
 	private final DateFormat df = new SimpleDateFormat(DATE_FORMAT + " Z");
 
 	/**
@@ -36,11 +40,11 @@ public class LogParser {
 		else {
 			Matcher matcher = pattern.matcher(line);
 			if (matcher.find()) {
-				String timestamp = matcher.group(1);
-				String level = matcher.group(2);
-				String logger = matcher.group(3);
-				String threadName = matcher.group(4);
-				String msg = matcher.group(5);
+				String timestamp = matcher.group(map.get(FIELD_LOG_TIMESTAMP));
+				String level = matcher.group(map.get(FIELD_LOG_LEVEL));
+				String logger = matcher.group(map.get(FIELD_LOGGER));
+				String threadName = matcher.group(map.get(FIELD_THREAD_NAME));
+				String msg = matcher.group(map.get(FIELD_MSG));
 
 				Long time;
 				if (timestamp != null && level != null && logger != null) {
@@ -64,5 +68,16 @@ public class LogParser {
 				return null;
 
 		}
+	}
+
+	private BiMap<String, Integer> createGroupMap() {
+		BiMap<String, Integer> map = HashBiMap.create(5);
+		map.put(FIELD_LOG_TIMESTAMP, 1);
+		map.put(FIELD_LOG_LEVEL, 2);
+		map.put(FIELD_LOGGER, 3);
+		map.put(FIELD_THREAD_NAME, 4);
+		map.put(FIELD_MSG, 5);
+
+		return map;
 	}
 }

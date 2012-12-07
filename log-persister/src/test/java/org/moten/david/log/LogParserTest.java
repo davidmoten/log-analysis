@@ -29,7 +29,7 @@ public class LogParserTest {
 
 	@Test
 	public void testParseLineWithThreadName() {
-		String line = "2012-11-29 04:39:02.941   INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor thread-1 - fixes queue size = 0";
+		String line = "2012-11-29 04:39:02.941   INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor thread_name-1 - fixes queue size = 0";
 		LogParser p = new LogParser();
 		LogEntry entry = p.parse(line);
 		assertNotNull(entry);
@@ -37,9 +37,9 @@ public class LogParserTest {
 				entry.getProperties().get(LogParser.FIELD_LOG_LEVEL));
 		assertEquals("au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor",
 				entry.getProperties().get(LogParser.FIELD_LOGGER));
-		assertEquals("fixes queue size = 0", entry.getProperties()
-				.get("logMsg"));
-		assertEquals("thread-1",
+		assertEquals("fixes queue size = 0",
+				entry.getProperties().get(LogParser.FIELD_MSG));
+		assertEquals("thread_name-1",
 				entry.getProperties().get(LogParser.FIELD_THREAD_NAME));
 	}
 
