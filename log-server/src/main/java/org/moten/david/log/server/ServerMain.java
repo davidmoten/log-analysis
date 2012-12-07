@@ -13,6 +13,8 @@ public class ServerMain {
 				.readConfiguration(
 						ServerMain.class
 								.getResourceAsStream("/orientdb-server-log.properties"));
+		System.setProperty("orientdb.www.path", System.getProperty("user.dir")
+				+ "/src/main/webapp");
 
 		OServer server = OServerMain.create();
 		server.startup(ServerMain.class
