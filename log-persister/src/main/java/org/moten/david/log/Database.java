@@ -112,7 +112,7 @@ public class Database {
 		// create a new document (row in table)
 		ODocument d = new ODocument(TABLE_ENTRY);
 
-		// persist the full message, timestamp, level and logger
+		// persist the full message, timestamp, level logger and threadName
 		d.field(FIELD_LOG_TIMESTAMP, entry.getTime());
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null)

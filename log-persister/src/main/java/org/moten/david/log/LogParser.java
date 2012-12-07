@@ -16,8 +16,9 @@ public class LogParser {
 	public static final String FIELD_LOG_LEVEL = "logLevel";
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+	private static final String FIELD_THREAD_NAME = "threadName";
 	private final Pattern pattern = Pattern
-			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +- (.*)$");
+			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +(\\S+)? ?- (.*)$");
 	private final DateFormat df = new SimpleDateFormat(DATE_FORMAT + " Z");
 
 	/**
@@ -38,7 +39,8 @@ public class LogParser {
 				String timestamp = matcher.group(1);
 				String level = matcher.group(2);
 				String logger = matcher.group(3);
-				String msg = matcher.group(4);
+				String threadName = matcher.group(4);
+				String msg = matcher.group(5);
 
 				Long time;
 				if (timestamp != null && level != null && logger != null) {
@@ -54,6 +56,8 @@ public class LogParser {
 				map.put(FIELD_LOG_LEVEL, level);
 				map.put(FIELD_LOGGER, logger);
 				map.put(FIELD_MSG, msg);
+				if (threadName != null && threadName.length() > 0)
+					map.put(FIELD_THREAD_NAME, threadName);
 
 				return new LogEntry(time, map);
 			} else
@@ -61,5 +65,4 @@ public class LogParser {
 
 		}
 	}
-
 }
