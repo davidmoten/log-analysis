@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.LogManager;
 
 import org.junit.Test;
 import org.moten.david.log.config.Log;
@@ -20,9 +21,14 @@ public class WatcherTest {
 
 	/**
 	 * @throws InterruptedException
+	 * @throws IOException
+	 * @throws SecurityException
 	 */
 	@Test
-	public void test() throws InterruptedException {
+	public void test() throws InterruptedException, SecurityException,
+			IOException {
+		LogManager.getLogManager().readConfiguration(
+				LogManager.class.getResourceAsStream("/my-logging.properties"));
 
 		List<Log> list = Lists.newArrayList();
 		list.add(new Log("dummy", TEST_LOG));

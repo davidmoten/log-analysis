@@ -67,7 +67,6 @@ public class LogFile {
 			public void handle(String line) {
 				db.useInCurrentThread();
 				LogEntry entry = parser.parse(line);
-				System.out.println(line);
 				if (entry != null)
 					db.persist(entry);
 			}
