@@ -30,10 +30,17 @@ public class Database {
 	private static final String FIELD_VALUE = "value";
 
 	private final ODatabaseDocumentTx db;
-	private final MessageSplitter splitter;
+	private final MessageSplitter splitter = new MessageSplitter();
 
 	public Database(File location) {
-		splitter = new MessageSplitter();
+		this(connectToDatabase(location));
+	}
+
+	public Database(ODatabaseDocumentTx db) {
+		this.db = db;
+	}
+
+	private static ODatabaseDocumentTx connectToDatabase(File location) {
 		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
 		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
 		OGlobalConfiguration.TX_USE_LOG.setValue(false);
@@ -49,7 +56,7 @@ public class Database {
 
 		String url = "local:" + getPath(location);
 		System.out.println(url);
-		db = new ODatabaseDocumentTx(url).create();
+		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).create();
 		OClass user = db
 				.getMetadata()
 				.getSchema()
@@ -63,6 +70,7 @@ public class Database {
 		user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
 				FIELD_LOG_TIMESTAMP);
 		db.commit();
+		return db;
 	}
 
 	private static String getPath(File location) {
