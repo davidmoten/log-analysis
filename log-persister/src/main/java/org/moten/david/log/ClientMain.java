@@ -14,12 +14,14 @@ public class ClientMain {
 	public static void main(String[] args) throws SecurityException,
 			IOException {
 		LogManager.getLogManager().readConfiguration(
-				LogManager.class.getResourceAsStream("/my-logging.properties"));
+				ClientMain.class.getResourceAsStream("/my-logging.properties"));
 		List<Log> list = Lists.newArrayList();
 		String name = System.getProperty("logName", "logFile");
-		String path = System.getProperty("logPath",
+		String paths = System.getProperty("logPaths",
 				"src/test/resources/test.log");
-		list.add(new Log(name, path));
+		String[] items = paths.split(",");
+		for (String item : items)
+			list.add(new Log(name, item));
 		Options options = new Options(null, null, list);
 		Database db = new Database("remote:localhost/logs", "admin", "admin");
 		Watcher w = new Watcher(db, options);

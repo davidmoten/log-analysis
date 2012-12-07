@@ -27,8 +27,10 @@ public class WatcherTest {
 	@Test
 	public void test() throws InterruptedException, SecurityException,
 			IOException {
-		LogManager.getLogManager().readConfiguration(
-				LogManager.class.getResourceAsStream("/my-logging.properties"));
+		LogManager.getLogManager()
+				.readConfiguration(
+						WatcherTest.class
+								.getResourceAsStream("/my-logging.properties"));
 
 		List<Log> list = Lists.newArrayList();
 		list.add(new Log("dummy", TEST_LOG));

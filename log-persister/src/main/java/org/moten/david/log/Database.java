@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
@@ -75,19 +76,24 @@ public class Database {
 	}
 
 	private static void configureDatabase(ODatabaseDocumentTx db) {
-		OClass user = db
-				.getMetadata()
-				.getSchema()
-				.createClass(
-						TABLE_ENTRY,
-						db.addCluster(TABLE_ENTRY,
-								OStorage.CLUSTER_TYPE.PHYSICAL));
-		user.createProperty(FIELD_LOG_TIMESTAMP, OType.LONG).setMandatory(true);
+		try {
+			OClass user = db
+					.getMetadata()
+					.getSchema()
+					.createClass(
+							TABLE_ENTRY,
+							db.addCluster(TABLE_ENTRY,
+									OStorage.CLUSTER_TYPE.PHYSICAL));
+			user.createProperty(FIELD_LOG_TIMESTAMP, OType.LONG).setMandatory(
+					true);
 
-		db.getMetadata().getSchema().save();
-		user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
-				FIELD_LOG_TIMESTAMP);
-		db.commit();
+			db.getMetadata().getSchema().save();
+			user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
+					FIELD_LOG_TIMESTAMP);
+			db.commit();
+		} catch (RuntimeException e) {
+			log.log(Level.WARNING, e.getMessage(), e);
+		}
 	}
 
 	private static String getPath(File location) {
