@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.moten.david.log.query.BucketQuery;
@@ -20,6 +21,9 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.core.storage.OStorage;
 
 public class Database {
+
+	private static final Logger log = Logger
+			.getLogger(Database.class.getName());
 
 	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
 	private static final String TABLE_ENTRY = "Entry";
@@ -59,7 +63,6 @@ public class Database {
 		user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
 				FIELD_LOG_TIMESTAMP);
 		db.commit();
-
 	}
 
 	private static String getPath(File location) {
@@ -87,6 +90,9 @@ public class Database {
 
 		// persist the split fields from the full message
 		Map<String, String> map = splitter.split(entry.getMessage());
+		// System.out.println(entry);
+		if (map.size() > 0)
+			log.info(map.toString());
 		for (Entry<String, String> e : map.entrySet()) {
 			if (e.getValue() != null) {
 				// field names in orientdb cannot have spaces so replace them

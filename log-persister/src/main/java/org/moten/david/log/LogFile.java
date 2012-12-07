@@ -1,8 +1,8 @@
 package org.moten.david.log;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
@@ -13,11 +13,25 @@ public class LogFile {
 	private final long checkIntervalMs;
 	private Tailer tailer;
 	private final LogParser parser;
+	private final ExecutorService executor;
 
-	public LogFile(File file, long checkIntervalMs, LogParser parser) {
+	public LogFile(File file, long checkIntervalMs, LogParser parser,
+			ExecutorService executor) {
 		this.file = file;
 		this.checkIntervalMs = checkIntervalMs;
 		this.parser = parser;
+		this.executor = executor;
+		createFileIfDoesntExist(file);
+	}
+
+	private void createFileIfDoesntExist(File file) {
+		if (!file.exists())
+			try {
+				if (!file.createNewFile())
+					throw new RuntimeException("could not create file: " + file);
+			} catch (IOException e) {
+				throw new RuntimeException("could not create file: " + file, e);
+			}
 	}
 
 	public void tail(Database db) {
@@ -26,7 +40,7 @@ public class LogFile {
 		// tail from the start of the file
 		tailer = new Tailer(file, listener, checkIntervalMs, false);
 
-		ExecutorService executor = Executors.newFixedThreadPool(5);
+		// start in separate thread
 		executor.execute(tailer);
 	}
 
@@ -53,6 +67,7 @@ public class LogFile {
 			public void handle(String line) {
 				db.useInCurrentThread();
 				LogEntry entry = parser.parse(line);
+				System.out.println(line);
 				if (entry != null)
 					db.persist(entry);
 			}
