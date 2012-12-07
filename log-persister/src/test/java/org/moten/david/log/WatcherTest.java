@@ -34,6 +34,7 @@ public class WatcherTest {
 
 		List<Log> list = Lists.newArrayList();
 		list.add(new Log("dummy", TEST_LOG));
+		list.add(new Log("dummy2", TEST_LOG));
 		Options options = new Options(null, null, list);
 		Database db = new Database(new File("target/test4"));
 		Watcher w = new Watcher(db, options);
@@ -44,7 +45,7 @@ public class WatcherTest {
 				try {
 					FileOutputStream fos = new FileOutputStream(TEST_LOG);
 					DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT);
-					for (int i = 1; i <= 25; i++) {
+					for (int i = 1; i <= 5; i++) {
 						String line = df.format(new Date())
 								+ " INFO org.moten.david.log.something - value="
 								+ (System.currentTimeMillis() % 20) + "\n";
