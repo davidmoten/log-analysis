@@ -36,6 +36,19 @@ public class Database {
 		this(connectToDatabase(location));
 	}
 
+	public Database(String url, String username, String password) {
+		this(connectToDatabase(url, username, password));
+	}
+
+	private static ODatabaseDocumentTx connectToDatabase(String url,
+			String username, String password) {
+		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).open(username,
+				password);
+		log.info("obtained db for " + url);
+		configureDatabase(db);
+		return db;
+	}
+
 	public Database(ODatabaseDocumentTx db) {
 		this.db = db;
 	}
@@ -57,6 +70,11 @@ public class Database {
 		String url = "local:" + getPath(location);
 		System.out.println(url);
 		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).create();
+		configureDatabase(db);
+		return db;
+	}
+
+	private static void configureDatabase(ODatabaseDocumentTx db) {
 		OClass user = db
 				.getMetadata()
 				.getSchema()
@@ -70,7 +88,6 @@ public class Database {
 		user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
 				FIELD_LOG_TIMESTAMP);
 		db.commit();
-		return db;
 	}
 
 	private static String getPath(File location) {

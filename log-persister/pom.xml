@@ -37,5 +37,10 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-client</artifactId>
+			<version>${orientdb.version}</version>
+		</dependency>
 	</dependencies>
 </project>

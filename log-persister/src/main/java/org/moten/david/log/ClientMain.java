@@ -1,6 +1,5 @@
 package org.moten.david.log;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.LogManager;
@@ -10,15 +9,19 @@ import org.moten.david.log.config.Options;
 
 import com.google.common.collect.Lists;
 
-public class Main {
+public class ClientMain {
+
 	public static void main(String[] args) throws SecurityException,
 			IOException {
 		LogManager.getLogManager().readConfiguration(
 				LogManager.class.getResourceAsStream("/my-logging.properties"));
 		List<Log> list = Lists.newArrayList();
-		list.add(new Log("cts", "/ausdev/container/logs/cts/cts.log"));
+		String name = System.getProperty("logName", "logFile");
+		String path = System.getProperty("logPath",
+				"src/test/resources/test.log");
+		list.add(new Log(name, path));
 		Options options = new Options(null, null, list);
-		Database db = new Database(new File("target/test4"));
+		Database db = new Database("remote:localhost/logs", "admin", "admin");
 		Watcher w = new Watcher(db, options);
 		w.start();
 	}

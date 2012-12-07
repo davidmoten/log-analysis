@@ -3,11 +3,15 @@ package org.moten.david.log;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
 
 public class LogFile {
+
+	private static Logger log = Logger.getLogger(LogFile.class.getName());
 
 	private final File file;
 	private final long checkIntervalMs;
@@ -65,10 +69,14 @@ public class LogFile {
 
 			@Override
 			public void handle(String line) {
-				db.useInCurrentThread();
-				LogEntry entry = parser.parse(line);
-				if (entry != null)
-					db.persist(entry);
+				try {
+					db.useInCurrentThread();
+					LogEntry entry = parser.parse(line);
+					if (entry != null)
+						db.persist(entry);
+				} catch (RuntimeException e) {
+					log.log(Level.SEVERE, e.getMessage(), e);
+				}
 			}
 
 			@Override
