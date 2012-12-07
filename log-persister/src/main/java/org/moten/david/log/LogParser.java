@@ -16,7 +16,7 @@ public class LogParser {
 	public static final String FIELD_LOG_LEVEL = "logLevel";
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
-	private static final String FIELD_THREAD_NAME = "threadName";
+	static final String FIELD_THREAD_NAME = "threadName";
 	private final Pattern pattern = Pattern
 			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +(\\S+)? ?- (.*)$");
 	private final DateFormat df = new SimpleDateFormat(DATE_FORMAT + " Z");
