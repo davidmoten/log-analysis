@@ -159,7 +159,7 @@ public class Database {
 		// try matching against Double
 		try {
 			Double val = Double.parseDouble(s);
-			return new ValueAndType(val, OType.INTEGER);
+			return new ValueAndType(val, OType.DOUBLE);
 		} catch (NumberFormatException e) {
 			// continue
 		}
