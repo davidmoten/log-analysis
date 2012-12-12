@@ -1,0 +1,104 @@
+{
+  "result": [{
+      "@type": "d", "@rid": "#-2:0", "@version": 0, 
+"logTimestamp": 1355184008511, 
+"value": 304, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:1", "@version": 0, 
+"logTimestamp": 1355184068935, 
+"value": 233, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:2", "@version": 0, 
+"logTimestamp": 1355184131446, 
+"value": 236, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:3", "@version": 0, 
+"logTimestamp": 1355184192408, 
+"value": 243, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:4", "@version": 0, 
+"logTimestamp": 1355184249468, 
+"value": 249, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:5", "@version": 0, 
+"logTimestamp": 1355184309299, 
+"value": 255, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:6", "@version": 0, 
+"logTimestamp": 1355184372584, 
+"value": 257, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:7", "@version": 0, 
+"logTimestamp": 1355184430737, 
+"value": 264, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:8", "@version": 0, 
+"logTimestamp": 1355184492705, 
+"value": 267, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:9", "@version": 0, 
+"logTimestamp": 1355184548359, 
+"value": 273, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:10", "@version": 0, 
+"logTimestamp": 1355184612085, 
+"value": 278, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:11", "@version": 0, 
+"logTimestamp": 1355184672548, 
+"value": 282, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:12", "@version": 0, 
+"logTimestamp": 1355184732550, 
+"value": 288, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:13", "@version": 0, 
+"logTimestamp": 1355184785016, 
+"value": 301, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:14", "@version": 0, 
+"logTimestamp": 1355184852300, 
+"value": 304, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:15", "@version": 0, 
+"logTimestamp": 1355184912011, 
+"value": 308, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:16", "@version": 0, 
+"logTimestamp": 1355184967641, 
+"value": 311, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:17", "@version": 0, 
+"logTimestamp": 1355185030716, 
+"value": 312, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:18", "@version": 0, 
+"logTimestamp": 1355185089268, 
+"value": 319, 
+  "@fieldTypes": "logTimestamp=l"
+    }, {
+      "@type": "d", "@rid": "#-2:19", "@version": 0, 
+"logTimestamp": 1355185146045, 
+"value": 321, 
+  "@fieldTypes": "logTimestamp=l"
+    }
+  ]
+}

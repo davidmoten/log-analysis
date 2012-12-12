@@ -4,12 +4,14 @@
  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Flot Examples</title>
-    <link href="layout.css" rel="stylesheet" type="text/css">
+    <link href="../layout.css" rel="stylesheet" type="text/css">
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="../jquery.js"></script>
     <script language="javascript" type="text/javascript" src="../jquery.flot.js"></script>
  </head>
     <body>
+    
+    <div id="placeholder3" style="width:600px;height:300px"></div>
 
     <div id="placeholder" style="width:600px;height:300px"></div>
 
@@ -79,6 +81,40 @@ $(function () {
                                    bars: { show: true }
                                }
                            ]);
+    
+ // then fetch the data with jQuery
+    function onDataReceived(series) {
+	 
+	 	var d = [];
+	 	
+	    for (var i in series.result) {
+	    	var timestamp = series.result[i].logTimestamp;
+	    	var val = series.result[i].value * 1.0;
+	    	console.log("tstamp="+timestamp + ",value="+ val);
+	    	d.push([timestamp,val]);
+	    }
+	 
+        var options = {}; 
+        
+        var graph = {
+                data: d,
+                lines: { show: true },
+                points: { show: true }
+            };
+        
+        console.log(graph);
+        
+        // and plot all we got
+        $.plot($("#placeholder3"), [graph]);
+     }
+ 
+ 	var dataurl = "http://localhost:8000/graphs/logs/data.txt";
+    $.ajax({
+        url: dataurl,
+        method: 'GET',
+        dataType: 'json',
+        success: onDataReceived
+    });
 });
 </script>
 
