@@ -110,11 +110,11 @@ $(function () {
 	 	var minT = null;
 	 	var maxT = null;
 	    for (var i in series.result) {
-	    	var timestamp = series.result[i].t;
+	    	var t = series.result[i].t;
 	    	var val = series.result[i].value * 1.0;
 	    	total += val;
-	    	//console.log("tstamp="+timestamp + ",value="+ val);
-	    	d.push([timestamp,val]);
+	    	//console.log("tstamp="+t + ",value="+ val);
+	    	d.push([t,val]);
 	    	if (minT === null || t < minT)
 	    		minT = val;
 	    	if (maxT === null || t > maxT)
