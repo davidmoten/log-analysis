@@ -106,12 +106,24 @@ $(function () {
 	 
 	 	var d = [];
 	 	
+	 	var total = 0.0;
+	 	var minT = null;
+	 	var maxT = null;
 	    for (var i in series.result) {
 	    	var timestamp = series.result[i].t;
 	    	var val = series.result[i].value * 1.0;
+	    	total += val;
 	    	//console.log("tstamp="+timestamp + ",value="+ val);
 	    	d.push([timestamp,val]);
+	    	if (minT === null || t < minT)
+	    		minT = val;
+	    	if (maxT === null || t > maxT)
+	    		maxT = val;
 	    }
+	    
+	    var mean = 0;
+	    if (series.result >0)
+	    	mean = total / series.result;
 	 
         var options = {}; 
         
@@ -121,10 +133,15 @@ $(function () {
                 points: { show: true }
             };
         
+        var meanGraph = {
+                data: [[minT,mean],[maxT,mean]],
+                lines: { show: true }
+        };
+        
         //console.log(graph);
         
         // and plot all we got
-        $.plot($("#placeholder3"), [graph]);
+        $.plot($("#placeholder3"), [graph,meanGraph]);
      }
  
  	//var dataurl = "http://localhost:8000/graphs/logs/data.txt";
