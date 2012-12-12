@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +30,8 @@ public class Database {
 	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
 	private static final String TABLE_ENTRY = "Entry";
 	private static final String FIELD_VALUE = "value";
+
+	private static final String TABLE_DUMMY = "Dummy";
 
 	private final ODatabaseDocumentTx db;
 	private final MessageSplitter splitter = new MessageSplitter();
@@ -113,7 +116,7 @@ public class Database {
 		ODocument d = new ODocument(TABLE_ENTRY);
 
 		// persist the full message, timestamp, level logger and threadName
-		d.field(FIELD_LOG_TIMESTAMP, entry.getTime());
+		d.field(FIELD_LOG_TIMESTAMP, entry.getTime(), OType.DATETIME);
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null)
 				d.field(e.getKey(), e.getValue());
@@ -197,5 +200,20 @@ public class Database {
 
 	public void close() {
 		db.close();
+	}
+
+	public void persistDummyRecords() {
+		long t = System.currentTimeMillis();
+		Random r = new Random();
+		for (int i = 0; i < 1000; i++) {
+			long time = t - r.nextInt(3600000);
+			ODocument d = new ODocument(TABLE_DUMMY);
+
+			int specialNumber = i % (r.nextInt(100) + 1);
+			d.field(LogParser.FIELD_LOG_TIMESTAMP, time, OType.DATETIME);
+			d.field(LogParser.FIELD_MSG, "specialNumber=" + specialNumber);
+			d.field("specialNumber", specialNumber);
+			d.save();
+		}
 	}
 }

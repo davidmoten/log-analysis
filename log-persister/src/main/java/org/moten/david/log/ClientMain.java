@@ -30,6 +30,8 @@ public class ClientMain {
 		}
 		Options options = new Options(null, null, list);
 		Database db = new Database("remote:localhost/logs", "admin", "admin");
+		db.persistDummyRecords();
+		log.info("loaded dummy records");
 		Watcher w = new Watcher(db, options);
 		w.start();
 	}
