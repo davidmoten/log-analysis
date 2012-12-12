@@ -117,7 +117,7 @@ $(function () {
  	//var dataurl = "http://localhost:8000/graphs/logs/data.txt";
  	
  	//var dataurl = getAbsolutePath() + "/data.txt";
- 	var dataurl = getAbsolutePath() + "query/logs/sql/select%20logTimestamp,oldFixes%20as%20value%20from%20Entry%20where%20oldFixes%20is%20not%20null%20limit%202000";
+ 	var dataurl = getAbsolutePath() + "query/logs/sql/select%20logTimestamp,oldFixes%20as%20value%20from%20Entry%20where%20oldFixes%20is%20not%20null/2000";
     $.ajax({
         url: dataurl,
         method: 'GET',
