@@ -4,10 +4,10 @@
  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Flot Examples</title>
-    <link href="../layout.css" rel="stylesheet" type="text/css">
+    <link href="../js/flot/layout.css" rel="stylesheet" type="text/css">
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
-    <script language="javascript" type="text/javascript" src="../jquery.js"></script>
-    <script language="javascript" type="text/javascript" src="../jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="../js/flot/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="../js/flot/jquery.flot.js"></script>
  </head>
     <body>
     
@@ -82,6 +82,12 @@ $(function () {
                                }
                            ]);
     
+    function getAbsolutePath() {
+        var loc = window.location;
+        var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+        return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+    }
+    
  // then fetch the data with jQuery
     function onDataReceived(series) {
 	 
@@ -108,7 +114,10 @@ $(function () {
         $.plot($("#placeholder3"), [graph]);
      }
  
- 	var dataurl = "http://localhost:8000/graphs/logs/data.txt";
+ 	//var dataurl = "http://localhost:8000/graphs/logs/data.txt";
+ 	
+ 	//var dataurl = getAbsolutePath() + "/data.txt";
+ 	var dataurl = getAbsolutePath() + "query/logs/sql/select%20logTimestamp,oldFixes%20as%20value%20from%20Entry%20where%20oldFixes%20is%20not%20null%20limit%202000";
     $.ajax({
         url: dataurl,
         method: 'GET',
