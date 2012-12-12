@@ -155,7 +155,12 @@ $(function () {
  	//var dataurl = "http://localhost:8000/graphs/logs/data.txt";
  	
  	//var dataurl = getAbsolutePath() + "/data.txt";
- 	var dataurl = getAbsolutePath() + "query/logs/sql/" + getURLParameter("sql") + "/" + getURLParameter("limit") ;
+ 	var dataurl;
+ 	if (getURLParameter("local") == "true")
+ 		dataurl = "data.txt";
+ 	else 
+ 	    dataurl = getAbsolutePath() + "query/logs/sql/" + getURLParameter("sql") + "/" + getURLParameter("limit") ;
+ 	console.log(dataurl);
     $.ajax({
         url: dataurl,
         method: 'GET',
