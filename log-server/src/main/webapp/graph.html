@@ -112,7 +112,7 @@ $(function () {
 	    for (var i in series.result) {
 	    	var t = series.result[i].t;
 	    	var val = series.result[i].value * 1.0;
-	    	total += val;
+	    	total += val * 1.0;
 	    	//console.log("tstamp="+t + ",value="+ val);
 	    	d.push([t,val]);
 	    	if (minT === null || t < minT)
@@ -124,6 +124,8 @@ $(function () {
 	    var mean = 0;
 	    if (series.result >0)
 	    	mean = total / series.result;
+	    
+	    console.log("mean="+ mean);
 	 
         var options = {}; 
         
