@@ -138,8 +138,8 @@ $(function () {
         success: onDataReceived
     });
     $(function() {
-        $( "#datepickerStart" ).datepicker();
-        $( "#datepickerFinish" ).datepicker();
+        $( "#datepickerStart" ).datepicker("option", "dateFormat", "yyyy-mm-dd );
+        $( "#datepickerFinish" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
     });
 });
 </script>
