@@ -4,14 +4,21 @@
  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Flot Examples</title>
-    <link href="../js/flot/layout.css" rel="stylesheet" type="text/css">
+    <link href="js/flot/layout.css" rel="stylesheet" type="text/css">
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
-    <script language="javascript" type="text/javascript" src="../js/flot/jquery.js"></script>
-    <script language="javascript" type="text/javascript" src="../js/flot/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="js/flot/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
+    
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+    <!-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> -->
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
  </head>
     <body>
     
     <div id="placeholder3" style="width:600px;height:300px"></div>
+    
+    <p>Start: <input type="text" id="datepickerStart" /></p>
+    <p>Finish: <input type="text" id="datepickerFinish" /></p>
 
     <div id="placeholder" style="width:600px;height:300px"></div>
 
@@ -129,6 +136,10 @@ $(function () {
         method: 'GET',
         dataType: 'json',
         success: onDataReceived
+    });
+    $(function() {
+        $( "#datepickerStart" ).datepicker();
+        $( "#datepickerFinish" ).datepicker();
     });
 });
 </script>
