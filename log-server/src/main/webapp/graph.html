@@ -116,9 +116,9 @@ $(function () {
 	    	//console.log("tstamp="+t + ",value="+ val);
 	    	d.push([t,val]);
 	    	if (minT === null || t < minT)
-	    		minT = val;
+	    		minT = t;
 	    	if (maxT === null || t > maxT)
-	    		maxT = val;
+	    		maxT = t;
 	    }
 	    
 	    var mean = 0;
