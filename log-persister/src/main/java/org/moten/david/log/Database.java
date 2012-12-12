@@ -128,12 +128,48 @@ public class Database {
 			if (e.getValue() != null) {
 				// field names in orientdb cannot have spaces so replace them
 				// with underscores
-				d.field(e.getKey().replace(" ", "_"), e.getValue());
+				ValueAndType v = parse(e.getValue());
+				d.field(e.getKey().replace(" ", "_"), v.value, v.type);
 			}
 		}
 
 		// persist the document
 		d.save();
+	}
+
+	private static class ValueAndType {
+		Object value;
+		OType type;
+
+		public ValueAndType(Object value, OType type) {
+			super();
+			this.value = value;
+			this.type = type;
+		}
+	}
+
+	private ValueAndType parse(String s) {
+		// try matching against Integer
+		try {
+			Integer val = Integer.parseInt(s);
+			return new ValueAndType(val, OType.INTEGER);
+		} catch (NumberFormatException e) {
+			// continue
+		}
+		// try matching against Double
+		try {
+			Double val = Double.parseDouble(s);
+			return new ValueAndType(val, OType.INTEGER);
+		} catch (NumberFormatException e) {
+			// continue
+		}
+		// try matching against boolean
+		if (s.equalsIgnoreCase("true"))
+			return new ValueAndType(Boolean.TRUE, OType.BOOLEAN);
+		else if (s.equalsIgnoreCase("false"))
+			return new ValueAndType(Boolean.FALSE, OType.BOOLEAN);
+
+		return new ValueAndType(s, OType.STRING);
 	}
 
 	public Buckets execute(BucketQuery query) {
