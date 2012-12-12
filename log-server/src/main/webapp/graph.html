@@ -15,7 +15,7 @@
  </head>
     <body>
     
-    <div id="placeholder3" style="width:600px;height:300px"></div>
+    <div id="placeholder3" style="width:80%;height:60%"></div>
     
     <p>Start: <input type="text" id="datepickerStart" /></p>
     <p>Finish: <input type="text" id="datepickerFinish" /></p>
@@ -51,7 +51,8 @@ $(function () {
     var d6 = [];
     for (var i = 0; i < 14; i += 0.5 + Math.random())
         d6.push([i, Math.sqrt(2*i + Math.sin(i) + 5)]);
-                        
+                    
+    if (false)
     $.plot($("#placeholder"), [
         {
             data: d1,
@@ -82,6 +83,7 @@ $(function () {
     
     var d7 = [[100,45678],[200,56789],[300,36789],[400,27000]];
     
+    if (false)
     $.plot($("#placeholder2"), [
                                {
                                    data: d7,
@@ -109,6 +111,7 @@ $(function () {
 	 	var total = 0.0;
 	 	var minT = null;
 	 	var maxT = null;
+	 	var count = 0;
 	    for (var i in series.result) {
 	    	var t = series.result[i].t;
 	    	var val = series.result[i].value * 1.0;
@@ -119,11 +122,12 @@ $(function () {
 	    		minT = t;
 	    	if (maxT === null || t > maxT)
 	    		maxT = t;
+	    	count ++;
 	    }
 	    
 	    var mean = 0;
-	    if (series.result >0)
-	    	mean = total / series.result;
+	    if (count >0)
+	    	mean = total / count;
 	    
 	    console.log("mean="+ mean);
 	 
