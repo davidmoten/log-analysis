@@ -50,4 +50,16 @@ public class UtilTest {
 		assertEquals("a\\.[0-9]?\\.log",
 				Util.getFilename("/src/test/resources/a\\.[0-9]?\\.log"));
 	}
+
+	@Test
+	public void testParsePath() {
+		assertEquals("/ausdev/container/logs/cts/",
+				Util.getPath("/ausdev/container/logs/cts/cts.log.*"));
+	}
+
+	@Test
+	public void testParseFilename() {
+		assertEquals("cts.log.*",
+				Util.getFilename("/ausdev/container/logs/cts/cts.log.*"));
+	}
 }

@@ -42,7 +42,7 @@ public class Util {
 			if (files != null)
 				for (File file : files) {
 					list.add(new Log(name, file.getPath()));
-					log.info("added " + item);
+					log.info("added " + file);
 				}
 
 		}

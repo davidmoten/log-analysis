@@ -115,6 +115,10 @@ public class Database {
 		// create a new document (row in table)
 		ODocument d = new ODocument(TABLE_ENTRY);
 
+		persist(entry, d);
+	}
+
+	private void persist(LogEntry entry, ODocument d) {
 		// persist the full message, timestamp, level logger and threadName
 		d.field(FIELD_LOG_TIMESTAMP, entry.getTime(), OType.DATETIME);
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
@@ -132,7 +136,7 @@ public class Database {
 				// field names in orientdb cannot have spaces so replace them
 				// with underscores
 				ValueAndType v = parse(e.getValue());
-				d.field(e.getKey().replace(" ", "_"), v.value, v.type);
+				d.field(e.getKey().replace(" ", "."), v.value, v.type);
 			}
 		}
 
