@@ -136,7 +136,7 @@ public class Database {
 				// field names in orientdb cannot have spaces so replace them
 				// with underscores
 				ValueAndType v = parse(e.getValue());
-				d.field(e.getKey().replace(" ", "."), v.value, v.type);
+				d.field(e.getKey().replace(" ", "_"), v.value, v.type);
 			}
 		}
 

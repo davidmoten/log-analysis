@@ -35,7 +35,6 @@ public class Util {
 			File[] files = directoryFile.listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
-					log.info("test filename " + name);
 					return pattern.matcher(name).matches();
 				}
 			});
