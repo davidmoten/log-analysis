@@ -15,4 +15,26 @@
 			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>org.moten.david.log.server.ServerMain</mainClass>
+					<arguments>
+						<argument>
+							-server
+						</argument>
+						<argument>
+							-XX:+AggressiveOpts
+						</argument>
+						<argument>
+							-XX:CompileThreshold=200
+						</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
