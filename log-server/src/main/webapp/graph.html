@@ -3,7 +3,7 @@
 <html>
  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Flot Examples</title>
+    <title>log-analysis</title>
     <link href="js/flot/layout.css" rel="stylesheet" type="text/css">
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="js/flot/jquery.js"></script>
@@ -15,10 +15,18 @@
  </head>
     <body>
     
-    <div id="placeholder3" style="width:800px;height:500px"></div>
+    <form action="" method="get" style="margin-left:80px;">
+    <p><textarea rows="5" cols="80" name="sql" id="sql" style="font-size:6;"></textarea></p>
+    <p>Limit: <input type="text" name="limit" id="limit"/> <input type="submit" value="Execute"/></p> 
+    </form>
     
     <p>Start: <input type="text" id="datepickerStart" /> </p>
     <p>Finish: <input type="text" id="datepickerFinish" /></p>
+    
+    
+    <div id="placeholder3" style="width:800px;height:500px"></div>
+    
+    
 
     <div id="placeholder" style="width:600px;height:300px"></div>
 
@@ -30,6 +38,11 @@
 
 <script type="text/javascript">
 $(function () {
+	
+	$( "#datepickerStart" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
+    $( "#datepickerFinish" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
+    
+	
     var d1 = [];
     for (var i = 0; i < 14; i += 0.5)
         d1.push([i, Math.sin(i)]);
@@ -98,7 +111,7 @@ $(function () {
     }
     
     function getURLParameter(name) {
-        return decodeURI(
+        return decodeURIComponent(
             (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
         );
     }
@@ -161,14 +174,19 @@ $(function () {
  	else 
  	    dataurl = getAbsolutePath() + "query/logs/sql/" + getURLParameter("sql") + "/" + getURLParameter("limit") ;
  	console.log(dataurl);
+ 	
+ 	$("#sql").val(getURLParameter("sql"));
+ 	$("#limit").val(getURLParameter("limit"));
+ 	
     $.ajax({
         url: dataurl,
         method: 'GET',
         dataType: 'json',
         success: onDataReceived
     });
-    $( "#datepickerStart" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
-    $( "#datepickerFinish" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
+    
+    
+    
 });
 </script>
 
