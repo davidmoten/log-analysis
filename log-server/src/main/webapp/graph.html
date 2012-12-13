@@ -23,6 +23,7 @@
     <p>Start: <input type="text" id="datepickerStart" /> </p>
     <p>Finish: <input type="text" id="datepickerFinish" /></p>
     
+    <div id="error"></div>
     
     <div id="placeholder3" style="width:800px;height:500px"></div>
     
@@ -39,8 +40,8 @@
 <script type="text/javascript">
 $(function () {
 	
-	$( "#datepickerStart" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
-    $( "#datepickerFinish" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
+	//$( "#datepickerStart" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
+    //$( "#datepickerFinish" ).datepicker("option", "dateFormat", "yyyy-mm-dd" );
     
 	
     var d1 = [];
@@ -118,6 +119,7 @@ $(function () {
     
  // then fetch the data with jQuery
     function onDataReceived(series) {
+    	$("#error").text("");
 	 
 	 	var d = [];
 	 	
@@ -182,7 +184,11 @@ $(function () {
         url: dataurl,
         method: 'GET',
         dataType: 'json',
-        success: onDataReceived
+        success: onDataReceived,
+        error: function () {
+        	$("#error").text("an error occurred");
+        },
+        timeout: 60000
     });
     
     

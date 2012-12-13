@@ -33,8 +33,14 @@ public class Database {
 
 	private static final String TABLE_DUMMY = "Dummy";
 
-	private final ODatabaseDocumentTx db;
+	private ODatabaseDocumentTx db;
 	private final MessageSplitter splitter = new MessageSplitter();
+
+	private String url;
+
+	private String username;
+
+	private String password;
 
 	public Database(File location) {
 		this(connectToDatabase(location));
@@ -42,6 +48,9 @@ public class Database {
 
 	public Database(String url, String username, String password) {
 		this(connectToDatabase(url, username, password));
+		this.url = url;
+		this.username = username;
+		this.password = password;
 	}
 
 	private static ODatabaseDocumentTx connectToDatabase(String url,
@@ -119,29 +128,51 @@ public class Database {
 	}
 
 	private void persist(LogEntry entry, ODocument d) {
-		// persist the full message, timestamp, level logger and threadName
-		d.field(FIELD_LOG_TIMESTAMP, entry.getTime(), OType.DATETIME);
-		for (Entry<String, String> e : entry.getProperties().entrySet()) {
-			if (e.getValue() != null)
-				d.field(e.getKey(), e.getValue());
-		}
-
-		// persist the split fields from the full message
-		Map<String, String> map = splitter.split(entry.getMessage());
-		// System.out.println(entry);
-		if (map.size() > 0)
-			log.info(map.toString());
-		for (Entry<String, String> e : map.entrySet()) {
-			if (e.getValue() != null) {
-				// field names in orientdb cannot have spaces so replace them
-				// with underscores
-				ValueAndType v = parse(e.getValue());
-				d.field(e.getKey().replace(" ", "_"), v.value, v.type);
+		try {
+			// persist the full message, timestamp, level logger and threadName
+			d.field(FIELD_LOG_TIMESTAMP, entry.getTime(), OType.DATETIME);
+			for (Entry<String, String> e : entry.getProperties().entrySet()) {
+				if (e.getValue() != null)
+					d.field(e.getKey(), e.getValue());
 			}
-		}
 
-		// persist the document
-		d.save();
+			// persist the split fields from the full message
+			Map<String, String> map = splitter.split(entry.getMessage());
+			// System.out.println(entry);
+			if (map.size() > 0)
+				log.info(map.toString());
+			for (Entry<String, String> e : map.entrySet()) {
+				if (e.getValue() != null) {
+					// field names in orientdb cannot have spaces so replace
+					// them
+					// with underscores
+					ValueAndType v = parse(e.getValue());
+					d.field(e.getKey().replace(" ", "_"), v.value, v.type);
+				}
+			}
+
+			// persist the document
+			d.save();
+		} catch (RuntimeException e) {
+			log.log(Level.WARNING, e.getMessage(), e);
+			try {
+				log.info("sleeping for 10 seconds before attempting reconnect");
+				Thread.sleep(10000);
+			} catch (InterruptedException e1) {
+				// do nothing
+			}
+			connect();
+		}
+	}
+
+	private void connect() {
+		try {
+			log.info("closing existing db connection");
+			db.close();
+		} catch (RuntimeException e) {
+			log.log(Level.WARNING, e.getMessage(), e);
+		}
+		db = connectToDatabase(url, username, password);
 	}
 
 	private static class ValueAndType {
