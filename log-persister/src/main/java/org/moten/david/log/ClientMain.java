@@ -32,11 +32,12 @@ public class ClientMain {
 		String name = System.getProperty("logName", "logFile");
 		String paths = System.getProperty("logPaths",
 				"src/test/resources/test.log");
+		String url = System.getProperty("url", "remote:localhost/logs");
 		String[] items = paths.split(",");
 		log.info("paths=" + paths);
 		List<Log> list = Util.getLogs(name, items);
 		Options options = new Options(null, null, list);
-		Database db = new Database("remote:localhost/logs", "admin", "admin");
+		Database db = new Database(url, "admin", "admin");
 		db.persistDummyRecords();
 		log.info("loaded dummy records");
 		Watcher w = new Watcher(db, options);
