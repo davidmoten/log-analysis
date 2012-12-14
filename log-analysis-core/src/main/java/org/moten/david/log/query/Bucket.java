@@ -1,7 +1,11 @@
 package org.moten.david.log.query;
 
+import com.google.common.base.Preconditions;
+
 public class Bucket {
 
+	private final double start;
+	private final double width;
 	private long count = 0;
 	private double sum = 0;
 	private double sumSquares = 0;
@@ -13,6 +17,12 @@ public class Bucket {
 	private Long latestTimestamp;
 	private Double max;
 	private Double min;
+
+	public Bucket(double start, double width) {
+		Preconditions.checkArgument(width > 0, "width must be > 0");
+		this.start = start;
+		this.width = width;
+	}
 
 	public void add(long timestamp, double value) {
 		sum += value;
@@ -98,7 +108,7 @@ public class Bucket {
 		return sum;
 	}
 
-	public Double metric(Metric metric) {
+	public Double get(Metric metric) {
 		if (metric == Metric.EARLIEST)
 			return earliest();
 		else if (metric == Metric.FIRST)
@@ -142,8 +152,21 @@ public class Bucket {
 		builder.append(mean());
 		builder.append(", sd=");
 		builder.append(standardDeviation());
+		builder.append(", start=");
+		builder.append(getStart());
+		builder.append(", width=");
+		builder.append(getWidth());
+
 		builder.append("]");
 		return builder.toString();
+	}
+
+	public double getStart() {
+		return start;
+	}
+
+	public double getWidth() {
+		return width;
 	}
 
 }
