@@ -1,0 +1,51 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>log-analysis</title>
+<link href="js/flot/layout.css" rel="stylesheet" type="text/css">
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript"
+	src="js/flot/jquery.js"></script>
+<script language="javascript" type="text/javascript"
+	src="js/flot/jquery.flot.js"></script>
+
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<!-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> -->
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+</head>
+<body>
+	<div id="json">json here</div>
+	<div id="error"></div>
+
+	<script type="text/javascript">
+$(function () {
+	
+	function getAbsolutePath() {
+        var loc = window.location;
+        var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+        return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+    }
+	
+	function onDataReceived(series) {
+	   	$("#json").text(series);
+	}
+	
+	var dataurl =  "data?sql=select%20logTimestamp,%20rateMsgPerSecond%20as%20value%20from%20Entry%20where%20rateMsgPerSecond%20is%20not%20null&start=1355463693198&interval=60000&buckets=60&metric=MEAN";
+	console.log("dataurl=" + dataurl);
+	$.ajax({
+        url: dataurl,
+        method: 'GET',
+        dataType: 'json',
+        success: onDataReceived,
+        error: function (request, textStatus, errorThrown) {
+        	console.log(errorThrown);
+        	$("#error").text(errorThrown);
+        },
+        timeout: 60000
+    });
+})
+    
+  	</script>
+</body>
+</html>

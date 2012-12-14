@@ -17,7 +17,7 @@ public class Util {
 				s.append(-1);
 			s.append(']');
 		}
-		s.insert(0, "{ data: [");
+		s.insert(0, "{ \"data\": [");
 		s.append("] }");
 
 		return s.toString();
