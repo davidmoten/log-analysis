@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.core;
 
 import java.util.Map;
 

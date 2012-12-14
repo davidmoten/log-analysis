@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.core;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.junit.Test;
+import org.moten.david.log.core.Database;
+import org.moten.david.log.core.LogEntry;
+import org.moten.david.log.core.LogParser;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 

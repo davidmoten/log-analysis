@@ -1,10 +1,11 @@
-package org.moten.david.log;
+package org.moten.david.log.core;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
 import org.junit.Test;
+import org.moten.david.log.core.MessageSplitter;
 
 public class MessageSplitterTest {
 

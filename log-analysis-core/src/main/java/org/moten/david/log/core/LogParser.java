@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.core;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,7 +19,7 @@ public class LogParser {
 	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
-	static final String FIELD_THREAD_NAME = "threadName";
+	public static final String FIELD_THREAD_NAME = "threadName";
 	private final Pattern pattern = Pattern
 			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +(\\S+)? ?- (.*)$");
 	private final BiMap<String, Integer> map = createGroupMap();

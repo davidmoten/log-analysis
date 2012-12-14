@@ -12,6 +12,8 @@ import java.util.logging.LogManager;
 import org.junit.Test;
 import org.moten.david.log.config.Log;
 import org.moten.david.log.config.Options;
+import org.moten.david.log.core.Database;
+import org.moten.david.log.core.LogParser;
 
 import com.google.common.collect.Lists;
 

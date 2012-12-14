@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +7,9 @@ import java.io.File;
 import java.util.concurrent.Executors;
 
 import org.junit.Test;
+import org.moten.david.log.core.Database;
+import org.moten.david.log.core.LogFile;
+import org.moten.david.log.core.LogParser;
 
 public class LogFileTest {
 

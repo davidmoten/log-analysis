@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.moten.david.log.config.Log;
 import org.moten.david.log.config.Options;
+import org.moten.david.log.core.Database;
 
 public class ClientMain {
 

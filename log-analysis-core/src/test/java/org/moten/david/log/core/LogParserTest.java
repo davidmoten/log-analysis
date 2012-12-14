@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 import org.junit.Test;
+import org.moten.david.log.core.LogEntry;
+import org.moten.david.log.core.LogParser;
+import org.moten.david.log.core.MessageSplitter;
 
 import com.google.common.io.LineReader;
 

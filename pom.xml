@@ -11,7 +11,7 @@
 		<guava.version>13.0.1</guava.version>
 	</properties>
 	<modules>
-		<module>log-analysis-util</module>
+		<module>log-analysis-core</module>
 		<module>log-persister</module>
 		<module>log-database</module>
 		<module>log-server</module>
