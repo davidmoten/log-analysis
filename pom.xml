@@ -9,6 +9,7 @@
 	<properties>
 		<orientdb.version>1.2.0</orientdb.version>
 		<guava.version>13.0.1</guava.version>
+		<jetty.plugin.version>8.1.8.v20121106</jetty.plugin.version>
 	</properties>
 	<modules>
 		<module>log-analysis-core</module>

@@ -9,12 +9,16 @@
 	<artifactId>log-ui</artifactId>
 	<packaging>war</packaging>
 	<description>webapp offering time series analysis graphs of parsed logs</description>
+	<properties>
+		<jetty.port>9292</jetty.port>
+		<jetty.stop.port>9998</jetty.stop.port>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.8.v20121106</version>
+				<version>${jetty.plugin.version}</version>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<stopKey>foo</stopKey>
@@ -23,6 +27,13 @@
 						<contextPath>/</contextPath>
 					</webAppConfig>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlets</artifactId>
+						<version>${jetty.plugin.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

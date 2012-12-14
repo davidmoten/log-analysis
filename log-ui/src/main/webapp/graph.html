@@ -173,8 +173,10 @@ $(function () {
  	var dataurl;
  	if (getURLParameter("local") == "true")
  		dataurl = "data.txt";
- 	else 
+ 	else if (getUrlParameter("direct") == "true")
  	    dataurl = getAbsolutePath() + "query/logs/sql/" + getURLParameter("sql") + "/" + getURLParameter("limit") ;
+ 	else 
+ 		dataurl = "http://localhost:9191/query/sql="+ getURLParameter("sql") + "&start=" + (nowMs-3600000) + "&interval=3600&buckets=60&metric=MEAN";
  	console.log(dataurl);
  	
  	$("#sql").val(getURLParameter("sql"));

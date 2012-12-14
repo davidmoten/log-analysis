@@ -9,6 +9,10 @@
 	<artifactId>log-server</artifactId>
 	<description>Aggregates data from orientdb remote database via binary connection and reports as JSON</description>
 	<packaging>war</packaging>
+	<properties>
+		<jetty.port>9191</jetty.port>
+		<jetty.stop.port>9999</jetty.stop.port>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.moten.david.log</groupId>
@@ -32,11 +36,11 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.8.v20121106</version>
+				<version>${jetty.plugin.version}</version>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<stopKey>foo</stopKey>
-					<stopPort>9999</stopPort>
+					<stopPort>${jetty.stop.port}</stopPort>
 					<webAppConfig>
 						<contextPath>/</contextPath>
 					</webAppConfig>
