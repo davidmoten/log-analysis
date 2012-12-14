@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -237,18 +238,23 @@ public class Database {
 		db.close();
 	}
 
+	/**
+	 * Persists 1000 random values in the range with times randomly selected
+	 * from the the last hour.
+	 */
 	public void persistDummyRecords() {
 		long t = System.currentTimeMillis();
 		Random r = new Random();
 		for (int i = 0; i < 1000; i++) {
-			long time = t - r.nextInt(3600000);
+			long time = t - TimeUnit.HOURS.toMillis(1)
+					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
 			ODocument d = new ODocument(TABLE_DUMMY);
-
 			int specialNumber = i % (r.nextInt(100) + 1);
-			d.field(LogParser.FIELD_LOG_TIMESTAMP, time, OType.DATETIME);
+			d.field(LogParser.FIELD_LOG_TIMESTAMP, time, OType.LONG);
 			d.field(LogParser.FIELD_MSG, "specialNumber=" + specialNumber);
 			d.field("specialNumber", specialNumber);
 			d.save();
 		}
+		log.info("persisted 1000 random values from the last hour to table Dummy");
 	}
 }

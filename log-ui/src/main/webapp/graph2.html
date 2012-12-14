@@ -15,7 +15,8 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 </head>
 <body>
-	<div id="json">json here</div>
+
+	<div id="graph" style="width:1200px;height:400px;"></div>
 	<div id="error"></div>
 
 	<script type="text/javascript">
@@ -28,10 +29,22 @@ $(function () {
     }
 	
 	function onDataReceived(series) {
-	   	$("#json").text(series);
+	   	console.log(series);
+	   	//series.lines = { show: true, steps: true, fill: true };
+	   	series.bars = { show: true, align: "center", barWidth: 36000};
+	   	series.points = { show: true };
+	   	
+	   	$.plot($("#graph"), [ series
+//	                                {
+//	                                    data: [[1,2],[5,7],[9,11]],
+//	                                    bars: { show: true }
+//	                                }
+	                            ]);
+	     
 	}
 	
-	var dataurl =  "data?sql=select%20logTimestamp,%20rateMsgPerSecond%20as%20value%20from%20Entry%20where%20rateMsgPerSecond%20is%20not%20null&start=1355463693198&interval=60000&buckets=60&metric=MEAN";
+	var now = new Date().getTime();
+	var dataurl =  "data?sql=select%20logTimestamp,%20specialNumber%20as%20value%20from%20Dummy%20where%20specialNumber%20is%20not%20null%20order%20by%20logTimestamp&start=" + (now - 3600000) + "&interval=60000&buckets=60&metric=MEAN";
 	console.log("dataurl=" + dataurl);
 	$.ajax({
         url: dataurl,

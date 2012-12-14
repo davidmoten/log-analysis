@@ -19,8 +19,8 @@ public class QueryServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5553574830587263509L;
 
-	private final Database db = new Database("remote:jenkins.amsa.gov.au/logs",
-			"admin", "admin");
+	private final Database db = new Database(System.getProperty("db.url",
+			"remote:localhost/logs"), "admin", "admin");
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
