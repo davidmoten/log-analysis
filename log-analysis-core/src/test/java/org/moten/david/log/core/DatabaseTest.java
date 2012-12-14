@@ -8,9 +8,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.junit.Test;
-import org.moten.david.log.core.Database;
-import org.moten.david.log.core.LogEntry;
-import org.moten.david.log.core.LogParser;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 
@@ -41,8 +38,8 @@ public class DatabaseTest {
 		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT);
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-		long n1 = 10000;
-		long n2 = 10000;
+		long n1 = 100;
+		long n2 = 100;
 		System.out
 				.println("triggering hotspot compilation by sending some messages");
 		persistMessages(lineMessage, p, parser, df, n1);
