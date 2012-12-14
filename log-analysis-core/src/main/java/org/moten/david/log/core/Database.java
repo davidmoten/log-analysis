@@ -2,6 +2,7 @@ package org.moten.david.log.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -130,7 +131,8 @@ public class Database {
 	private void persist(LogEntry entry, ODocument d) {
 		try {
 			// persist the full message, timestamp, level logger and threadName
-			d.field(FIELD_LOG_TIMESTAMP, entry.getTime(), OType.DATETIME);
+			d.field(FIELD_LOG_TIMESTAMP, new Date(entry.getTime()),
+					OType.DATETIME);
 			for (Entry<String, String> e : entry.getProperties().entrySet()) {
 				if (e.getValue() != null)
 					d.field(e.getKey(), e.getValue());
@@ -218,9 +220,9 @@ public class Database {
 		Buckets buckets = new Buckets(query);
 		for (ODocument doc : result) {
 			System.out.println(doc);
-			Long timestamp = doc.field(FIELD_LOG_TIMESTAMP);
+			Date timestampDate = doc.field(FIELD_LOG_TIMESTAMP);
 			Number value = doc.field(FIELD_VALUE);
-			buckets.add(timestamp, value.doubleValue());
+			buckets.add(timestampDate.getTime(), value.doubleValue());
 		}
 		return buckets;
 	}

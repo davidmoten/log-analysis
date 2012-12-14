@@ -2,6 +2,7 @@ package org.moten.david.log.server;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,10 +30,17 @@ public class QueryServlet extends HttpServlet {
 		double interval = getMandatoryDouble(req, "interval");
 		long numBuckets = getMandatoryLong(req, "buckets");
 		Metric metric = Metric.valueOf(getMandatoryParameter(req, "metric"));
+		String json = getJson(db, sql, startTime, interval, numBuckets, metric);
+		resp.getWriter().print(json);
+	}
+
+	private static String getJson(Database db, String sql, long startTime,
+			double interval, long numBuckets, Metric metric) {
 		BucketQuery q = new BucketQuery(new Date(startTime), interval,
 				numBuckets, sql);
 		Buckets buckets = db.execute(q);
-		resp.getWriter().print(Util.toJson(buckets, metric));
+		String json = Util.toJson(buckets, metric);
+		return json;
 	}
 
 	private double getMandatoryDouble(HttpServletRequest req, String name) {
@@ -66,4 +74,14 @@ public class QueryServlet extends HttpServlet {
 			throw new RuntimeException("parameter " + name + " is mandatory");
 	}
 
+	public static void main(String[] args) {
+
+		Database db = new Database("remote:jenkins.amsa.gov.au/logs", "admin",
+				"admin");
+		String json = getJson(db,
+				"select logTimestamp, logTimestamp as value from Entry",
+				System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1),
+				TimeUnit.MINUTES.toMillis(1), 60, Metric.MEAN);
+		System.out.println(json);
+	}
 }

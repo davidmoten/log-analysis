@@ -1,8 +1,12 @@
 package org.moten.david.log.query;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class BucketQuery {
+
+	private static final Logger log = Logger.getLogger(BucketQuery.class
+			.getName());
 
 	private final Date startTime;
 	private final double intervalSizeMs;
@@ -21,6 +25,7 @@ public class BucketQuery {
 				+ Math.ceil(startTime.getTime() + intervalSizeMs * numIntervals);
 		Sql sq = new Sql(sql);
 		this.sql = sq.and(timeClause).toString();
+		log.info("sql = " + this.sql);
 	}
 
 	public Date getStartTime() {
