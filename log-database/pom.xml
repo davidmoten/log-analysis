@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.moten.david.log</groupId>
+		<artifactId>log-analysis</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>log-database</artifactId>
+	<description>Starts orientdb database server</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-server</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>org.moten.david.log.server.ServerMain</mainClass>
+					<arguments>
+						<argument>
+							-server
+						</argument>
+						<argument>
+							-XX:+AggressiveOpts
+						</argument>
+						<argument>
+							-XX:CompileThreshold=200
+						</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

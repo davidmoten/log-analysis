@@ -7,35 +7,16 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>log-server</artifactId>
-	<description>Parses log lines and persists to orientdb</description>
+	<description>Aggregates data from orientdb remote database via binary connection and reports as JSON</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.orientechnologies</groupId>
-			<artifactId>orientdb-server</artifactId>
-			<version>1.2.0</version>
+			<artifactId>orientdb-client</artifactId>
+			<version>${orientdb.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<configuration>
-					<mainClass>org.moten.david.log.server.ServerMain</mainClass>
-					<arguments>
-						<argument>
-							-server
-						</argument>
-						<argument>
-							-XX:+AggressiveOpts
-						</argument>
-						<argument>
-							-XX:CompileThreshold=200
-						</argument>
-					</arguments>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 </project>

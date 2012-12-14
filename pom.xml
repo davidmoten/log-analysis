@@ -13,6 +13,7 @@
 	<modules>
 		<module>log-analysis-util</module>
 		<module>log-persister</module>
+		<module>log-database</module>
 		<module>log-server</module>
 		<module>log-ui</module>
 	</modules>
