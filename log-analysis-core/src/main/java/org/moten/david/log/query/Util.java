@@ -10,7 +10,11 @@ public class Util {
 			s.append('[');
 			s.append(bucket.getStart());
 			s.append(',');
-			s.append(bucket.get(metric));
+			Double value = bucket.get(metric);
+			if (value != null)
+				s.append(value);
+			else
+				s.append(-1);
 			s.append(']');
 		}
 		s.insert(0, "{ data: [");

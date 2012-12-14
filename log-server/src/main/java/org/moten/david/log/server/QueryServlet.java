@@ -78,8 +78,9 @@ public class QueryServlet extends HttpServlet {
 
 		Database db = new Database("remote:jenkins.amsa.gov.au/logs", "admin",
 				"admin");
-		String json = getJson(db,
-				"select logTimestamp, logTimestamp as value from Entry",
+		String json = getJson(
+				db,
+				"select logTimestamp, rateMsgPerSecond as value from Entry where rateMsgPerSecond is not null",
 				System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1),
 				TimeUnit.MINUTES.toMillis(1), 60, Metric.MEAN);
 		System.out.println(json);

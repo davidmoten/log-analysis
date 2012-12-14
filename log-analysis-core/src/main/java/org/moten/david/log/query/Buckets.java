@@ -22,8 +22,10 @@ public class Buckets {
 	public void add(long timestamp, double value) {
 		int bucketIndex = (int) ((timestamp - query.getStartTime().getTime()) / query
 				.getIntervalSizeMs());
-		buckets.get(bucketIndex).add(timestamp, value);
-		allBucket.add(timestamp, value);
+		if (bucketIndex < buckets.size()) {
+			buckets.get(bucketIndex).add(timestamp, value);
+			allBucket.add(timestamp, value);
+		}
 	}
 
 	public List<Bucket> getBuckets() {
