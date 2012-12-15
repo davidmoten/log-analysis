@@ -40,7 +40,7 @@ $(function () {
 	function onDataReceived(series) {
 	   	console.log(series);
 	   	//series.lines = { show: true, steps: true, fill: true };
-	   	series.bars = { show: true, align: "center", barWidth: 36000};
+	   	series.bars = { show: true, align: "center", barWidth: 60000};
 	   	series.points = { show: true };
 		var options = {
 				xaxis: {
@@ -59,7 +59,7 @@ $(function () {
 	
 	var now = new Date().getTime();
 	
-	var dataurl =  "data?sql=select%20logTimestamp,%20specialNumber%20as%20value%20from%20Dummy%20where%20specialNumber%20is%20not%20null%20order%20by%20logTimestamp&start=" + (now - 3600000) + "&interval=60000&buckets=60&metric=MEAN";
+	var dataurl =  "data?sql=select%20logTimestamp,%20specialNumber%20as%20value%20from%20Dummy%20where%20specialNumber%20is%20not%20null%20order%20by%20logTimestamp&start=" + (now - 3600000 ) + "&interval=60000&buckets=60&metric=MEAN";
 	console.log("dataurl=" + dataurl);
 	$.ajax({
         url: dataurl,
