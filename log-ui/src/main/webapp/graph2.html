@@ -58,8 +58,13 @@ $(function () {
 	}
 	
 	var now = new Date().getTime();
-	
-	var dataurl =  "data?sql=select%20logTimestamp,%20specialNumber%20as%20value%20from%20Dummy%20where%20specialNumber%20is%20not%20null%20order%20by%20logTimestamp&start=" + (now - 3600000 ) + "&interval=60000&buckets=60&metric=MEAN";
+	var sql = "select logTimestamp, specialNumber as value from Dummy where specialNumber is not null order by logTimestamp";
+	sql = sql.replace(" ","%20");
+	var startTime = now - 3600000;
+	var interval = 60000;
+	var buckets = 60;
+	var metric = "MEAN";
+	var dataurl =  "data?sql="+sql+"&start=" + startTime + "&interval="+ interval + "&buckets="+buckets+"&metric="+metric;
 	console.log("dataurl=" + dataurl);
 	$.ajax({
         url: dataurl,
