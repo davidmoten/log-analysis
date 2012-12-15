@@ -37,26 +37,6 @@ $(function () {
         return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
     }
 	
-	function onDataReceived(series) {
-	   	console.log(series);
-	   	//series.lines = { show: true, steps: true, fill: true };
-	   	series.bars = { show: true, align: "center", barWidth: 60000};
-	   	series.points = { show: true };
-		var options = {
-				xaxis: {
-			   	    mode: "time",
-			   	    timeformat: "%H:%M"
-			   	}
-		};
-	   	$.plot($("#graph"), [ series
-//	                                {
-//	                                    data: [[1,2],[5,7],[9,11]],
-//	                                    bars: { show: true }
-//	                                }
-	                            ], options);
-	     
-	}
-	
 	var now = new Date().getTime();
 	var sql = "select logTimestamp, specialNumber as value from Dummy where specialNumber is not null order by logTimestamp";
 	sql = sql.replace(" ","%20");
@@ -64,6 +44,23 @@ $(function () {
 	var interval = 60000;
 	var buckets = 60;
 	var metric = "MEAN";
+	var barOptions = { show: true, align: "center", barWidth: interval};
+	
+	function onDataReceived(series) {
+	   	console.log(series);
+	   	//series.lines = { show: true, steps: true, fill: true };
+	   	series.bars = barOptions;
+	   	series.points = { show: true };
+		var options = {
+				xaxis: {
+			   	    mode: "time",
+			   	    timeformat: "%H:%M"
+			   	}
+		};
+	   	$.plot($("#graph"), [ series ], options);
+	}
+	
+	
 	var dataurl =  "data?sql="+sql+"&start=" + startTime + "&interval="+ interval + "&buckets="+buckets+"&metric="+metric;
 	console.log("dataurl=" + dataurl);
 	$.ajax({
