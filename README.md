@@ -3,7 +3,7 @@ log-analysis
 
 Analyzes log files for the purposes of time series analysis.
 
-Uses orientdb for high speed persistence and querying and flot for javascript graphs.
+Uses (orientdb) for high speed persistence and querying and flot for javascript graphs.
 
 Comprises the following components:
 
@@ -21,7 +21,7 @@ which will
 * start log-server
 * start log-ui
 
-To test go to http://localhost:9292/graph.html
+To test go to (http://localhost:9292/graph.html).
 
 To stop, ctrl-c the process started above and run 
     ./stop-all.sh
