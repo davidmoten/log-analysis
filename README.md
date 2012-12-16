@@ -3,7 +3,7 @@ log-analysis
 
 Analyzes log files for the purposes of time series analysis.
 
-Uses (orientdb) for high speed persistence and querying and flot for javascript graphs.
+Uses (http://www.orientdb.org orientdb) for high speed persistence and querying and (http://www.flotcharts.org/ flot) for javascript graphs.
 
 Comprises the following components:
 
