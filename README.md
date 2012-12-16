@@ -12,9 +12,16 @@ Comprises the following components:
 * log-server
 * log-ui
 
-To test, run ./restart-all.sh which will
+To test, run 
+    ./restart-all.sh 
+which will
+* stop log-server, log-ui
+* mvn clean install
 * start log-database with some dummy data
 * start log-server
 * start log-ui
 
-To test go to http://localhost:9292/graph2.html
+To test go to http://localhost:9292/graph.html
+
+To stop, ctrl-c the process started above and run 
+    ./stop-all.sh
