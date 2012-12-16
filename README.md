@@ -25,3 +25,10 @@ To test go to (http://localhost:9292/graph.html).
 
 To stop, ctrl-c the process started above and run 
     ./stop-all.sh
+
+Todo
+===========
+A fair bit but the core is in and working. 
+* detailed configuration including regex patterns for extraction of info from log lines
+* non-aggregated queries
+* dashboard
