@@ -32,3 +32,4 @@ A fair bit but the core is in and working.
 * detailed configuration including regex patterns for extraction of info from log lines
 * non-aggregated queries
 * dashboard
+* auto scan for new log files
