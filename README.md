@@ -16,4 +16,5 @@ To test, run ./restart-all.sh which will
 * start log-database with some dummy data
 * start log-server
 * start log-ui
+
 To test go to http://localhost:9292/graph2.html
