@@ -57,7 +57,22 @@ $(function () {
 			   	    timeformat: "%H:%M"
 			   	}
 		};
-	   	$.plot($("#graph"), [ series ], options);
+		var meanGraph = {
+                data: [[startTime,series.stats.mean],
+                       [startTime+interval*buckets,series.stats.mean]],
+                lines: { show: true }
+        };
+		var sdUpperGraph  = {
+				data: [[startTime,series.stats.mean+series.stats.standardDeviation],
+				       [startTime+interval*buckets,series.stats.mean + series.stats.standardDeviation]],
+                lines: { show: true }
+		}
+		var sdLowerGraph  = {
+				data: [[startTime,series.stats.mean-series.stats.standardDeviation],
+				       [startTime+interval*buckets,series.stats.mean - series.stats.standardDeviation]],
+                lines: { show: true }
+		}
+	   	$.plot($("#graph"), [ series, meanGraph,sdLowerGraph,sdUpperGraph ], options);
 	}
 	
 	
