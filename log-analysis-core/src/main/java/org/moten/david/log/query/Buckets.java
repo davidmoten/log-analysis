@@ -20,12 +20,24 @@ public class Buckets {
 	}
 
 	public void add(long timestamp, double value) {
-		int bucketIndex = (int) ((timestamp - query.getStartTime().getTime()) / query
-				.getIntervalSizeMs());
-		if (bucketIndex < buckets.size()) {
-			buckets.get(bucketIndex).add(timestamp, value);
+		if (collate()) {
+			int bucketIndex = (int) ((timestamp - query.getStartTime()
+					.getTime()) / query.getIntervalSizeMs());
+			if (bucketIndex < buckets.size()) {
+				buckets.get(bucketIndex).add(timestamp, value);
+				allBucket.add(timestamp, value);
+			}
+		} else {
+			// no collation, each new pair gets a new Bucket
+			Bucket bucket = new Bucket(timestamp);
+			bucket.add(timestamp, value);
+			buckets.add(bucket);
 			allBucket.add(timestamp, value);
 		}
+	}
+
+	private boolean collate() {
+		return query.getNumIntervals() > 0;
 	}
 
 	public List<Bucket> getBuckets() {

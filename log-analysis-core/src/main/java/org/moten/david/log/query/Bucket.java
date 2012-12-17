@@ -1,6 +1,5 @@
 package org.moten.david.log.query;
 
-import com.google.common.base.Preconditions;
 
 public class Bucket {
 
@@ -19,9 +18,17 @@ public class Bucket {
 	private Double min;
 
 	public Bucket(double start, double width) {
-		Preconditions.checkArgument(width > 0, "width must be > 0");
 		this.start = start;
 		this.width = width;
+	}
+
+	/**
+	 * Constructor to hold singleton value buckets.
+	 * 
+	 * @param timestamp
+	 */
+	public Bucket(long timestamp) {
+		this(timestamp, 0);
 	}
 
 	public void add(long timestamp, double value) {

@@ -19,10 +19,13 @@ public class BucketQuery {
 		this.startTime = startTime;
 		this.intervalSizeMs = intervalSizeMs;
 		this.numIntervals = numIntervals;
-		String timeClause = "logTimestamp between "
-				+ startTime.getTime()
-				+ " and "
-				+ Math.ceil(startTime.getTime() + intervalSizeMs * numIntervals);
+		long n;
+		if (numIntervals == 0)
+			n = 1;
+		else
+			n = numIntervals;
+		String timeClause = "logTimestamp between " + startTime.getTime()
+				+ " and " + Math.ceil(startTime.getTime() + intervalSizeMs * n);
 		Sql sq = new Sql(sql);
 		this.sql = sq.and(timeClause).toString();
 		log.info("sql = " + this.sql);

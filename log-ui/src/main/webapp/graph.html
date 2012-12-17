@@ -42,8 +42,8 @@
 			var sql = "select logTimestamp, specialNumber as value from Dummy where specialNumber is not null order by logTimestamp";
 			sql = sql.replace(" ", "%20");
 			var startTime = now - 3600000;
-			var interval = 60000;
-			var buckets = 60;
+			var interval = 3600000;
+			var buckets = 0;
 			var metric = "MEAN";
 			var barOptions = {
 				show : true,
@@ -53,6 +53,14 @@
 
 			function onDataReceived(series) {
 				console.log(series);
+				var n;
+				if (buckets>0) 
+					n = buckets;
+				else {
+					n = 1;
+					barOptions.barWidth=0;
+				}
+				
 				//series.lines = { show: true, steps: true, fill: true };
 				series.bars = barOptions;
 				series.points = {
@@ -66,10 +74,12 @@
 				    //,colors: ["#d18b2c", "#dba255","#dba255", "#919733","#919733"]
 				};
 				
+				var finishTime = startTime + interval *n;
+				
 				var meanGraph = {
 					data : [
 							[ startTime, series.stats.mean ],
-							[ startTime + interval * buckets, series.stats.mean ] ],
+							[ finishTime, series.stats.mean ] ],
 					lines : {
 						show : true
 					}
@@ -78,7 +88,7 @@
 				var metricGraph = {
 						data : [
 								[ startTime, metricValue ],
-								[ startTime + interval * buckets, metricValue ] ],
+								[ finishTime, metricValue ] ],
 						lines : {
 							show : true
 						}
@@ -90,7 +100,7 @@
 									series.stats.mean
 											+ series.stats.standardDeviation ],
 							[
-									startTime + interval * buckets,
+									finishTime,
 									series.stats.mean
 											+ series.stats.standardDeviation ] ],
 					lines : {
@@ -104,7 +114,7 @@
 									series.stats.mean
 											- series.stats.standardDeviation ],
 							[
-									startTime + interval * buckets,
+									finishTime,
 									series.stats.mean
 											- series.stats.standardDeviation ] ],
 					lines : {
