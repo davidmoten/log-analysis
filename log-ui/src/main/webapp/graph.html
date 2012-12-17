@@ -49,15 +49,19 @@ div.inline { float:left; }
 			var now = new Date().getTime();
 			var sql = "select logTimestamp, specialNumber as value from Dummy where specialNumber is not null order by logTimestamp";
 			sql = sql.replace(new RegExp(" ",'g'), "%20");
-			var startTime = now - 3600000;
-			var singleBucket = true;
-			if (singleBucket) {
-				var buckets = 0;
-				var interval = 3600000;
-			} else {
-				var buckets = 60;
-				var interval = 60000;
+			var buckets = getURLParameter("buckets");
+			var interval = getURLParameter("interval");
+			var n;
+			if (buckets == 0) 
+				n = 1;
+			else 
+				n = buckets;
+			
+			if (getURLParameter("finish")=="now"){
+				var startTime = now - n* interval; 
 			}
+			else startTime = now - 10;
+			
 			var metric = "MEAN";
 			var barOptions = {
 				show : true,
