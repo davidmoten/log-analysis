@@ -202,3 +202,9 @@ function getAbsolutePath() {
 					loc.href.length
 							- ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 }
+
+function setTitle(title) {
+	var s= getURLParameter("title");
+	if (s!="null")
+		title.text(s);
+}

@@ -16,12 +16,12 @@
 	<div id="title" class="title"></div>
 	<div id="main"></div>
 	<script type="text/javascript">
-		var title = getURLParameter("title");
-		if (title!="null")
-			$("#title").text(title);
+		
+		setTitle($("#title"));
+
 		$(function() {
-			for (i=1;i<=30;i++) {
-				addGraph($("#main"),i);
+			for (i = 1; i <= 30; i++) {
+				addGraph($("#main"), i);
 			}
 		})
 	</script>
