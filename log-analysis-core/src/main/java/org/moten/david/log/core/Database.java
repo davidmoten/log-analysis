@@ -72,7 +72,7 @@ public class Database {
 		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
 		OGlobalConfiguration.TX_USE_LOG.setValue(false);
 		OGlobalConfiguration.TX_COMMIT_SYNCH.setValue(true);
-		OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(false);
+		OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(true);
 		// OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
 		OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
 		try {
