@@ -61,14 +61,12 @@ div.inline {
 										- ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 			}
 
+			// parse parameters from the url
 			var now = new Date().getTime();
 			var field = getURLParameter('field');
 			var tablename = getURLParameter("table");
-			console.log(tablename);
 			if (tablename == null || tablename=="null")
 				tablename="Entry";
-			
-			
 			var buckets = Number(getURLParameter("buckets"));
 			var s = getURLParameter("interval");
 			var interval;
@@ -84,24 +82,27 @@ div.inline {
 				interval = s.substring(0,s.length-1);
 			else 
 				interval = Number(s);
-			
-			var finishTime = getURLParameter("finish");
-			var metric = getURLParameter("metric");
-			
-			var sql = "select logTimestamp, " + field + " as value from " + tablename + " where " + field +" is not null order by logTimestamp";
-			sql = sql.replace(new RegExp(" ", 'g'), "%20");
-			
 			var n;
 			if (buckets == 0)
+				//no aggregation
 				n = 1;
 			else
 				n = buckets;
-
-			if (getURLParameter("finish") == "now") {
+			
+			var finishTime = getURLParameter("finish");
+			if (finishTime == "now") {
 				var startTime = now - n * interval;
 			} else
 				//TOOD parse finish time/start time from url parameters
 				startTime = now - n * interval;
+			var metric = getURLParameter("metric");
+			
+			//graph it
+			
+			var sql = "select logTimestamp, " + field + " as value from " 
+						+ tablename + " where " + field 
+						+" is not null order by logTimestamp";
+			sql = sql.replace(new RegExp(" ", 'g'), "%20");
 
 			var barOptions = {
 				show : true,
