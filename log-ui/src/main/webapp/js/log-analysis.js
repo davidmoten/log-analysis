@@ -141,6 +141,7 @@ function endsWith(str, suffix) {
 }
 
 function addGraph(main,graphId) {
+	var field = getURLParameter("field"+graphId);
 	if (field=="null") return;
 	
 	main
@@ -150,8 +151,6 @@ function addGraph(main,graphId) {
 	$("#graph" + graphId).css("width", getURLParameter("width"));
 	$("#graph" + graphId).css("height", getURLParameter("height"));
 	
-	var field = getURLParameter("field"+graphId);
-
 	// parse parameters from the url
 	var now = new Date().getTime();
 	//var field = getURLParameter('field');
