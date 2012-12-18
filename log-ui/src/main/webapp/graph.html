@@ -38,8 +38,13 @@ div.inline {
 	</div>
 
 	<script type="text/javascript">
+	
 		$(function() {
 
+			function endsWith(str, suffix) {
+			    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+			}
+			
 			function getURLParameter(name) {
 				return decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)')
 						.exec(location.search) || [ , null ])[1]);
@@ -65,7 +70,21 @@ div.inline {
 			
 			
 			var buckets = Number(getURLParameter("buckets"));
-			var interval = Number(getURLParameter("interval"));
+			var s = getURLParameter("interval");
+			var interval;
+			if (endsWith(s,"d"))
+				interval = s.substring(0,s.length-1) * 24 * 3600000;
+			else if (endsWith(s, "h"))
+				interval = s.substring(0,s.length-1) * 3600000;
+			else if (endsWith(s, "m"))
+				interval = s.substring(0,s.length-1) * 60000;
+			else if (endsWith(s, "s"))
+				interval = s.substring(0,s.length-1) * 1000;
+			else if (endsWith(s, "ms"))
+				interval = s.substring(0,s.length-1);
+			else 
+				interval = Number(s);
+			
 			var finishTime = getURLParameter("finish");
 			var metric = getURLParameter("metric");
 			
