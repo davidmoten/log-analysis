@@ -121,6 +121,21 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,plot,refres
 
 }
 
+function extractPeriod(s) {
+	if (endsWith(s, "d"))
+		return s.substring(0, s.length - 1) * 24 * 3600000;
+	else if (endsWith(s, "h"))
+		return s.substring(0, s.length - 1) * 3600000;
+	else if (endsWith(s, "m"))
+		return s.substring(0, s.length - 1) * 60000;
+	else if (endsWith(s, "s"))
+		return s.substring(0, s.length - 1) * 1000;
+	else if (endsWith(s, "ms"))
+		return s.substring(0, s.length - 1);
+	else
+		return Number(s);
+}
+
 function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }

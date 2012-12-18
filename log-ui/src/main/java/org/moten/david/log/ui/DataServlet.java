@@ -27,6 +27,7 @@ public class DataServlet extends HttpServlet {
 				+ req.getParameter("interval") + "&buckets="
 				+ req.getParameter("buckets") + "&metric="
 				+ req.getParameter("metric");
+
 		url = url.replace(" ", "%20");
 		// TODO properly escape url
 		URL u;

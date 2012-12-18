@@ -23,78 +23,57 @@ div.inline {
 .clearBoth {
 	clear: both;
 }
+
+
 </style>
 
 </head>
 <body>
-	<div id="error"></div>
-	
 	<div>
-	<div id="graph1" style="width: 800px; height: 300px;"></div>
-	<div id="refresh1"  style="margin-left:25px;margin-bottom:10px;">
-		<img src="images/refresh.png" style="height: 16px; width: 16px;" />
+		<div id="graph" class="graph"></div>
+		<div id="refresh" style="margin-left: 25px; margin-bottom: 10px;">
+			<img src="images/refresh.png" style="height: 16px; width: 16px;" />
+		</div>
+		<textarea id="sql" class='inline'
+			style="font-size: 9px; width: 50%; margin: 0px 100px auto; display: none"
+			value="" cols="50" rows="4"></textarea>
 	</div>
-	<textarea id="sql1" class='inline' style="font-size:9px; width:50%;margin: 0px 100px  auto;display:none" value="" cols="50" rows="4"></textarea>
-</div>
-<div>
-	<div id="graph2" style="width: 800px; height:300px;"></div>
-	<div id="refresh2" class="inline" style="margin-left:25px;">
-		<img src="images/refresh.png" style="height: 16px; width: 16px;" />
-	</div>
-	<textarea id="sql2" class='inline' style="font-size:9px; width:50%;margin: 0px 100px  auto;display:none" value="" cols="50" rows="4"></textarea>
-</div>
 	<script type="text/javascript">
-	
-$(function() {
+		$(function() {
+			$("#graph").css("width",getURLParameter("width"));
+			$("#graph").css("height",getURLParameter("height"));
 
-	function extractPeriod(s) {
-		if (endsWith(s,"d"))
-			return s.substring(0,s.length-1) * 24 * 3600000;
-		else if (endsWith(s, "h"))
-			return s.substring(0,s.length-1) * 3600000;
-		else if (endsWith(s, "m"))
-			return s.substring(0,s.length-1) * 60000;
-		else if (endsWith(s, "s"))
-			return s.substring(0,s.length-1) * 1000;
-		else if (endsWith(s, "ms"))
-			return s.substring(0,s.length-1);
-		else 
-			return Number(s);
-	}
-	
-	// parse parameters from the url
-	var now = new Date().getTime();
-	var field = getURLParameter('field');
-	var field2 = getURLParameter('field2');
-	if (field2 =="null")
-		field2 = field;
-	var tablename = getURLParameter("table");
-	if (tablename == null || tablename=="null")
-		tablename="Entry";
-	var buckets = Number(getURLParameter("buckets"));
-	var interval = extractPeriod(getURLParameter("interval"));
-	
-	var n;
-	if (buckets == 0)
-		//no aggregation
-		n = 1;
-	else
-		n = buckets;
-	
-	var finishTime = getURLParameter("finish");
-	if (finishTime == "now") {
-		var startTime = now - n * interval;
-	} else
-		//TOOD parse finish time/start time from url parameters
-		startTime = now - n * interval;
-	var metric = getURLParameter("metric");
-	
-	//draw the graphs
-	
-	drawGraph(field,tablename,buckets,interval,startTime,metric,$("#graph1"),$("#refresh1"),$("#sql1"));
-	drawGraph(field2,tablename,buckets,interval,startTime,metric,$("#graph2"),$("#refresh2"),$("#sql2"));
-	
-})
+			// parse parameters from the url
+			var now = new Date().getTime();
+			var field = getURLParameter('field');
+			var field2 = getURLParameter('field2');
+			if (field2 == "null")
+				field2 = field;
+			var tablename = getURLParameter("table");
+			if (tablename == null || tablename == "null")
+				tablename = "Entry";
+			var buckets = Number(getURLParameter("buckets"));
+			var interval = extractPeriod(getURLParameter("interval"));
+
+			var n;
+			if (buckets == 0)
+				//no aggregation
+				n = 1;
+			else
+				n = buckets;
+
+			var finishTime = getURLParameter("finish");
+			if (finishTime == "now") {
+				var startTime = now - n * interval;
+			} else
+				//TOOD parse finish time/start time from url parameters
+				startTime = now - n * interval;
+			var metric = getURLParameter("metric");
+
+			//draw the graphs
+			drawGraph(field, tablename, buckets, interval, startTime, metric,
+					$("#graph"), $("#refresh"), $("#sql"));
+		})
 	</script>
 </body>
 </html>
