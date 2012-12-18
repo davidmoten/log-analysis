@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>com.orientechnologies</groupId>
 			<artifactId>orientdb-server</artifactId>
-			<version>1.2.0</version>
+			<version>${orientdb.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.moten.david.log</groupId>
