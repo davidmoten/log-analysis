@@ -1,6 +1,5 @@
 package org.moten.david.log.query;
 
-
 public class Bucket {
 
 	private final double start;
@@ -142,6 +141,8 @@ public class Bucket {
 			return sumSquares();
 		else if (metric == Metric.VARIANCE)
 			return variance();
+		else if (metric == Metric.COUNT)
+			return (double) count;
 		else if (metric == Metric.VARIANCE_POPULATION)
 			throw new RuntimeException("not implemented " + metric);
 		else

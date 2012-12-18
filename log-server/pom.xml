@@ -12,6 +12,7 @@
 	<properties>
 		<jetty.port>9191</jetty.port>
 		<jetty.stop.port>9999</jetty.stop.port>
+		<db.url>remote:localhost/logs</db.url>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -44,6 +45,12 @@
 					<webAppConfig>
 						<contextPath>/</contextPath>
 					</webAppConfig>
+					<systemProperties>
+						<systemProperty>
+							<name>db.url</name>
+							<value>${db.url}</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>

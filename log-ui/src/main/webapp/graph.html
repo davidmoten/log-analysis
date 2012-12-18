@@ -26,8 +26,8 @@ div.inline {
 
 </head>
 <body>
-	<div style="width: 1000px">
-	<div id="graph" style="width: 100%; height: 80%;"></div>
+	<div style="width: 100%;height:100%; position:absolute;">
+	<div id="graph" style="width: 90%; height: 80%;"></div>
 	<div id="error"></div>
 	<div id="refresh" class="inline" style="margin-left:25px;">
 		<img src="images/refresh.png" style="height: 16px; width: 16px;" />
@@ -58,12 +58,20 @@ div.inline {
 
 			var now = new Date().getTime();
 			var field = getURLParameter('field');
-			var sql = "select logTimestamp, " + field + " as value from Dummy where " + field +" is not null order by logTimestamp";
-			sql = sql.replace(new RegExp(" ", 'g'), "%20");
+			var tablename = getURLParameter("table");
+			console.log(tablename);
+			if (tablename == null || tablename=="null")
+				tablename="Entry";
+			
+			
 			var buckets = Number(getURLParameter("buckets"));
 			var interval = Number(getURLParameter("interval"));
 			var finishTime = getURLParameter("finish");
 			var metric = getURLParameter("metric");
+			
+			var sql = "select logTimestamp, " + field + " as value from " + tablename + " where " + field +" is not null order by logTimestamp";
+			sql = sql.replace(new RegExp(" ", 'g'), "%20");
+			
 			var n;
 			if (buckets == 0)
 				n = 1;
