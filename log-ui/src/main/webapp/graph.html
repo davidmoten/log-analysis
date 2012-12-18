@@ -15,64 +15,72 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 
 <style type="text/css">
-div.inline {
-	float: left;
-}
 
 .clearBoth {
 	clear: both;
 }
 
+.refresh {
+	margin-left: 25px;
+	margin-bottom: 10px;
+	height: 16px;
+	width: 16px;
+}
 
+.sql {
+	font-size: 9px;
+	width: 50%;
+	margin: 0px 100px auto;
+	display: none;
+	float: left;
+}
 </style>
 
 </head>
 <body>
 	<div>
 		<div id="graph" class="graph"></div>
-		<div id="refresh" style="margin-left: 25px; margin-bottom: 10px;">
-			<img src="images/refresh.png" style="height: 16px; width: 16px;" />
-		</div>
-		<textarea id="sql" class='inline'
-			style="font-size: 9px; width: 50%; margin: 0px 100px auto; display: none"
-			value="" cols="50" rows="4"></textarea>
+		<img src="images/refresh.png" class="refresh" />
+		<textarea id="sql" class="sql" ></textarea>
 	</div>
 	<script type="text/javascript">
-		$(function() {
-			$("#graph").css("width",getURLParameter("width"));
-			$("#graph").css("height",getURLParameter("height"));
+	
+function drawGraphFromUrl() {
+	$("#graph").css("width", getURLParameter("width"));
+	$("#graph").css("height", getURLParameter("height"));
 
-			// parse parameters from the url
-			var now = new Date().getTime();
-			var field = getURLParameter('field');
-			var field2 = getURLParameter('field2');
-			if (field2 == "null")
-				field2 = field;
-			var tablename = getURLParameter("table");
-			if (tablename == null || tablename == "null")
-				tablename = "Entry";
-			var buckets = Number(getURLParameter("buckets"));
-			var interval = extractPeriod(getURLParameter("interval"));
+	// parse parameters from the url
+	var now = new Date().getTime();
+	var field = getURLParameter('field');
+	var tablename = getURLParameter("table");
+	if (tablename == null || tablename == "null")
+		tablename = "Entry";
+	var buckets = Number(getURLParameter("buckets"));
+	var interval = extractPeriod(getURLParameter("interval"));
 
-			var n;
-			if (buckets == 0)
-				//no aggregation
-				n = 1;
-			else
-				n = buckets;
+	var n;
+	if (buckets == 0)
+		//no aggregation
+		n = 1;
+	else
+		n = buckets;
 
-			var finishTime = getURLParameter("finish");
-			if (finishTime == "now") {
-				var startTime = now - n * interval;
-			} else
-				//TOOD parse finish time/start time from url parameters
-				startTime = now - n * interval;
-			var metric = getURLParameter("metric");
+	var finishTime = getURLParameter("finish");
+	if (finishTime == "now") {
+		var startTime = now - n * interval;
+	} else
+		//TOOD parse finish time/start time from url parameters
+		startTime = now - n * interval;
+	var metric = getURLParameter("metric");
 
-			//draw the graphs
-			drawGraph(field, tablename, buckets, interval, startTime, metric,
-					$("#graph"), $("#refresh"), $("#sql"));
-		})
+	//draw the graphs
+	drawGraph(field, tablename, buckets, interval, startTime, metric,
+			$("#graph"), $("#refresh"), $("#sql"));
+}
+
+$(function() {
+	drawGraphFromUrl();
+})
 	</script>
 </body>
 </html>
