@@ -1,6 +1,7 @@
 package org.moten.david.log.server;
 
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import org.moten.david.log.core.Database;
 
@@ -29,6 +30,7 @@ public class Server {
 						"admin", "admin");
 				database.persistDummyRecords();
 			}
+			Logger.getLogger(Server.class.getName()).info("started");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
