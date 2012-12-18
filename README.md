@@ -5,7 +5,9 @@ Analyzes log files for the purposes of time series analysis.
 
 Uses [orientdb](https://github.com/nuvolabase/orientdb) for high speed persistence and querying and [flot](http://www.flotcharts.org/) for javascript graphs.
 
+Non-aggregated:
 <img src="https://raw.github.com/davidmoten/log-analysis/master/docs/screen1.png"/>
+Aggregated:
 <img src="https://raw.github.com/davidmoten/log-analysis/master/docs/screen2.png"/>
 
 
