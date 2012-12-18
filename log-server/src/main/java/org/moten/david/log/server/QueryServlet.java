@@ -57,13 +57,14 @@ public class QueryServlet extends HttpServlet {
 
 	private long getMandatoryLong(HttpServletRequest req, String name) {
 		if (req.getParameter(name) == null)
-			throw new RuntimeException("parameter " + name + " is mandatory");
+			throw new RuntimeException("parameter '" + name + "' is mandatory");
 		else
 			try {
 				return Long.parseLong(req.getParameter(name));
 			} catch (NumberFormatException e) {
-				throw new RuntimeException("parameter " + name
-						+ " parsing problem", e);
+				throw new RuntimeException("parameter '" + name
+						+ "' could not be parsed as a Long: "
+						+ req.getParameter(name), e);
 			}
 	}
 

@@ -218,11 +218,11 @@ public class Database {
 		List<ODocument> result = db.query(sqlQuery);
 		Buckets buckets = new Buckets(query);
 		for (ODocument doc : result) {
-			System.out.println(doc);
 			Long timestamp = doc.field(FIELD_LOG_TIMESTAMP);
 			Number value = doc.field(FIELD_VALUE);
 			buckets.add(timestamp, value.doubleValue());
 		}
+		log.info("found " + result.size() + " records");
 		return buckets;
 	}
 

@@ -15,18 +15,28 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 
 <style type="text/css">
-div.inline { float:left; }
-.clearBoth { clear:both; }
+div.inline {
+	float: left;
+}
+
+.clearBoth {
+	clear: both;
+}
 </style>
 
 </head>
 <body>
-
-	<div id="graph" style="width: 1200px; height: 400px;"></div>
+	<div style="width: 1000px">
+	<div id="graph" style="width: 100%; height: 80%;"></div>
 	<div id="error"></div>
-	<textarea id="sql" class='inline'  value="" cols="50" rows="4"></textarea>
-	<div id="refresh" class="inline"><img src="images/refresh.png" style="height:16px;width:16px;"/></div>
+	<div id="refresh" class="inline" style="margin-left:25px;">
+		<img src="images/refresh.png" style="height: 16px; width: 16px;" />
+	</div>
+	<br/>
+	<textarea id="sql" class='inline' style="font-size:9px; width:50%;margin: 0px 100px  auto" value="" cols="50" rows="4"></textarea>
 	
+	</div>
+
 	<script type="text/javascript">
 		$(function() {
 
@@ -47,22 +57,25 @@ div.inline { float:left; }
 			}
 
 			var now = new Date().getTime();
-			var sql = "select logTimestamp, specialNumber as value from Dummy where specialNumber is not null order by logTimestamp";
-			sql = sql.replace(new RegExp(" ",'g'), "%20");
-			var buckets = getURLParameter("buckets");
-			var interval = getURLParameter("interval");
+			var field = getURLParameter('field');
+			var sql = "select logTimestamp, " + field + " as value from Dummy where " + field +" is not null order by logTimestamp";
+			sql = sql.replace(new RegExp(" ", 'g'), "%20");
+			var buckets = Number(getURLParameter("buckets"));
+			var interval = Number(getURLParameter("interval"));
+			var finishTime = getURLParameter("finish");
+			var metric = getURLParameter("metric");
 			var n;
-			if (buckets == 0) 
+			if (buckets == 0)
 				n = 1;
-			else 
+			else
 				n = buckets;
-			
-			if (getURLParameter("finish")=="now"){
-				var startTime = now - n* interval; 
-			}
-			else startTime = now - 10;
-			
-			var metric = "MEAN";
+
+			if (getURLParameter("finish") == "now") {
+				var startTime = now - n * interval;
+			} else
+				//TOOD parse finish time/start time from url parameters
+				startTime = now - n * interval;
+
 			var barOptions = {
 				show : true,
 				align : "center",
@@ -72,15 +85,15 @@ div.inline { float:left; }
 			function onDataReceived(series) {
 				console.log(series);
 				var n;
-				if (buckets==0) {
+				if (buckets == 0) {
 					n = 1;
-     				barOptions.barWidth=0;
-			    }
-				else {
+					barOptions.barWidth = 0;
+				} else {
 					n = buckets;
 				}
-				
+
 				//series.lines = { show: true, steps: true, fill: true };
+				series.label=field;
 				series.bars = barOptions;
 				series.points = {
 					show : true
@@ -90,70 +103,74 @@ div.inline { float:left; }
 						mode : "time",
 						timeformat : "%H:%M"
 					}
-				    //,colors: ["#d18b2c", "#dba255","#dba255", "#919733","#919733"]
+				//,colors: ["#d18b2c", "#dba255","#dba255", "#919733","#919733"]
 				};
-				
-				var finishTime = startTime + interval *n;
-				
+
+				var finishTime = startTime + interval * n;
+
 				var meanGraph = {
-					data : [
-							[ startTime, series.stats.mean ],
-							[ finishTime, series.stats.mean ] ],
+					label:"mean",
+					data : [ [ startTime, series.stats.MEAN ],
+							[ finishTime, series.stats.MEAN ] ],
 					lines : {
 						show : true
 					}
 				};
-				var metricValue = series.stats.max;
+				console.log(series.stats);
+				var metricValue = series.stats[metric];
+				console.log("metric="+metricValue);
 				var metricGraph = {
-						data : [
-								[ startTime, metricValue ],
-								[ finishTime, metricValue ] ],
-						lines : {
-							show : true
-						}
-					};
+					label:metric.toLowerCase(),
+					data : [ [ startTime, metricValue ],
+							[ finishTime, metricValue ] ],
+					lines : {
+						show : true
+					}
+				};
 				var sdUpperGraph = {
+						label:"mean+sd",
 					data : [
 							[
 									startTime,
-									series.stats.mean
-											+ series.stats.standardDeviation ],
+									series.stats.MEAN
+											+ series.stats.STANDARD_DEVIATION ],
 							[
 									finishTime,
-									series.stats.mean
-											+ series.stats.standardDeviation ] ],
+									series.stats.MEAN
+											+ series.stats.STANDARD_DEVIATION ] ],
 					lines : {
 						show : true
 					}
 				}
 				var sdLowerGraph = {
+					label: "mean-sd",
 					data : [
 							[
 									startTime,
-									series.stats.mean
-											- series.stats.standardDeviation ],
+									series.stats.MEAN
+											- series.stats.STANDARD_DEVIATION ],
 							[
 									finishTime,
-									series.stats.mean
-											- series.stats.standardDeviation ] ],
+									series.stats.MEAN
+											- series.stats.STANDARD_DEVIATION ] ],
 					lines : {
 						show : true
 					}
 				}
 				$.plot($("#graph"), [ series, meanGraph, sdLowerGraph,
-						sdUpperGraph,metricGraph ], options);
+						sdUpperGraph, metricGraph ], options);
 			}
 
-			$("#sql").text(sql.replace(new RegExp("%20",'g'), " "));
-			
+			$("#sql").text(sql.replace(new RegExp("%20", 'g'), " "));
+
 			function refreshGraph() {
-				var sql2 = $("#sql").val().replace(new RegExp(" ",'g'),"%20");
-				
+				var sql2 = $("#sql").val().replace(new RegExp(" ", 'g'), "%20");
+
 				var dataurl = "data?sql=" + sql2 + "&start=" + startTime
-				+ "&interval=" + interval + "&buckets=" + buckets
-				+ "&metric=" + metric;
+						+ "&interval=" + interval + "&buckets=" + buckets
+						+ "&metric=" + metric;
 				console.log("dataurl=" + dataurl);
-		
+
 				$.ajax({
 					url : dataurl,
 					method : 'GET',
@@ -167,10 +184,10 @@ div.inline { float:left; }
 				});
 			}
 			refreshGraph();
-			$("#refresh").click(function( event ) {
-                event.preventDefault();
-                refreshGraph();
-            });
+			$("#refresh").click(function(event) {
+				event.preventDefault();
+				refreshGraph();
+			});
 		})
 	</script>
 </body>

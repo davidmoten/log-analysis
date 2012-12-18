@@ -1,6 +1,5 @@
 package org.moten.david.log.query;
 
-import com.google.common.base.CaseFormat;
 
 public class Util {
 
@@ -23,10 +22,7 @@ public class Util {
 				Double value = b.get(m);
 				if (s2.length() > 0)
 					s2.append(",\n\t");
-				s2.append("\t\""
-						+ CaseFormat.LOWER_UNDERSCORE.to(
-								CaseFormat.LOWER_CAMEL, m.toString()) + "\": "
-						+ value);
+				s2.append("\t\"" + m + "\": " + value);
 			} catch (RuntimeException e) {
 				// ignore unimplemented metric
 			}
