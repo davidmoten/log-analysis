@@ -146,10 +146,12 @@ function addGraph(main,graphId) {
 	
 	main
 			.append(
-					'<div><div id="graph'+graphId+'" class="graph"></div><img id="refresh'+graphId+'" src="images/refresh.png" class="refresh"/><textarea id="sql'+graphId+'" class="sql"></textarea></div>');
+					'<div class="graphParent"><div id="title'+graphId+'" class="graphTitle"></div><div id="graph'+graphId+'" class="graph"></div><img id="refresh'+graphId+'" src="images/refresh.png" class="refresh"/><textarea id="sql'+graphId+'" class="sql"></textarea></div>');
 
 	$("#graph" + graphId).css("width", getURLParameter("width"));
 	$("#graph" + graphId).css("height", getURLParameter("height"));
+	$(".graphParent").css("width", getURLParameter("width"));
+//	$(".graphParent").css("height", getURLParameter("height"));
 	
 	// parse parameters from the url
 	var now = new Date().getTime();
@@ -159,6 +161,10 @@ function addGraph(main,graphId) {
 		tablename = "Entry";
 	var buckets = Number(getURLParameter("buckets"));
 	var interval = extractPeriod(getURLParameter("interval"));
+	var title = getURLParameter("title"+ graphId);
+	if (title=="null")
+		title=field;
+	$("#title"+graphId).text(title);
 
 	var n;
 	if (buckets == 0)

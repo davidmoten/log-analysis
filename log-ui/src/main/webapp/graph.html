@@ -13,9 +13,12 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 </head>
 <body>
+	<div id="title" class="title"></div>
 	<div id="main"></div>
 	<script type="text/javascript">
-
+		var title = getURLParameter("title");
+		if (title!="null")
+			$("#title").text(title);
 		$(function() {
 			for (i=1;i<=30;i++) {
 				addGraph($("#main"),i);
