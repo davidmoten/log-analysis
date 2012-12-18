@@ -66,6 +66,8 @@ $(function() {
 	var now = new Date().getTime();
 	var field = getURLParameter('field');
 	var field2 = getURLParameter('field2');
+	if (field2 =="null")
+		field2 = field;
 	var tablename = getURLParameter("table");
 	if (tablename == null || tablename=="null")
 		tablename="Entry";
