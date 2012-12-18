@@ -3,81 +3,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>log-analysis</title>
 <link href="layout.css" rel="stylesheet" type="text/css">
-
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
 <script type="text/javascript" src="js/flot/jquery.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.time.js"></script>
 <script type="text/javascript" src="js/log-analysis.js"></script>
-
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-
-<style type="text/css">
-.clearBoth {
-	clear: both;
-}
-
-.refresh {
-	margin-left: 25px;
-	margin-bottom: 10px;
-	height: 16px;
-	width: 16px;
-}
-
-.sql {
-	font-size: 9px;
-	width: 50%;
-	margin: 0px 100px auto;
-	display: none;
-	float: left;
-}
-</style>
-
 </head>
 <body>
-	<div id="main">
-		
-	</div>
+	<div id="main"></div>
 	<script type="text/javascript">
-		function addGraph() {
-			$("#main").append('<div><div id="graph" class="graph"></div><img src="images/refresh.png" class="refresh"/><textarea id="sql" class="sql"></textarea></div>');
-			
-			$("#graph").css("width", getURLParameter("width"));
-			$("#graph").css("height", getURLParameter("height"));
-
-			// parse parameters from the url
-			var now = new Date().getTime();
-			var field = getURLParameter('field');
-			var tablename = getURLParameter("table");
-			if (tablename == null || tablename == "null")
-				tablename = "Entry";
-			var buckets = Number(getURLParameter("buckets"));
-			var interval = extractPeriod(getURLParameter("interval"));
-
-			var n;
-			if (buckets == 0)
-				//no aggregation
-				n = 1;
-			else
-				n = buckets;
-
-			var finishTime = getURLParameter("finish");
-			if (finishTime == "now") {
-				var startTime = now - n * interval;
-			} else
-				//TOOD parse finish time/start time from url parameters
-				startTime = now - n * interval;
-			var metric = getURLParameter("metric");
-
-			//draw the graphs
-			drawGraph(field, tablename, buckets, interval, startTime, metric,
-					$("#graph"), $("#refresh"), $("#sql"));
-		}
 
 		$(function() {
-			addGraph();
+			for (i=1;i<=30;i++) {
+				addGraph($("#main"),i);
+			}
 		})
 	</script>
 </body>

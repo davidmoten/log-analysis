@@ -140,6 +140,48 @@ function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
+function addGraph(main,graphId) {
+	if (field=="null") return;
+	
+	main
+			.append(
+					'<div><div id="graph'+graphId+'" class="graph"></div><img id="refresh'+graphId+'" src="images/refresh.png" class="refresh"/><textarea id="sql'+graphId+'" class="sql"></textarea></div>');
+
+	$("#graph" + graphId).css("width", getURLParameter("width"));
+	$("#graph" + graphId).css("height", getURLParameter("height"));
+	
+	var field = getURLParameter("field"+graphId);
+
+	// parse parameters from the url
+	var now = new Date().getTime();
+	//var field = getURLParameter('field');
+	var tablename = getURLParameter("table");
+	if (tablename == null || tablename == "null")
+		tablename = "Entry";
+	var buckets = Number(getURLParameter("buckets"));
+	var interval = extractPeriod(getURLParameter("interval"));
+
+	var n;
+	if (buckets == 0)
+		//no aggregation
+		n = 1;
+	else
+		n = buckets;
+
+	var finishTime = getURLParameter("finish");
+	if (finishTime == "now") {
+		var startTime = now - n * interval;
+	} else
+		//TOOD parse finish time/start time from url parameters
+		startTime = now - n * interval;
+	var metric = getURLParameter("metric");
+
+	//draw the graphs
+	drawGraph(field, tablename, buckets, interval, startTime, metric,
+			$("#graph" + graphId), $("#refresh" + graphId), $("#sql"
+					+ graphId));
+}
+
 function getURLParameter(name) {
 	return decodeURIComponent((RegExp(name + '=' + '(.+?)(&|$)')
 			.exec(location.search) || [ , null ])[1]);
