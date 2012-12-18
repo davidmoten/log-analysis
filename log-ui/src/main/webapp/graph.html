@@ -27,17 +27,22 @@ div.inline {
 
 </head>
 <body>
-	<div style="width: 100%;height:100%; position:absolute;">
-	<div id="graph" style="width: 90%; height: 80%;"></div>
 	<div id="error"></div>
-	<div id="refresh" class="inline" style="margin-left:25px;">
+	
+	<div>
+	<div id="graph1" style="width: 500px; height: 300px;"></div>
+	<div id="refresh1"  style="margin-left:25px;margin-bottom:10px;">
 		<img src="images/refresh.png" style="height: 16px; width: 16px;" />
 	</div>
-	<br/>
-	<textarea id="sql" class='inline' style="font-size:9px; width:50%;margin: 0px 100px  auto;display:none" value="" cols="50" rows="4"></textarea>
-	
+	<textarea id="sql1" class='inline' style="font-size:9px; width:50%;margin: 0px 100px  auto;display:none" value="" cols="50" rows="4"></textarea>
+</div>
+<div>
+	<div id="graph2" style="width: 500px; height: 300px;"></div>
+	<div id="refresh2" class="inline" style="margin-left:25px;">
+		<img src="images/refresh.png" style="height: 16px; width: 16px;" />
 	</div>
-
+	<textarea id="sql2" class='inline' style="font-size:9px; width:50%;margin: 0px 100px  auto;display:none" value="" cols="50" rows="4"></textarea>
+</div>
 	<script type="text/javascript">
 	
 $(function() {
@@ -60,6 +65,7 @@ $(function() {
 	// parse parameters from the url
 	var now = new Date().getTime();
 	var field = getURLParameter('field');
+	var field2 = getURLParameter('field2');
 	var tablename = getURLParameter("table");
 	if (tablename == null || tablename=="null")
 		tablename="Entry";
@@ -83,7 +89,8 @@ $(function() {
 	
 	//draw the graph
 	
-	drawGraph(field,tablename,buckets,interval,startTime,metric,$("#graph"),$("#refresh"),$("#sql"));
+	drawGraph(field,tablename,buckets,interval,startTime,metric,$("#graph1"),$("#refresh1"),$("#sql1"));
+	drawGraph(field2,tablename,buckets,interval,startTime,metric,$("#graph2"),$("#refresh2"),$("#sql2"));
 	
 })
 	</script>
