@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.moten.david.log.config.Log;
 import org.moten.david.log.config.Options;
 import org.moten.david.log.core.Database;
+import org.moten.david.log.core.DatabaseFactory;
 
 public class ClientMain {
 
@@ -38,10 +39,12 @@ public class ClientMain {
 		log.info("paths=" + paths);
 		List<Log> list = Util.getLogs(name, items);
 		Options options = new Options(null, null, list);
-		Database db = new Database(url, "admin", "admin");
+		DatabaseFactory provider = new DatabaseFactory(url, "admin", "admin");
+		Database db = provider.create();
 		db.persistDummyRecords();
+		db.close();
 		log.info("loaded dummy records");
-		Watcher w = new Watcher(db, options);
+		Watcher w = new Watcher(provider, options);
 		w.start();
 	}
 

@@ -12,7 +12,7 @@ import java.util.logging.LogManager;
 import org.junit.Test;
 import org.moten.david.log.config.Log;
 import org.moten.david.log.config.Options;
-import org.moten.david.log.core.Database;
+import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.core.LogParser;
 
 import com.google.common.collect.Lists;
@@ -38,8 +38,8 @@ public class WatcherTest {
 		list.add(new Log("dummy", TEST_LOG));
 		list.add(new Log("dummy2", TEST_LOG));
 		Options options = new Options(null, null, list);
-		Database db = new Database(new File("target/test4"));
-		Watcher w = new Watcher(db, options);
+		DatabaseFactory factory = new DatabaseFactory(new File("target/test4"));
+		Watcher w = new Watcher(factory, options);
 		w.start();
 		Thread t = new Thread(new Runnable() {
 			@Override

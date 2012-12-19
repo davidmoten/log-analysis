@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.moten.david.log.core.Database;
+import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 import org.moten.david.log.query.Metric;
@@ -19,19 +20,27 @@ public class QueryServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5553574830587263509L;
 
-	private final Database db = new Database(System.getProperty("db.url",
-			"remote:localhost/logs"), "admin", "admin");
+	private final DatabaseFactory factory = new DatabaseFactory(
+			System.getProperty("db.url", "remote:localhost/logs"), "admin",
+			"admin");
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String sql = getMandatoryParameter(req, "sql");
-		long startTime = getMandatoryLong(req, "start");
-		double interval = getMandatoryDouble(req, "interval");
-		long numBuckets = getMandatoryLong(req, "buckets");
-		Metric metric = Metric.valueOf(getMandatoryParameter(req, "metric"));
-		String json = getJson(db, sql, startTime, interval, numBuckets, metric);
-		resp.getWriter().print(json);
+		Database db = factory.create();
+		try {
+			String sql = getMandatoryParameter(req, "sql");
+			long startTime = getMandatoryLong(req, "start");
+			double interval = getMandatoryDouble(req, "interval");
+			long numBuckets = getMandatoryLong(req, "buckets");
+			Metric metric = Metric
+					.valueOf(getMandatoryParameter(req, "metric"));
+			String json = getJson(db, sql, startTime, interval, numBuckets,
+					metric);
+			resp.getWriter().print(json);
+		} finally {
+			db.close();
+		}
 	}
 
 	private static String getJson(Database db, String sql, long startTime,

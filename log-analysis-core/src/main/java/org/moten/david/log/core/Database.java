@@ -16,6 +16,7 @@ import org.moten.david.log.query.Buckets;
 
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
@@ -23,6 +24,7 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.core.storage.OStorage;
 
+//TODO setup for concurrency, use Filter as per https://github.com/nuvolabase/orientdb/wiki/Java-Web-Apps?
 public class Database {
 
 	private static final Logger log = Logger
@@ -34,7 +36,6 @@ public class Database {
 
 	private static final String TABLE_DUMMY = "Dummy";
 
-	private ODatabaseDocumentTx db;
 	private final MessageSplitter splitter = new MessageSplitter();
 
 	private String url;
@@ -42,6 +43,8 @@ public class Database {
 	private String username;
 
 	private String password;
+
+	private final ODatabaseDocumentTx db;
 
 	public Database(File location) {
 		this(connectToDatabase(location));
@@ -54,12 +57,11 @@ public class Database {
 		this.password = password;
 	}
 
-	private static ODatabaseDocumentTx connectToDatabase(String url,
-			String username, String password) {
-		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).open(username,
-				password);
+	private synchronized static ODatabaseDocumentTx connectToDatabase(
+			String url, String username, String password) {
+		ODatabaseDocumentTx db = ODatabaseDocumentPool.global().acquire(url,
+				username, password);
 		log.info("obtained db for " + url);
-		configureDatabase(db);
 		return db;
 	}
 
@@ -84,8 +86,14 @@ public class Database {
 		String url = "local:" + getPath(location);
 		System.out.println(url);
 		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).create();
-		configureDatabase(db);
 		return db;
+	}
+
+	/**
+	 * Setup indexes.
+	 */
+	public void configureDatabase() {
+		configureDatabase(db);
 	}
 
 	private static void configureDatabase(ODatabaseDocumentTx db) {
@@ -129,51 +137,30 @@ public class Database {
 	}
 
 	private void persist(LogEntry entry, ODocument d) {
-		try {
-			// persist the full message, timestamp, level logger and threadName
-			d.field(FIELD_LOG_TIMESTAMP, entry.getTime());
-			for (Entry<String, String> e : entry.getProperties().entrySet()) {
-				if (e.getValue() != null)
-					d.field(e.getKey(), e.getValue());
-			}
-
-			// persist the split fields from the full message
-			Map<String, String> map = splitter.split(entry.getMessage());
-			// System.out.println(entry);
-			if (map.size() > 0)
-				log.info(map.toString());
-			for (Entry<String, String> e : map.entrySet()) {
-				if (e.getValue() != null) {
-					// field names in orientdb cannot have spaces so replace
-					// them
-					// with underscores
-					ValueAndType v = parse(e.getValue());
-					d.field(e.getKey().replace(" ", "_"), v.value, v.type);
-				}
-			}
-
-			// persist the document
-			d.save();
-		} catch (RuntimeException e) {
-			log.log(Level.WARNING, e.getMessage(), e);
-			try {
-				log.info("sleeping for 10 seconds before attempting reconnect");
-				Thread.sleep(10000);
-			} catch (InterruptedException e1) {
-				// do nothing
-			}
-			connect();
+		// persist the full message, timestamp, level logger and threadName
+		d.field(FIELD_LOG_TIMESTAMP, entry.getTime());
+		for (Entry<String, String> e : entry.getProperties().entrySet()) {
+			if (e.getValue() != null)
+				d.field(e.getKey(), e.getValue());
 		}
-	}
 
-	private void connect() {
-		try {
-			log.info("closing existing db connection");
-			db.close();
-		} catch (RuntimeException e) {
-			log.log(Level.WARNING, e.getMessage(), e);
+		// persist the split fields from the full message
+		Map<String, String> map = splitter.split(entry.getMessage());
+		// System.out.println(entry);
+		if (map.size() > 0)
+			log.info(map.toString());
+		for (Entry<String, String> e : map.entrySet()) {
+			if (e.getValue() != null) {
+				// field names in orientdb cannot have spaces so replace
+				// them
+				// with underscores
+				ValueAndType v = parse(e.getValue());
+				d.field(e.getKey().replace(" ", "_"), v.value, v.type);
+			}
 		}
-		db = connectToDatabase(url, username, password);
+
+		// persist the document
+		d.save();
 	}
 
 	private static class ValueAndType {
@@ -227,6 +214,7 @@ public class Database {
 	}
 
 	public long size() {
+
 		return db.getSize();
 	}
 

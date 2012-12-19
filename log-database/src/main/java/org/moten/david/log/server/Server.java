@@ -4,11 +4,14 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.moten.david.log.core.Database;
+import org.moten.david.log.core.DatabaseFactory;
 
 import com.orientechnologies.orient.server.OServer;
 import com.orientechnologies.orient.server.OServerMain;
 
 public class Server {
+
+	private static final Logger log = Logger.getLogger(Server.class.getName());
 
 	public void start(boolean persistDummyRecords) {
 		try {
@@ -25,12 +28,13 @@ public class Server {
 					.getResourceAsStream("/orientdb-server-config.xml"));
 			server.activate();
 
+			Database database = new DatabaseFactory("remote:localhost/logs",
+					"admin", "admin").create();
+			database.configureDatabase();
 			if (persistDummyRecords) {
-				Database database = new Database("remote:localhost/logs",
-						"admin", "admin");
 				database.persistDummyRecords();
 			}
-			Logger.getLogger(Server.class.getName()).info("started");
+			log.info("started");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

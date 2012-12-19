@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import org.moten.david.log.config.Log;
 import org.moten.david.log.config.Options;
-import org.moten.david.log.core.Database;
+import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.core.LogFile;
 import org.moten.david.log.core.LogParser;
 
@@ -23,14 +23,14 @@ public class Watcher {
 
 	private final Options options;
 
-	private final Database db;
+	private final DatabaseFactory factory;
 
 	private final ExecutorService executor;
 
 	private final List<LogFile> logs = Lists.newArrayList();
 
-	public Watcher(Database db, Options options) {
-		this.db = db;
+	public Watcher(DatabaseFactory factory, Options options) {
+		this.factory = factory;
 		this.options = options;
 		executor = Executors.newFixedThreadPool(20);
 	}
@@ -41,7 +41,7 @@ public class Watcher {
 			log.info("starting tail on " + f);
 			LogFile logFile = new LogFile(new File(f.getPath()), 500,
 					new LogParser(), executor);
-			logFile.tail(db);
+			logFile.tail(factory);
 			logs.add(logFile);
 		}
 		log.info("started watcher");

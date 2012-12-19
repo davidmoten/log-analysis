@@ -38,9 +38,9 @@ public class LogFile {
 			}
 	}
 
-	public void tail(Database db) {
+	public void tail(DatabaseFactory factory) {
 
-		TailerListener listener = createListener(db);
+		TailerListener listener = createListener(factory.create());
 		// tail from the start of the file
 		tailer = new Tailer(file, listener, checkIntervalMs, false);
 
