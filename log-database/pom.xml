@@ -26,18 +26,20 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>server</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+
+					</execution>
+				</executions>
 				<configuration>
-					<mainClass>org.moten.david.log.server.ServerMain</mainClass>
+					<executable>${project.build.directory}/orientdb-${orientdb.version}/bin/server.sh</executable>
+					<workingDirectory>${project.build.directory}/orientdb-${orientdb.version}/bin/</workingDirectory>
 					<arguments>
-						<argument>
-							-server
-						</argument>
-						<argument>
-							-XX:+AggressiveOpts
-						</argument>
-						<argument>
-							-XX:CompileThreshold=200
-						</argument>
+						<argument>start</argument>
 					</arguments>
 				</configuration>
 			</plugin>
