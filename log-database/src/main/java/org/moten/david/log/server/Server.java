@@ -35,6 +35,7 @@ public class Server {
 				database.persistDummyRecords();
 			}
 			log.info("started");
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
