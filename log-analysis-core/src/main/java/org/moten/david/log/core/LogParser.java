@@ -1,9 +1,11 @@
 package org.moten.david.log.core;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,10 +22,20 @@ public class LogParser {
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 	public static final String FIELD_THREAD_NAME = "threadName";
-	private final Pattern pattern = Pattern
-			.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +(\\S+)? ?- (.*)$");
+	private final Pattern pattern;
 	private final BiMap<String, Integer> map = createGroupMap();
 	private final DateFormat df = new SimpleDateFormat(DATE_FORMAT + " Z");
+
+	public LogParser() {
+		Properties p = new Properties();
+		try {
+			p.load(LogParser.class.getResourceAsStream(System.getProperty(
+					"logParserConfig", "/log-parser.properties")));
+			pattern = Pattern.compile(p.getProperty("pattern"));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	 * Returns the parsed line as a {@link LogEntry}. Note that this method is
