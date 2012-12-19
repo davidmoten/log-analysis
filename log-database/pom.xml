@@ -9,7 +9,7 @@
 	<artifactId>log-database</artifactId>
 	<description>Starts orientdb database server</description>
 	<properties>
-	    <command>start</command>
+		<command>server</command>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -39,11 +39,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<executable>${project.build.directory}/orientdb-${orientdb.version}/bin/server.sh</executable>
+					<executable>${project.build.directory}/orientdb-${orientdb.version}/bin/${command}.sh</executable>
 					<workingDirectory>${project.build.directory}/orientdb-${orientdb.version}/bin/</workingDirectory>
-					<arguments>
-						<argument>${command}</argument>
-					</arguments>
 				</configuration>
 			</plugin>
 			<plugin>
