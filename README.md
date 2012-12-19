@@ -56,5 +56,6 @@ Todo
 ===========
 A fair bit but the core is in and working. 
 * detailed configuration including regex patterns for extraction of info from log lines
-* dashboard
-* auto scan for new log files
+* handle split line java.util.logging style logs
+* dashboard (multiple graphs per page)
+* auto scan for new log files (perhaps not required)

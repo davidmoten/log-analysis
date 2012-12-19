@@ -137,7 +137,6 @@ public class Database {
 
 		// persist the split fields from the full message
 		Map<String, String> map = splitter.split(entry.getMessage());
-		// System.out.println(entry);
 		if (map.size() > 0)
 			log.info(map.toString());
 		for (Entry<String, String> e : map.entrySet()) {
@@ -190,7 +189,7 @@ public class Database {
 	}
 
 	public Buckets execute(BucketQuery query) {
-		System.out.println(query);
+		log.info(query.toString());
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
 				query.getSql());
 		List<ODocument> result = db.query(sqlQuery);

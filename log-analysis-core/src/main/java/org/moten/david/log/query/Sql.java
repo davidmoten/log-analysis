@@ -29,7 +29,6 @@ public class Sql {
 		String currentKeyword = null;
 		while (scan.hasNext()) {
 			String word = scan.next();
-			System.out.println(word);
 			boolean isKeyword = keywords.contains(word.toUpperCase());
 			if (isKeyword) {
 				if (clause.length() > 0)

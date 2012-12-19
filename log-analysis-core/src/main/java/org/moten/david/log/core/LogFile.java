@@ -58,12 +58,12 @@ public class LogFile {
 
 			@Override
 			public void fileNotFound() {
-				System.out.println("file not found");
+				log.warning("file not found");
 			}
 
 			@Override
 			public void fileRotated() {
-				System.out.println("file rotated");
+				log.info("file rotated");
 
 			}
 
@@ -81,12 +81,13 @@ public class LogFile {
 
 			@Override
 			public void handle(Exception arg0) {
-				System.out.println("handle exception " + arg0);
+				log.log(Level.WARNING, "handle exception " + arg0.getMessage(),
+						arg0);
 			}
 
 			@Override
 			public void init(Tailer tailer) {
-				System.out.println("init");
+				log.info("init");
 			}
 		};
 	}
