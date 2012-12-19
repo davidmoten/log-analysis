@@ -1,6 +1,6 @@
 
 	
-function drawGraph(field,tablename,buckets,interval,startTime,metric,plot,refresh,sqlElement) {
+function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric,plot,refresh,sqlElement) {
 	
 	var sql = "select logTimestamp, " + field + " as value from " 
 				+ tablename + " where " + field 
@@ -48,10 +48,10 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,plot,refres
 			}
 		};
 		console.log(series.stats);
-		var metricValue = series.stats[metric];
-		console.log("metric="+metricValue);
-		var metricGraph = {
-			label:metric.toLowerCase(),
+		var metricValue = series.stats[extraMetric];
+		console.log("extraMetric="+metricValue);
+		var extraMetricGraph = {
+			label:extraMetric.toLowerCase(),
 			data : [ [ startTime, metricValue ],
 					[ finishTime, metricValue ] ],
 			lines : {
@@ -89,7 +89,7 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,plot,refres
 			}
 		}
 		$.plot(plot, [ series, meanGraph, sdLowerGraph,
-				sdUpperGraph, metricGraph ], options);
+				sdUpperGraph, extraMetricGraph ], options);
 	}
 	sqlElement.text(sql.replace(new RegExp("%20", 'g'), " "));
 	
@@ -180,9 +180,10 @@ function addGraph(main,graphId) {
 		//TOOD parse finish time/start time from url parameters
 		startTime = now - n * interval;
 	var metric = getURLParameter("metric");
+	var extraMetric = getURLParameter("extraMetric");
 
 	//draw the graphs
-	drawGraph(field, tablename, buckets, interval, startTime, metric,
+	drawGraph(field, tablename, buckets, interval, startTime, metric,extraMetric,
 			$("#graph" + graphId), $("#refresh" + graphId), $("#sql"
 					+ graphId));
 }
