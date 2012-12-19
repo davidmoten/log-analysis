@@ -18,6 +18,8 @@ import org.moten.david.log.query.Util;
 
 public class QueryServlet extends HttpServlet {
 
+	private static final String DATABASE_HOST = "localhost";
+
 	private static final long serialVersionUID = 5553574830587263509L;
 
 	private final DatabaseFactory factory = new DatabaseFactory(
@@ -29,8 +31,8 @@ public class QueryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		Database db = factory.create();
-		configure(db);
+		OServerShutdownMain m;
+		Database db = getDatabase(factory);
 		try {
 			String sql = getMandatoryParameter(req, "sql");
 			long startTime = getMandatoryLong(req, "start");
@@ -46,10 +48,13 @@ public class QueryServlet extends HttpServlet {
 		}
 	}
 
-	private synchronized void configure(Database db) {
+	private synchronized Database getDatabase(DatabaseFactory factory) {
+		Database.create(DATABASE_HOST);
+		Database db = factory.create();
 		if (!haveConfigured)
 			db.configureDatabase();
 		haveConfigured = true;
+		return db;
 	}
 
 	private static String getJson(Database db, String sql, long startTime,

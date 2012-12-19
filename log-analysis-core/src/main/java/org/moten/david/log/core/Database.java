@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 
+import com.orientechnologies.orient.client.remote.OServerAdmin;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
@@ -36,6 +37,8 @@ public class Database {
 
 	private static final String TABLE_DUMMY = "Dummy";
 
+	private static final String DATABASE_LOGS = "logs";
+
 	private final MessageSplitter splitter = new MessageSplitter();
 
 	private String url;
@@ -48,6 +51,17 @@ public class Database {
 
 	public Database(File location) {
 		this(connectToDatabase(location));
+	}
+
+	public static void create(String host) {
+		try {
+			new OServerAdmin("remote:" + host)
+					.connect("root",
+							"74103539972C36DFECEB00CF6CEBDF0BFE70CDBC222742206BACD2883E333770")
+					.createDatabase("document", DATABASE_LOGS).close();
+		} catch (IOException e) {
+			log.warning(e.getMessage());
+		}
 	}
 
 	public Database(String url, String username, String password) {
