@@ -20,8 +20,6 @@ import com.orientechnologies.orient.server.OServerShutdownMain;
 
 public class QueryServlet extends HttpServlet {
 
-	private static final String DATABASE_HOST = "localhost";
-
 	private static final long serialVersionUID = 5553574830587263509L;
 
 	private final DatabaseFactory factory = new DatabaseFactory(
@@ -52,8 +50,10 @@ public class QueryServlet extends HttpServlet {
 
 	private synchronized Database getDatabase(DatabaseFactory factory) {
 		Database db = factory.create();
-		if (!haveConfigured)
+		if (!haveConfigured) {
 			db.configureDatabase();
+			db.persistDummyRecords();
+		}
 		haveConfigured = true;
 		return db;
 	}
