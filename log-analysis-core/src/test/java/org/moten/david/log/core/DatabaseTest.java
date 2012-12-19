@@ -35,7 +35,7 @@ public class DatabaseTest {
 		System.out.println("creating database");
 		Database p = new Database(new File("target/test2"));
 		LogParser parser = new LogParser();
-		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT);
+		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT_DEFAULT);
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		long n1 = 100;

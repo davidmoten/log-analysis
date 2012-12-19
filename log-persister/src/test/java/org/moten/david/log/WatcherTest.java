@@ -46,7 +46,7 @@ public class WatcherTest {
 			public void run() {
 				try {
 					FileOutputStream fos = new FileOutputStream(TEST_LOG);
-					DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT);
+					DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT_DEFAULT);
 					for (int i = 1; i <= 5; i++) {
 						String line = df.format(new Date())
 								+ " INFO org.moten.david.log.something - value="

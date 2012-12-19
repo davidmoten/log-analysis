@@ -9,9 +9,6 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 import org.junit.Test;
-import org.moten.david.log.core.LogEntry;
-import org.moten.david.log.core.LogParser;
-import org.moten.david.log.core.MessageSplitter;
 
 import com.google.common.io.LineReader;
 
@@ -23,11 +20,13 @@ public class LogParserTest {
 		LogParser p = new LogParser();
 		LogEntry entry = p.parse(line);
 		assertNotNull(entry);
-		assertEquals("INFO", entry.getProperties().get("logLevel"));
+		assertEquals(1354163942941L, entry.getTime());
+		assertEquals("INFO",
+				entry.getProperties().get(LogParser.FIELD_LOG_LEVEL));
 		assertEquals("au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor",
-				entry.getProperties().get("logLogger"));
-		assertEquals("fixes queue size = 0", entry.getProperties()
-				.get("logMsg"));
+				entry.getProperties().get(LogParser.FIELD_LOGGER));
+		assertEquals("fixes queue size = 0",
+				entry.getProperties().get(LogParser.FIELD_MSG));
 	}
 
 	@Test
