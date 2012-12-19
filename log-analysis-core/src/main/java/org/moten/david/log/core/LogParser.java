@@ -22,7 +22,6 @@ public class LogParser {
 	public static final String FIELD_THREAD_NAME = "threadName";
 
 	public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS";
-	private final String dateFormat;
 	private final String timezone;
 
 	private final Pattern pattern;
@@ -35,7 +34,7 @@ public class LogParser {
 			p.load(LogParser.class.getResourceAsStream(System.getProperty(
 					"logParserConfig", "/log-parser.properties")));
 			pattern = Pattern.compile(p.getProperty("pattern"));
-			dateFormat = p.getProperty("timestamp.format");
+			String dateFormat = p.getProperty("timestamp.format");
 			df = new SimpleDateFormat(dateFormat + " Z");
 			timezone = p.getProperty("timestamp.timezone");
 			map = createGroupMap(p.getProperty("pattern.groups"));
