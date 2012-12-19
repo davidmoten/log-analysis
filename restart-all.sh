@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
 ./stop-all.sh 
+set -e
 mvn clean install
 ./start-all.sh
