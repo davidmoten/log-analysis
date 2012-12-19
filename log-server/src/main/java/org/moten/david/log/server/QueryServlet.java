@@ -16,6 +16,8 @@ import org.moten.david.log.query.Buckets;
 import org.moten.david.log.query.Metric;
 import org.moten.david.log.query.Util;
 
+import com.orientechnologies.orient.server.OServerShutdownMain;
+
 public class QueryServlet extends HttpServlet {
 
 	private static final String DATABASE_HOST = "localhost";
@@ -49,7 +51,6 @@ public class QueryServlet extends HttpServlet {
 	}
 
 	private synchronized Database getDatabase(DatabaseFactory factory) {
-		Database.create(DATABASE_HOST);
 		Database db = factory.create();
 		if (!haveConfigured)
 			db.configureDatabase();
