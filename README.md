@@ -34,7 +34,7 @@ A jetty web server running on port 9191 that makes binary connections to *log-da
 
 log-ui
 ----------------
-A jetty web server running on port 9292 that presents graphs using json sourced from *log-server*.
+A jetty web server running on port 9292 that presents graphs using json sourced from *log-server*. Graphs produced using javascript, flot and jQuery.
 
 Demo
 =============
