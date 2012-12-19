@@ -24,10 +24,13 @@ public class QueryServlet extends HttpServlet {
 			System.getProperty("db.url", "remote:localhost/logs"), "admin",
 			"admin");
 
+	private static boolean haveConfigured = false;
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		Database db = factory.create();
+		configure(db);
 		try {
 			String sql = getMandatoryParameter(req, "sql");
 			long startTime = getMandatoryLong(req, "start");
@@ -41,6 +44,12 @@ public class QueryServlet extends HttpServlet {
 		} finally {
 			db.close();
 		}
+	}
+
+	private synchronized void configure(Database db) {
+		if (!haveConfigured)
+			db.configureDatabase();
+		haveConfigured = true;
 	}
 
 	private static String getJson(Database db, String sql, long startTime,
