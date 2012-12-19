@@ -26,7 +26,7 @@ public class LogParser {
 	private final String timezone;
 
 	private final Pattern pattern;
-	private final BiMap<String, Integer> map = createGroupMap();
+	private final BiMap<String, Integer> map;
 	private final DateFormat df;
 
 	public LogParser() {
@@ -38,6 +38,7 @@ public class LogParser {
 			dateFormat = p.getProperty("timestamp.format");
 			df = new SimpleDateFormat(dateFormat + " Z");
 			timezone = p.getProperty("timestamp.timezone");
+			map = createGroupMap(p.getProperty("pattern.groups"));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -88,14 +89,11 @@ public class LogParser {
 		}
 	}
 
-	private BiMap<String, Integer> createGroupMap() {
+	private BiMap<String, Integer> createGroupMap(String list) {
 		BiMap<String, Integer> map = HashBiMap.create(5);
-		map.put(FIELD_LOG_TIMESTAMP, 1);
-		map.put(FIELD_LOG_LEVEL, 2);
-		map.put(FIELD_LOGGER, 3);
-		map.put(FIELD_THREAD_NAME, 4);
-		map.put(FIELD_MSG, 5);
-
+		String[] items = list.split(",");
+		for (int i = 0; i < items.length; i++)
+			map.put(items[i], i + 1);
 		return map;
 	}
 }
