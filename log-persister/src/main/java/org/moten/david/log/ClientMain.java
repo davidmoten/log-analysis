@@ -38,12 +38,9 @@ public class ClientMain {
 
 		LogManager.getLogManager().readConfiguration(
 				ClientMain.class.getResourceAsStream("/my-logging.properties"));
-		String name = System.getProperty("logName", "logFile");
 		String paths = System.getProperty("logPaths",
 				"src/test/resources/test.log");
 		String url = System.getProperty("url", "remote:localhost/logs");
-		String[] items = paths.split(",");
-		log.info("paths=" + paths);
 		DatabaseFactory provider = new DatabaseFactory(url, "admin", "admin");
 		Database db = provider.create();
 		db.persistDummyRecords();
