@@ -59,7 +59,7 @@
     </network>
     <storages>
         <!-- <storage name="temp" path="memory:temp" userName="admin" userPassword="admin" loaded-at-startup="true"/> -->
-        <storage name="logs" path="local:../databases/logs"  userName="admin" userPassword="admin" loaded-at-startup="true"/>
+        <storage name="logs" path="local:target/db"  userName="admin" userPassword="admin" loaded-at-startup="true"/>
     </storages>
     <users>
     <!-- 
