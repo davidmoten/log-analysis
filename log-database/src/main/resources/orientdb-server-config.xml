@@ -58,12 +58,14 @@
         </listeners>
     </network>
     <storages>
-        <storage name="temp" path="memory:temp" userName="admin" userPassword="admin" loaded-at-startup="true"/>
-        <storage name="logs" path="local:logs"  userName="admin" userPassword="admin" loaded-at-startup="true"/>
+        <!-- <storage name="temp" path="memory:temp" userName="admin" userPassword="admin" loaded-at-startup="true"/> -->
+        <storage name="logs" path="remote:logs"  userName="admin" userPassword="admin" loaded-at-startup="true"/>
     </storages>
     <users>
+    <!-- 
         <user name="root" password="74103539972C36DFECEB00CF6CEBDF0BFE70CDBC222742206BACD2883E333770" resources="*"/>
         <user name="guest" password="guest" resources="connect,server.listDatabases"/>
+        -->
     </users>
     <properties>
         <entry name="log.console.level" value="info"/>
