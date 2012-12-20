@@ -16,8 +16,6 @@ import org.moten.david.log.query.Buckets;
 import org.moten.david.log.query.Metric;
 import org.moten.david.log.query.Util;
 
-import com.orientechnologies.orient.server.OServerShutdownMain;
-
 public class QueryServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5553574830587263509L;
@@ -31,7 +29,6 @@ public class QueryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		OServerShutdownMain m;
 		Database db = getDatabase(factory);
 		try {
 			String sql = getMandatoryParameter(req, "sql");

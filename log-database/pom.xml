@@ -12,18 +12,6 @@
 	<properties>
 		<command>server</command>
 	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>com.orientechnologies</groupId>
-			<artifactId>orientdb-server</artifactId>
-			<version>${orientdb.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.moten.david.log</groupId>
-			<artifactId>log-analysis-core</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
