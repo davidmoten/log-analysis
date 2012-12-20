@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 
 import org.junit.Test;
-import org.moten.david.log.core.MessageSplitter;
 
 public class MessageSplitterTest {
 
@@ -94,6 +93,14 @@ public class MessageSplitterTest {
 		MessageSplitter m = new MessageSplitter();
 		Map<String, String> map = m.split("Finished run. 1run time  = 200");
 		assertEquals("200", map.get("time"));
+		assertEquals(1, map.size());
+	}
+
+	@Test
+	public void testVariableNameHasHyphenMeansLatterPartOnlyIsInterpretedAsName() {
+		MessageSplitter m = new MessageSplitter();
+		Map<String, String> map = m.split("SKY-CONNECT= 200");
+		assertEquals("200", map.get("CONNECT"));
 		assertEquals(1, map.size());
 	}
 }

@@ -88,7 +88,10 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 				show : true
 			}
 		}
-		$.plot(plot, [ series, meanGraph, sdLowerGraph,
+		if (metric=="COUNT")
+			$.plot(plot, [ series, extraMetricGraph ], options);
+		else 
+		    $.plot(plot, [ series, meanGraph, sdLowerGraph,
 				sdUpperGraph, extraMetricGraph ], options);
 	}
 	sqlElement.text(sql.replace(new RegExp("%20", 'g'), " "));
