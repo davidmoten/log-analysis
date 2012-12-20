@@ -3,6 +3,7 @@ package org.moten.david.log.configuration;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.moten.david.log.core.LogParserOptions;
 
 public class ConfigurationTest {
 
@@ -27,5 +28,14 @@ public class ConfigurationTest {
 		Configuration c = marshaller.unmarshal(ConfigurationTest.class
 				.getResourceAsStream("/configuration-test.xml"));
 		assertEquals("UTC", c.group.get(0).timezone);
+	}
+
+	@Test
+	public void testLoadLogParserOptions() {
+		Marshaller marshaller = new Marshaller();
+		Configuration c = marshaller.unmarshal(ConfigurationTest.class
+				.getResourceAsStream("/configuration-test.xml"));
+		LogParserOptions options = LogParserOptions.load(c.group.get(0));
+		assertEquals("UTC", options.getTimezone());
 	}
 }

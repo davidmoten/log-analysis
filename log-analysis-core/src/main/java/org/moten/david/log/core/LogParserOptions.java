@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import org.moten.david.log.configuration.Group;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -45,6 +47,14 @@ public class LogParserOptions {
 		boolean multiline = "true".equalsIgnoreCase(p.getProperty("multiline"));
 		return new LogParserOptions(pattern, patternGroups, df, timezone,
 				multiline);
+	}
+
+	public static LogParserOptions load(Group group) {
+		Pattern pattern = Pattern.compile(group.pattern);
+		DateFormat df = new SimpleDateFormat(group.timestampFormat);
+		BiMap<String, Integer> patternGroups = createGroupMap(group.patternGroups);
+		return new LogParserOptions(pattern, patternGroups, df, group.timezone,
+				group.multiline);
 	}
 
 	public static LogParserOptions load() {
