@@ -11,7 +11,7 @@ public class Log {
 	}
 
 	public Log() {
-
+		// no-args constructor required by jaxb
 	}
 
 }

@@ -11,6 +11,7 @@ import java.util.logging.LogManager;
 
 import org.junit.Test;
 import org.moten.david.log.configuration.Configuration;
+import org.moten.david.log.configuration.Group;
 import org.moten.david.log.configuration.Log;
 import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.core.LogParser;
@@ -29,23 +30,36 @@ public class WatcherTest {
 	@Test
 	public void test() throws InterruptedException, SecurityException,
 			IOException {
-		LogManager.getLogManager()
-				.readConfiguration(
-						WatcherTest.class
-								.getResourceAsStream("/my-logging.properties"));
+		setupLogging();
 
 		List<Log> list = Lists.newArrayList();
 		list.add(new Log(TEST_LOG, true));
 		list.add(new Log(TEST_LOG, true));
-		Configuration configuration = null;
+		Configuration configuration = new Configuration();
+		configuration.parser = TestingUtil.createDefaultParser();
+		configuration.group.add(new Group(list));
+
 		DatabaseFactory factory = new DatabaseFactory(new File("target/test4"));
 		Watcher w = new Watcher(factory, configuration);
 		w.start();
+		startWritingToFile(TEST_LOG);
+		Thread.sleep(3000);
+		w.stop();
+	}
+
+	private void setupLogging() throws IOException {
+		LogManager.getLogManager()
+				.readConfiguration(
+						WatcherTest.class
+								.getResourceAsStream("/my-logging.properties"));
+	}
+
+	private void startWritingToFile(final String filename) {
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					FileOutputStream fos = new FileOutputStream(TEST_LOG);
+					FileOutputStream fos = new FileOutputStream(filename);
 					DateFormat df = new SimpleDateFormat(
 							LogParser.DATE_FORMAT_DEFAULT);
 					for (int i = 1; i <= 5; i++) {
@@ -65,7 +79,5 @@ public class WatcherTest {
 			}
 		});
 		t.start();
-		Thread.sleep(3000);
-		w.stop();
 	}
 }
