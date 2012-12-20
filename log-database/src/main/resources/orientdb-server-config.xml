@@ -59,7 +59,7 @@
     </network>
     <storages>
         <!-- <storage name="temp" path="memory:temp" userName="admin" userPassword="admin" loaded-at-startup="true"/> -->
-        <storage name="logs" path="local:../../../target/orientdb-1.2.0/databases/logs"  userName="admin" userPassword="admin" loaded-at-startup="true"/>
+        <storage name="logs" path="local:logs"  userName="admin" userPassword="admin" loaded-at-startup="true"/>
     </storages>
     <users>
     <!-- 
