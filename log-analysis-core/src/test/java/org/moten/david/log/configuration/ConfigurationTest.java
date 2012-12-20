@@ -13,7 +13,8 @@ public class ConfigurationTest {
 		Configuration configuration = new Configuration();
 		Group group = new Group();
 		configuration.group.add(group);
-		group.path.add("/home/dave/logs/app/tomcatlog4j.log\\..*");
+		group.log.add(new Log("/home/dave/logs/app/tomcatlog4j.log\\..*",
+				true));
 		group.pattern = "^(\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d) +(\\S+) +(\\S+) +(\\S+)? ?- (.*)$";
 		group.timestampFormat = "yyyy-MM-dd HH:mm:ss.SSS";
 		group.patternGroups = "logTimestamp,logLevel,logLogger,threadName,logMsg";
