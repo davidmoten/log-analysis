@@ -5,12 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.moten.david.log.config.Log;
-import org.moten.david.log.config.Options;
 import org.moten.david.log.configuration.Configuration;
 import org.moten.david.log.configuration.Marshaller;
 import org.moten.david.log.core.Database;
@@ -47,14 +44,12 @@ public class ClientMain {
 		String url = System.getProperty("url", "remote:localhost/logs");
 		String[] items = paths.split(",");
 		log.info("paths=" + paths);
-		List<Log> list = Util.getLogs(name, items);
-		Options options = new Options(null, null, list);
 		DatabaseFactory provider = new DatabaseFactory(url, "admin", "admin");
 		Database db = provider.create();
 		db.persistDummyRecords();
 		db.close();
 		log.info("loaded dummy records");
-		Watcher w = new Watcher(provider, options);
+		Watcher w = new Watcher(provider, configuration);
 		w.start();
 	}
 

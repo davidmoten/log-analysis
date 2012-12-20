@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.moten.david.log.configuration.Group;
+import org.moten.david.log.configuration.Parser;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -49,12 +50,16 @@ public class LogParserOptions {
 				multiline);
 	}
 
-	public static LogParserOptions load(Group group) {
-		Pattern pattern = Pattern.compile(group.pattern);
-		DateFormat df = new SimpleDateFormat(group.timestampFormat);
-		BiMap<String, Integer> patternGroups = createGroupMap(group.patternGroups);
-		return new LogParserOptions(pattern, patternGroups, df, group.timezone,
-				group.multiline);
+	public static LogParserOptions load(Parser defaultParsing, Group group) {
+		Parser parsing = defaultParsing;
+		if (group.parser != null)
+			parsing = group.parser;
+
+		Pattern pattern = Pattern.compile(parsing.pattern);
+		DateFormat df = new SimpleDateFormat(parsing.timestampFormat);
+		BiMap<String, Integer> patternGroups = createGroupMap(parsing.patternGroups);
+		return new LogParserOptions(pattern, patternGroups, df,
+				parsing.timezone, parsing.multiline);
 	}
 
 	public static LogParserOptions load() {

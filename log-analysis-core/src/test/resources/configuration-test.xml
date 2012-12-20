@@ -5,10 +5,12 @@
             <path>/home/dave/logs/app/tomcatlog4j.log\..*</path>
             <watch>true</watch>
         </log>
-        <pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+) +(\S+)? ?- (.*)$</pattern>
-        <patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
-        <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
-        <timezone>UTC</timezone>
-        <multiline>false</multiline>
+        <parser>
+            <pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+) +(\S+)? ?- (.*)$</pattern>
+            <patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
+            <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
+            <timezone>UTC</timezone>
+            <multiline>false</multiline>
+        </parser>
     </group>
 </ns2:configuration>

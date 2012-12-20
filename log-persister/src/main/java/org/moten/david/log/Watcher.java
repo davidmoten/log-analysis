@@ -7,8 +7,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import org.moten.david.log.config.Log;
-import org.moten.david.log.config.Options;
+import org.moten.david.log.configuration.Configuration;
+import org.moten.david.log.configuration.Group;
+import org.moten.david.log.configuration.Log;
 import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.core.LogFile;
 import org.moten.david.log.core.LogParser;
@@ -21,25 +22,26 @@ public class Watcher {
 
 	private static final Logger log = Logger.getLogger(Watcher.class.getName());
 
-	private final Options options;
-
 	private final DatabaseFactory factory;
 
 	private final ExecutorService executor;
 
 	private final List<LogFile> logs = Lists.newArrayList();
 
-	public Watcher(DatabaseFactory factory, Options options) {
+	private final Configuration configuration;
+
+	public Watcher(DatabaseFactory factory, Configuration configuration) {
 		this.factory = factory;
-		this.options = options;
+		this.configuration = configuration;
 		executor = Executors.newFixedThreadPool(20);
 	}
 
 	public void start() {
 		log.info("starting watcher");
-		for (Log f : options.getLog()) {
+		Group group = configuration.group.get(0);
+		for (Log f : group.log) {
 			log.info("starting tail on " + f);
-			LogFile logFile = new LogFile(new File(f.getPath()), 500,
+			LogFile logFile = new LogFile(new File(f.path), 500,
 					new LogParser(), executor);
 			logFile.tail(factory);
 			logs.add(logFile);

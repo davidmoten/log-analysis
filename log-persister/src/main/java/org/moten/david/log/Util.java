@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.moten.david.log.config.Log;
+import org.moten.david.log.configuration.Log;
 
 import com.google.common.collect.Lists;
 
@@ -22,7 +22,7 @@ public class Util {
 	 * @param regexPaths
 	 * @return
 	 */
-	static List<Log> getLogs(String name, String[] regexPaths) {
+	static List<Log> getLogs(String[] regexPaths) {
 		List<Log> list = Lists.newArrayList();
 		for (String item : regexPaths) {
 			String directory = getPath(item);
@@ -40,7 +40,7 @@ public class Util {
 			});
 			if (files != null)
 				for (File file : files) {
-					list.add(new Log(name, file.getPath()));
+					list.add(new Log(file.getPath(), true));
 					log.info("added " + file);
 				}
 
