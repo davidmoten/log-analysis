@@ -8,6 +8,7 @@
 	<li><a
 		href="graph.html?buckets=60&finish=now&interval=1m&metric=MAX&extraMetric=MAX&field1=specialNumber&table=Dummy&width=1000px&height=500px&title=SpecialNumber aggregated by minute for the last hour">Last
 			hour, aggregated by minute</a></li>
+	<li><a href="amsa.html">AMSA graphs</a></li>
 </ul>
 
 <h3>Build a graph</h3>
@@ -17,8 +18,9 @@
 		Title: <input type="text" name="title"></input>
 	</p>
 	<p>
-		Buckets: <input type="text" name="buckets" value="24" style="width: 5em;"></input>&nbsp;&nbsp;
-		Interval: <input type="text" name="interval" value="1h" style="width: 8em;"
+		Buckets: <input type="text" name="buckets" value="24"
+			style="width: 5em;"></input>&nbsp;&nbsp; Interval: <input type="text"
+			name="interval" value="1h" style="width: 8em;"
 			pattern="[0-9]+(d|h|m|s|ms)?"></input> (Number optionally followed by
 		unit <i>d,h,m,s,ms</i>)
 	</p>
