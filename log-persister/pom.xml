@@ -14,7 +14,6 @@
 			<artifactId>log-analysis-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		
 
 		<!-- test dependencies -->
 		<dependency>
@@ -23,6 +22,43 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
+
+	<properties>
+		<logan.db.url>remote:localhost/logs</logan.db.url>
+		<logan.config>${basedir}/src/test/resources/configuration-test.xml</logan.config>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>persister</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>org.moten.david.log.persister.Main</mainClass>
+					<workingDirectory>${base.dir}</workingDirectory>
+					<systemProperties>
+						<systemProperty>
+							<key>logan.db.url</key>
+							<value>${logan.db.url}</value>
+						</systemProperty>
+						<systemProperty>
+							<key>logan.config</key>
+							<value>${logan.config}</value>
+						</systemProperty>
+					</systemProperties>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

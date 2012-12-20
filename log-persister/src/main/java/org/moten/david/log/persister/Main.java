@@ -35,12 +35,10 @@ public class Main {
 			IOException {
 
 		Configuration configuration = getConfiguration();
+		setupLogging();
 
-		LogManager.getLogManager().readConfiguration(
-				Main.class.getResourceAsStream("/my-logging.properties"));
-		String paths = System.getProperty("logPaths",
-				"src/test/resources/test.log");
-		String url = System.getProperty("url", "remote:localhost/logs");
+		String url = System
+				.getProperty("logan.db.url", "remote:localhost/logs");
 		DatabaseFactory provider = new DatabaseFactory(url, "admin", "admin");
 		Database db = provider.create();
 		db.persistDummyRecords();
@@ -50,10 +48,15 @@ public class Main {
 		w.start();
 	}
 
+	private static void setupLogging() throws IOException {
+		LogManager.getLogManager().readConfiguration(
+				Main.class.getResourceAsStream("/my-logging.properties"));
+	}
+
 	private static Configuration getConfiguration()
 			throws FileNotFoundException {
-		String configLocation = System.getProperty(
-				"log.analysis.configuration", DEFAULT_CONFIGURATION_LOCATION);
+		String configLocation = System.getProperty("logan.config",
+				DEFAULT_CONFIGURATION_LOCATION);
 		InputStream is = Main.class.getResourceAsStream(configLocation);
 		if (is == null) {
 			File file = new File(configLocation);
