@@ -15,7 +15,7 @@
 <form style="font-size: 12px; margin-left: 50px;" action="graph.html"
 	method="get">
 	<p>
-		Title: <input type="text" name="title"></input>
+		Title: <input type="text" name="title" value=" "></input>
 	</p>
 	<p>
 		Buckets: <input type="text" name="buckets" value="24"
