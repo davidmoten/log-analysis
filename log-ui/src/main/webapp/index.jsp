@@ -36,12 +36,9 @@
 		<option value="LAST">Last</option>
 		<option value="EARLIEST">Earliest</option>
 		<option value="LATEST">Latest</option>
-		<option value="MEDIAN">Median</option>
-		<option value="MODE">Mode</option>
 		<option value="STANDARD_DEVIATION">Standard Deviation</option>
 		<option value="SUM_SQUARES">Sum of squares</option>
 		<option value="VARIANCE">Variance</option>
-		<option value="VARIANCE">Variance (population)</option>
 	</select>
 	</p>
 	<div style="min-width: 13em">Extra metric:</div>
@@ -56,12 +53,9 @@
 		<option value="LAST">Last</option>
 		<option value="EARLIEST">Earliest</option>
 		<option value="LATEST">Latest</option>
-		<option value="MEDIAN">Median</option>
-		<option value="MODE">Mode</option>
 		<option value="STANDARD_DEVIATION">Standard Deviation</option>
 		<option value="SUM_SQUARES">Sum of squares</option>
 		<option value="VARIANCE">Variance</option>
-		<option value="VARIANCE">Variance (population)</option>
 	</select>
 	</p>
 	<p>
