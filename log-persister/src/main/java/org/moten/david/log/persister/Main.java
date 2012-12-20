@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.persister;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,10 +13,10 @@ import org.moten.david.log.configuration.Marshaller;
 import org.moten.david.log.core.Database;
 import org.moten.david.log.core.DatabaseFactory;
 
-public class ClientMain {
+public class Main {
 
 	private static final String DEFAULT_CONFIGURATION_LOCATION = "/log-analysis-configuration.xml";
-	private static Logger log = Logger.getLogger(ClientMain.class.getName());
+	private static Logger log = Logger.getLogger(Main.class.getName());
 
 	/**
 	 * <p>
@@ -37,7 +37,7 @@ public class ClientMain {
 		Configuration configuration = getConfiguration();
 
 		LogManager.getLogManager().readConfiguration(
-				ClientMain.class.getResourceAsStream("/my-logging.properties"));
+				Main.class.getResourceAsStream("/my-logging.properties"));
 		String paths = System.getProperty("logPaths",
 				"src/test/resources/test.log");
 		String url = System.getProperty("url", "remote:localhost/logs");
@@ -54,7 +54,7 @@ public class ClientMain {
 			throws FileNotFoundException {
 		String configLocation = System.getProperty(
 				"log.analysis.configuration", DEFAULT_CONFIGURATION_LOCATION);
-		InputStream is = ClientMain.class.getResourceAsStream(configLocation);
+		InputStream is = Main.class.getResourceAsStream(configLocation);
 		if (is == null) {
 			File file = new File(configLocation);
 			if (file.exists())

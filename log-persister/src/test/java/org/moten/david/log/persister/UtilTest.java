@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.persister;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.moten.david.log.configuration.Log;
+import org.moten.david.log.persister.Util;
 
 import com.google.common.collect.Sets;
 

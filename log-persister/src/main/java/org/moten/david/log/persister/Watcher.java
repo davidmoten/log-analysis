@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.persister;
 
 import java.io.File;
 import java.util.List;
@@ -39,9 +39,9 @@ public class Watcher {
 	public void start() {
 		log.info("starting watcher");
 		Group group = configuration.group.get(0);
-		for (Log f : group.log) {
-			log.info("starting tail on " + f);
-			LogFile logFile = new LogFile(new File(f.path), 500,
+		for (Log lg : group.log) {
+			log.info("starting tail on " + lg);
+			LogFile logFile = new LogFile(new File(lg.path), 500,
 					new LogParser(), executor);
 			logFile.tail(factory);
 			logs.add(logFile);

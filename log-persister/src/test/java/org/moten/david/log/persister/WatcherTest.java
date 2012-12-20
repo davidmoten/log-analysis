@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.persister;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +15,7 @@ import org.moten.david.log.configuration.Group;
 import org.moten.david.log.configuration.Log;
 import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.core.LogParser;
+import org.moten.david.log.persister.Watcher;
 
 import com.google.common.collect.Lists;
 

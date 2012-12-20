@@ -1,4 +1,4 @@
-package org.moten.david.log;
+package org.moten.david.log.persister;
 
 import java.io.File;
 import java.io.FilenameFilter;
