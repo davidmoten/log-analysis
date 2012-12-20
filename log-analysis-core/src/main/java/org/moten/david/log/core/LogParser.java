@@ -1,18 +1,18 @@
 package org.moten.david.log.core;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 
+/**
+ * 
+ * @author dxm
+ * 
+ */
 public class LogParser {
 
 	public static final String FIELD_MSG = "logMsg";
@@ -20,27 +20,17 @@ public class LogParser {
 	public static final String FIELD_LOG_LEVEL = "logLevel";
 	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
 	public static final String FIELD_THREAD_NAME = "threadName";
+	public static final String FIELD_METHOD = "method";
 
 	public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS";
-	private final String timezone;
+	private final LogParserOptions options;
 
-	private final Pattern pattern;
-	private final BiMap<String, Integer> map;
-	private final DateFormat df;
+	public LogParser(LogParserOptions options) {
+		this.options = options;
+	}
 
 	public LogParser() {
-		Properties p = new Properties();
-		try {
-			p.load(LogParser.class.getResourceAsStream(System.getProperty(
-					"logParserConfig", "/log-parser.properties")));
-			pattern = Pattern.compile(p.getProperty("pattern"));
-			String dateFormat = p.getProperty("timestamp.format");
-			df = new SimpleDateFormat(dateFormat + " Z");
-			timezone = p.getProperty("timestamp.timezone");
-			map = createGroupMap(p.getProperty("pattern.groups"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		this(LogParserOptions.load());
 	}
 
 	/**
@@ -56,43 +46,53 @@ public class LogParser {
 		if (line == null)
 			return null;
 		else {
-			Matcher matcher = pattern.matcher(line);
+			Matcher matcher = options.getPattern().matcher(line);
 			if (matcher.find()) {
-				String timestamp = matcher.group(map.get(FIELD_LOG_TIMESTAMP));
-				String level = matcher.group(map.get(FIELD_LOG_LEVEL));
-				String logger = matcher.group(map.get(FIELD_LOGGER));
-				String threadName = matcher.group(map.get(FIELD_THREAD_NAME));
-				String msg = matcher.group(map.get(FIELD_MSG));
+				BiMap<String, Integer> map = options.getPatternGroups();
+				String timestamp = getGroup(matcher,
+						map.get(FIELD_LOG_TIMESTAMP));
+				String level = getGroup(matcher, map.get(FIELD_LOG_LEVEL));
+				String logger = getGroup(matcher, map.get(FIELD_LOGGER));
+				String threadName = getGroup(matcher,
+						map.get(FIELD_THREAD_NAME));
+				String msg = getGroup(matcher, map.get(FIELD_MSG));
+				String method = getGroup(matcher, map.get(FIELD_METHOD));
 
 				Long time;
 				if (timestamp != null && level != null && logger != null) {
 					try {
-						time = df.parse(timestamp + " " + timezone).getTime();
+						time = options.getTimestampFormat()
+								.parse(timestamp + " " + options.getTimezone())
+								.getTime();
 					} catch (ParseException e) {
 						time = null;
 					}
 				} else
 					time = null;
 
-				Map<String, String> map = Maps.newHashMap();
-				map.put(FIELD_LOG_LEVEL, level);
-				map.put(FIELD_LOGGER, logger);
-				map.put(FIELD_MSG, msg);
+				Map<String, String> values = Maps.newHashMap();
+				if (level != null)
+					values.put(FIELD_LOG_LEVEL, level);
+				if (logger != null)
+					values.put(FIELD_LOGGER, logger);
+				if (msg != null)
+					values.put(FIELD_MSG, msg);
 				if (threadName != null && threadName.length() > 0)
-					map.put(FIELD_THREAD_NAME, threadName);
+					values.put(FIELD_THREAD_NAME, threadName);
+				if (method != null && method.length() > 0)
+					values.put(FIELD_METHOD, method);
 
-				return new LogEntry(time, map);
+				return new LogEntry(time, values);
 			} else
 				return null;
 
 		}
 	}
 
-	private BiMap<String, Integer> createGroupMap(String list) {
-		BiMap<String, Integer> map = HashBiMap.create(5);
-		String[] items = list.split(",");
-		for (int i = 0; i < items.length; i++)
-			map.put(items[i], i + 1);
-		return map;
+	private String getGroup(Matcher matcher, Integer index) {
+		if (index == null)
+			return null;
+		return matcher.group(index);
 	}
+
 }
