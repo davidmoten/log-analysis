@@ -46,6 +46,7 @@
 	</p>
 	<div style="min-width: 13em">Extra metric:</div>
 	<select name="extraMetric">
+		<option value="NONE">None</option>
 		<option value="MEAN">Mean</option>
 		<option value="MIN">Min</option>
 		<option value="MAX" selected="MAX">Max</option>
