@@ -3,13 +3,12 @@ package org.moten.david.log.persister;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import org.junit.Test;
-import org.moten.david.log.configuration.Log;
-import org.moten.david.log.persister.Util;
 
 import com.google.common.collect.Sets;
 
@@ -20,22 +19,24 @@ public class UtilTest {
 
 	@Test
 	public void testGetLogsNoWildcards() {
-		List<Log> list = Util
-				.getLogs(new String[] { "src/test/resources/test.log" });
-		assertEquals("src/test/resources/test.log", list.get(0).path);
+
+		List<File> files = Util
+				.getFilesFromPathWithRegexFilename("src/test/resources/test.log");
+		assertEquals("test.log", files.get(0).getName());
+		assertEquals(1, files.size());
 	}
 
 	@Test
-	public void testGetLogsWildcards() {
-		List<Log> list = Util
-				.getLogs(new String[] { "src/test/resources/test(2|3)\\.log" });
+	public void testGetMatchingFiles() {
+		List<File> files = Util
+				.getFilesFromPathWithRegexFilename("src/test/resources/test(2|3)\\.log");
 		Set<String> paths = Sets.newHashSet();
-		paths.add(list.get(0).path);
-		paths.add(list.get(1).path);
+		paths.add(files.get(0).getName());
+		paths.add(files.get(1).getName());
 		log.info("paths=" + paths);
-		assertTrue(paths.contains("src/test/resources/test2.log"));
-		assertTrue(paths.contains("src/test/resources/test3.log"));
-		assertEquals(2, list.size());
+		assertTrue(paths.contains("test2.log"));
+		assertTrue(paths.contains("test3.log"));
+		assertEquals(2, files.size());
 	}
 
 	@Test

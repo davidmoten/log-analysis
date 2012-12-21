@@ -9,29 +9,9 @@ import java.util.regex.Pattern;
 
 import org.moten.david.log.configuration.Log;
 
-import com.google.common.collect.Lists;
-
 public class Util {
 
 	private static final Logger log = Logger.getLogger(Util.class.getName());
-
-	/**
-	 * Note that regex special characters can only be used on the filename not
-	 * the containing directory.
-	 * 
-	 * @param name
-	 * @param regexPaths
-	 * @return
-	 */
-	static List<Log> getLogs(String[] regexPaths) {
-		List<Log> list = Lists.newArrayList();
-		for (String item : regexPaths) {
-			Log lg = getLog(item);
-			if (lg != null)
-				list.add(lg);
-		}
-		return list;
-	}
 
 	static List<File> getFilesFromPathWithRegexFilename(String item) {
 		String directory = getPath(item);
