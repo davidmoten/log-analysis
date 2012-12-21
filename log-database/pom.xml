@@ -7,11 +7,23 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>log-database</artifactId>
-	<packaging>pom</packaging>
 	<description>Starts orientdb database server</description>
 	<properties>
 		<command>server</command>
 	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-core</artifactId>
+			<version>${orientdb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -24,7 +36,6 @@
 						<goals>
 							<goal>exec</goal>
 						</goals>
-
 					</execution>
 				</executions>
 				<configuration>
@@ -39,7 +50,7 @@
 				<executions>
 					<execution>
 						<id>unpack</id>
-						<phase>package</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>unpack</goal>
 						</goals>
@@ -63,7 +74,7 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<phase>generate-resources</phase>
 						<configuration>
 							<tasks>
 								<copy file="${basedir}/src/main/resources/orientdb-server-config.xml"
