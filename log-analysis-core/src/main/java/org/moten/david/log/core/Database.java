@@ -40,12 +40,19 @@ public class Database {
 
 	private final ODatabaseDocumentTx db;
 
+	private final String url;
+
+	private final String username;
+
+	private final String password;
+
 	public Database(File location) {
-		this(connectToDatabase(location));
+		this(connectToDatabase(location), null, null, null);
 	}
 
 	public Database(String url, String username, String password) {
-		this(connectToDatabase(url, username, password));
+		this(connectToDatabase(url, username, password), url, username,
+				password);
 	}
 
 	private synchronized static ODatabaseDocumentTx connectToDatabase(
@@ -56,8 +63,17 @@ public class Database {
 		return db;
 	}
 
-	public Database(ODatabaseDocumentTx db) {
+	public Database reconnect() {
+		close();
+		return new Database(url, username, password);
+	}
+
+	public Database(ODatabaseDocumentTx db, String url, String username,
+			String password) {
 		this.db = db;
+		this.url = url;
+		this.username = username;
+		this.password = password;
 	}
 
 	private static ODatabaseDocumentTx connectToDatabase(File location) {

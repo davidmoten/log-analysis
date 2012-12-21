@@ -53,8 +53,9 @@ public class LogFile {
 			tailer.stop();
 	}
 
-	private TailerListener createListener(final Database db) {
+	private TailerListener createListener(final Database dbInitial) {
 		return new TailerListener() {
+			private Database db = dbInitial;
 
 			@Override
 			public void fileNotFound() {
@@ -68,7 +69,7 @@ public class LogFile {
 			}
 
 			@Override
-			public void handle(String line) {
+			public synchronized void handle(String line) {
 				try {
 					db.useInCurrentThread();
 					LogEntry entry = parser.parse(line);
@@ -76,13 +77,25 @@ public class LogFile {
 						db.persist(entry);
 				} catch (RuntimeException e) {
 					log.log(Level.SEVERE, e.getMessage(), e);
+					// reconnect
+					try {
+						db = dbInitial.reconnect();
+					} catch (RuntimeException e2) {
+						log.info("could not reconnect at this time: "
+								+ e2.getMessage());
+						log.info("waiting 30s");
+						try {
+							Thread.sleep(30000);
+						} catch (InterruptedException e1) {
+							// do nothing
+						}
+					}
 				}
 			}
 
 			@Override
-			public void handle(Exception arg0) {
-				log.log(Level.WARNING, "handle exception " + arg0.getMessage(),
-						arg0);
+			public void handle(Exception e) {
+				log.log(Level.WARNING, "handle exception " + e.getMessage(), e);
 			}
 
 			@Override
@@ -91,5 +104,4 @@ public class LogFile {
 			}
 		};
 	}
-
 }
