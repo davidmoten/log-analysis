@@ -14,4 +14,15 @@ public class Log {
 		// no-args constructor required by jaxb
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Log [path=");
+		builder.append(path);
+		builder.append(", watch=");
+		builder.append(watch);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

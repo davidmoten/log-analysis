@@ -20,4 +20,22 @@ public class Parser {
 	public Parser() {
 		// required for jaxb
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Parser [pattern=");
+		builder.append(pattern);
+		builder.append(", patternGroups=");
+		builder.append(patternGroups);
+		builder.append(", timestampFormat=");
+		builder.append(timestampFormat);
+		builder.append(", timezone=");
+		builder.append(timezone);
+		builder.append(", multiline=");
+		builder.append(multiline);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }
