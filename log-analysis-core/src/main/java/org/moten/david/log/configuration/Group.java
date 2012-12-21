@@ -21,4 +21,16 @@ public class Group {
 	public Group() {
 		// no-args constructor required by jaxb
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Group [log=");
+		builder.append(log);
+		builder.append(", parser=");
+		builder.append(parser);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

@@ -40,11 +40,13 @@ public class Watcher {
 		log.info("starting watcher");
 		Group group = configuration.group.get(0);
 		for (Log lg : group.log) {
-			log.info("starting tail on " + lg);
-			LogFile logFile = new LogFile(new File(lg.path), 500,
-					new LogParser(), executor);
-			logFile.tail(factory);
-			logs.add(logFile);
+			for (File file : Util.getFilesFromPathWithRegexFilename(lg.path)) {
+				log.info("starting tail on " + file);
+				LogFile logFile = new LogFile(file, 500, new LogParser(),
+						executor);
+				logFile.tail(factory);
+				logs.add(logFile);
+			}
 		}
 		log.info("started watcher");
 	}

@@ -18,4 +18,18 @@ public class Configuration {
 	public Configuration() {
 		// no-args constructor required by jaxb
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Configuration [databaseUrl=");
+		builder.append(databaseUrl);
+		builder.append(", parser=");
+		builder.append(parser);
+		builder.append(", group=");
+		builder.append(group);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }
