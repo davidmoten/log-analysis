@@ -13,6 +13,8 @@ Aggregated:
 
 Architecture
 ==============
+<img src="https://raw.github.com/davidmoten/log-analysis/master/docs/log-analysis.png"/>
+
 Comprises the following components:
 
 * log-database
