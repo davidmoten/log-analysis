@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 public class Configuration {
+	public String databaseUrl = "remote:localhost/logs";
 	public Parser parser;
 	public List<Group> group = Lists.newArrayList();
 

@@ -19,27 +19,16 @@ public class Main {
 	private static Logger log = Logger.getLogger(Main.class.getName());
 
 	/**
-	 * <p>
-	 * -DlogPaths = f1,f2,f3 etc.
-	 * </p>
-	 * <p>
-	 * where f1, etc is of the form:
-	 * </p>
-	 * <code>/some/path/finished/by/regex</code>
 	 * 
 	 * @param args
-	 * @throws SecurityException
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws SecurityException,
-			IOException {
+	public static void main(String[] args) throws IOException {
 
 		Configuration configuration = getConfiguration();
 		setupLogging();
-
-		String url = System
-				.getProperty("logan.db.url", "remote:localhost/logs");
-		DatabaseFactory provider = new DatabaseFactory(url, "admin", "admin");
+		DatabaseFactory provider = new DatabaseFactory(
+				configuration.databaseUrl, "admin", "admin");
 		Database db = provider.create();
 		db.persistDummyRecords();
 		db.close();
