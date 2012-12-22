@@ -2,9 +2,9 @@
 	
 function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric,plot,refresh,sqlElement) {
 	
-	var sql = "select logTimestamp, " + field + " as value from " 
-				+ tablename + " where " + field 
-				+" is not null order by logTimestamp";
+	var sql = "select logTimestamp, logValue as value from " 
+				+ tablename + " where logKey = '" + field + "'" +
+				" and logValue is not null order by logTimestamp";
 	sql = sql.replace(new RegExp(" ", 'g'), "%20");
 
 	var barOptions = {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,11 +31,15 @@ public class Database {
 	private static final Logger log = Logger
 			.getLogger(Database.class.getName());
 
-	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
 	private static final String TABLE_ENTRY = "Entry";
-	private static final String FIELD_VALUE = "value";
 
 	private static final String TABLE_DUMMY = "Dummy";
+
+	private static final String FIELD_LOG_ID = "logId";
+
+	private static final String FIELD_KEY = "logKey";
+
+	private static final String FIELD_VALUE = "logValue";
 
 	private final MessageSplitter splitter = new MessageSplitter();
 
@@ -112,12 +117,12 @@ public class Database {
 							TABLE_ENTRY,
 							db.addCluster(TABLE_ENTRY,
 									OStorage.CLUSTER_TYPE.PHYSICAL));
-			user.createProperty(FIELD_LOG_TIMESTAMP, OType.LONG).setMandatory(
-					true);
+			user.createProperty(LogParser.FIELD_LOG_TIMESTAMP, OType.LONG)
+					.setMandatory(true);
 
 			db.getMetadata().getSchema().save();
 			user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
-					FIELD_LOG_TIMESTAMP);
+					LogParser.FIELD_LOG_TIMESTAMP);
 			db.commit();
 		} catch (RuntimeException e) {
 			log.log(Level.WARNING, e.getMessage());
@@ -138,17 +143,14 @@ public class Database {
 
 	public void persist(LogEntry entry) {
 		// create a new document (row in table)
-		ODocument d = new ODocument(TABLE_ENTRY);
-
-		persist(entry, d);
-	}
-
-	private void persist(LogEntry entry, ODocument d) {
 		// persist the full message, timestamp, level logger and threadName
-		d.field(FIELD_LOG_TIMESTAMP, entry.getTime());
+		long timestamp = entry.getTime();
+		String id = UUID.randomUUID().toString();
+
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
-			if (e.getValue() != null)
-				d.field(e.getKey(), e.getValue());
+			if (e.getValue() != null) {
+				persistDocument(timestamp, id, e.getKey(), e.getValue());
+			}
 		}
 
 		// persist the split fields from the full message
@@ -157,16 +159,33 @@ public class Database {
 			log.info(map.toString());
 		for (Entry<String, String> e : map.entrySet()) {
 			if (e.getValue() != null) {
-				// field names in orientdb cannot have spaces so replace
-				// them
-				// with underscores
 				ValueAndType v = parse(e.getValue());
-				d.field(e.getKey().replace(" ", "_"), v.value, v.type);
+				// replace spaces in field names with underscores
+				persistDocument(timestamp, id, e.getKey().replace(" ", "_"),
+						v.value, v.type);
 			}
 		}
+	}
 
-		// persist the document
+	private void persistDocument(long timestamp, String id, String key,
+			Object value, OType type) {
+		persistDocument(TABLE_ENTRY, timestamp, id, key, value, type);
+	}
+
+	private void persistDocument(String table, long timestamp, String id,
+			String key, Object value, OType type) {
+		ODocument d = new ODocument(table);
+		d.field(LogParser.FIELD_LOG_TIMESTAMP, timestamp);
+		d.field(FIELD_LOG_ID, id);
+		d.field(FIELD_KEY, key);
+		d.field(FIELD_VALUE, value, type);
 		d.save();
+
+	}
+
+	private void persistDocument(long timestamp, String id, String key,
+			String value) {
+		persistDocument(timestamp, id, key, value, OType.STRING);
 	}
 
 	private static class ValueAndType {
@@ -211,9 +230,11 @@ public class Database {
 		List<ODocument> result = db.query(sqlQuery);
 		Buckets buckets = new Buckets(query);
 		for (ODocument doc : result) {
-			Long timestamp = doc.field(FIELD_LOG_TIMESTAMP);
-			Number value = doc.field(FIELD_VALUE);
-			buckets.add(timestamp, value.doubleValue());
+			Long timestamp = doc.field(LogParser.FIELD_LOG_TIMESTAMP);
+			if (doc.field(FIELD_VALUE) != null) {
+				Number value = doc.field(FIELD_VALUE);
+				buckets.add(timestamp, value.doubleValue());
+			}
 		}
 		log.info("found " + result.size() + " records");
 		return buckets;
@@ -242,12 +263,12 @@ public class Database {
 		for (int i = 0; i < 1000; i++) {
 			long time = t - TimeUnit.HOURS.toMillis(1)
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
-			ODocument d = new ODocument(TABLE_DUMMY);
+			String id = UUID.randomUUID().toString();
 			int specialNumber = i % (r.nextInt(100) + 1);
-			d.field(LogParser.FIELD_LOG_TIMESTAMP, time, OType.LONG);
-			d.field(LogParser.FIELD_MSG, "specialNumber=" + specialNumber);
-			d.field("specialNumber", specialNumber);
-			d.save();
+			persistDocument(TABLE_DUMMY, time, id, LogParser.FIELD_MSG,
+					"specialNumber=" + specialNumber, OType.INTEGER);
+			persistDocument(TABLE_DUMMY, time, id, "specialNumber",
+					specialNumber + "", OType.STRING);
 		}
 		log.info("persisted 1000 random values from the last hour to table Dummy");
 	}
