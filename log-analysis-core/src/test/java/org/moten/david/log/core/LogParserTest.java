@@ -21,12 +21,11 @@ public class LogParserTest {
 		LogEntry entry = p.parse(line);
 		assertNotNull(entry);
 		assertEquals(1354163942941L, entry.getTime());
-		assertEquals("INFO",
-				entry.getProperties().get(LogParser.FIELD_LOG_LEVEL));
+		assertEquals("INFO", entry.getProperties().get(Field.FIELD_LOG_LEVEL));
 		assertEquals("au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor",
-				entry.getProperties().get(LogParser.FIELD_LOGGER));
+				entry.getProperties().get(Field.FIELD_LOGGER));
 		assertEquals("fixes queue size = 0",
-				entry.getProperties().get(LogParser.FIELD_MSG));
+				entry.getProperties().get(Field.FIELD_MSG));
 	}
 
 	@Test
@@ -35,14 +34,13 @@ public class LogParserTest {
 		LogParser p = new LogParser();
 		LogEntry entry = p.parse(line);
 		assertNotNull(entry);
-		assertEquals("INFO",
-				entry.getProperties().get(LogParser.FIELD_LOG_LEVEL));
+		assertEquals("INFO", entry.getProperties().get(Field.FIELD_LOG_LEVEL));
 		assertEquals("au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor",
-				entry.getProperties().get(LogParser.FIELD_LOGGER));
+				entry.getProperties().get(Field.FIELD_LOGGER));
 		assertEquals("fixes queue size = 0",
-				entry.getProperties().get(LogParser.FIELD_MSG));
+				entry.getProperties().get(Field.FIELD_MSG));
 		assertEquals("thread_name-1",
-				entry.getProperties().get(LogParser.FIELD_THREAD_NAME));
+				entry.getProperties().get(Field.FIELD_THREAD_NAME));
 	}
 
 	@Test
@@ -64,7 +62,7 @@ public class LogParserTest {
 			LogEntry entry = p.parse(line);
 			if (entry != null) {
 				Map<String, String> map = splitter.split(entry.getProperties()
-						.get(LogParser.FIELD_MSG));
+						.get(Field.FIELD_MSG));
 				if (map.size() > 0)
 					System.out.println(map);
 			}

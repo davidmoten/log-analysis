@@ -22,7 +22,7 @@ public class LogEntry {
 	}
 
 	public String getMessage() {
-		return properties.get(LogParser.FIELD_MSG);
+		return properties.get(Field.FIELD_MSG);
 	}
 
 	@Override

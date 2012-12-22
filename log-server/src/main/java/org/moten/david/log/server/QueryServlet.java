@@ -49,7 +49,9 @@ public class QueryServlet extends HttpServlet {
 		Database db = factory.create();
 		if (firstTime) {
 			db.persistDummyRecords();
+			firstTime = false;
 		}
+
 		return db;
 	}
 

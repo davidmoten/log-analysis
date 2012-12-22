@@ -36,12 +36,6 @@ public class Database {
 
 	private static final String TABLE_DUMMY = "Dummy";
 
-	private static final String FIELD_LOG_ID = "logId";
-
-	private static final String FIELD_KEY = "logKey";
-
-	private static final String FIELD_VALUE = "logValue";
-
 	private final MessageSplitter splitter = new MessageSplitter();
 
 	private final ODatabaseDocumentTx db;
@@ -114,13 +108,24 @@ public class Database {
 			OSchema schema = db.getMetadata().getSchema();
 			OClass entry = schema.createClass(TABLE_ENTRY,
 					db.addCluster(TABLE_ENTRY, OStorage.CLUSTER_TYPE.PHYSICAL));
-			entry.createProperty(LogParser.FIELD_LOG_TIMESTAMP, OType.LONG)
+			entry.createProperty(Field.FIELD_LOG_TIMESTAMP, OType.LONG)
 					.setMandatory(true);
+			entry.createProperty(Field.FIELD_KEY, OType.STRING).setMandatory(
+					true);
+			entry.createProperty(Field.FIELD_VALUE, OType.STRING).setMandatory(
+					true);
+			entry.createIndex("EntryTimestampIndex",
+					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP);
+			entry.createIndex("EntryTimestampKeyIndex",
+					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP,
+					Field.FIELD_KEY);
 
-			entry.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
-					LogParser.FIELD_LOG_TIMESTAMP);
 			OClass dummy = schema.createClass(TABLE_DUMMY,
 					db.addCluster(TABLE_DUMMY, OStorage.CLUSTER_TYPE.PHYSICAL));
+			dummy.createProperty(Field.FIELD_LOG_TIMESTAMP, OType.LONG)
+					.setMandatory(true);
+			dummy.createIndex("DummyTimestampIndex",
+					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP);
 
 			db.getMetadata().getSchema().save();
 
@@ -178,10 +183,10 @@ public class Database {
 	private void persistDocument(String table, long timestamp, String id,
 			String key, Object value, OType type) {
 		ODocument d = new ODocument(table);
-		d.field(LogParser.FIELD_LOG_TIMESTAMP, timestamp);
-		d.field(FIELD_LOG_ID, id);
-		d.field(FIELD_KEY, key);
-		d.field(FIELD_VALUE, value, type);
+		d.field(Field.FIELD_LOG_TIMESTAMP, timestamp);
+		d.field(Field.FIELD_LOG_ID, id);
+		d.field(Field.FIELD_KEY, key);
+		d.field(Field.FIELD_VALUE, value, type);
 		d.save();
 
 	}
@@ -233,11 +238,11 @@ public class Database {
 		List<ODocument> result = db.query(sqlQuery);
 		Buckets buckets = new Buckets(query);
 		for (ODocument doc : result) {
-			Long timestamp = doc.field(LogParser.FIELD_LOG_TIMESTAMP);
-			if (doc.field(FIELD_VALUE) != null) {
+			Long timestamp = doc.field(Field.FIELD_LOG_TIMESTAMP);
+			if (doc.field(Field.FIELD_VALUE) != null) {
 				try {
 					double value = Double.parseDouble((String) doc
-							.field(FIELD_VALUE));
+							.field(Field.FIELD_VALUE));
 					buckets.add(timestamp, value);
 				} catch (NumberFormatException e) {
 					// not a number don't care about it
@@ -274,7 +279,7 @@ public class Database {
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
 			String id = UUID.randomUUID().toString();
 			int specialNumber = i % (r.nextInt(100) + 1);
-			persistDocument(TABLE_DUMMY, time, id, LogParser.FIELD_MSG,
+			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_MSG,
 					"specialNumber=" + specialNumber, OType.INTEGER);
 			persistDocument(TABLE_DUMMY, time, id, "specialNumber",
 					specialNumber + "", OType.STRING);

@@ -1,5 +1,12 @@
 package org.moten.david.log.core;
 
+import static org.moten.david.log.core.Field.FIELD_LOGGER;
+import static org.moten.david.log.core.Field.FIELD_LOG_LEVEL;
+import static org.moten.david.log.core.Field.FIELD_LOG_TIMESTAMP;
+import static org.moten.david.log.core.Field.FIELD_METHOD;
+import static org.moten.david.log.core.Field.FIELD_MSG;
+import static org.moten.david.log.core.Field.FIELD_THREAD_NAME;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Map;
@@ -14,13 +21,6 @@ import com.google.common.collect.Maps;
  * 
  */
 public class LogParser {
-
-	public static final String FIELD_MSG = "logMsg";
-	public static final String FIELD_LOGGER = "logLogger";
-	public static final String FIELD_LOG_LEVEL = "logLevel";
-	public static final String FIELD_LOG_TIMESTAMP = "logTimestamp";
-	public static final String FIELD_THREAD_NAME = "threadName";
-	public static final String FIELD_METHOD = "method";
 
 	public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS";
 	private final LogParserOptions options;
