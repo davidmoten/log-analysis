@@ -20,6 +20,7 @@ import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
+import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
@@ -110,22 +111,23 @@ public class Database {
 
 	private static void configureDatabase(ODatabaseDocumentTx db) {
 		try {
-			OClass user = db
-					.getMetadata()
-					.getSchema()
-					.createClass(
-							TABLE_ENTRY,
-							db.addCluster(TABLE_ENTRY,
-									OStorage.CLUSTER_TYPE.PHYSICAL));
-			user.createProperty(LogParser.FIELD_LOG_TIMESTAMP, OType.LONG)
+			OSchema schema = db.getMetadata().getSchema();
+			OClass entry = schema.createClass(TABLE_ENTRY,
+					db.addCluster(TABLE_ENTRY, OStorage.CLUSTER_TYPE.PHYSICAL));
+			entry.createProperty(LogParser.FIELD_LOG_TIMESTAMP, OType.LONG)
 					.setMandatory(true);
 
-			db.getMetadata().getSchema().save();
-			user.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
+			entry.createIndex("LogTimestampIndex", OClass.INDEX_TYPE.NOTUNIQUE,
 					LogParser.FIELD_LOG_TIMESTAMP);
+			OClass dummy = schema.createClass(TABLE_DUMMY,
+					db.addCluster(TABLE_DUMMY, OStorage.CLUSTER_TYPE.PHYSICAL));
+
+			db.getMetadata().getSchema().save();
+
 			db.commit();
 		} catch (RuntimeException e) {
 			log.log(Level.WARNING, e.getMessage());
+			throw e;
 		}
 	}
 
@@ -165,6 +167,7 @@ public class Database {
 						v.value, v.type);
 			}
 		}
+		db.commit();
 	}
 
 	private void persistDocument(long timestamp, String id, String key,
@@ -232,8 +235,13 @@ public class Database {
 		for (ODocument doc : result) {
 			Long timestamp = doc.field(LogParser.FIELD_LOG_TIMESTAMP);
 			if (doc.field(FIELD_VALUE) != null) {
-				Number value = doc.field(FIELD_VALUE);
-				buckets.add(timestamp, value.doubleValue());
+				try {
+					double value = Double.parseDouble((String) doc
+							.field(FIELD_VALUE));
+					buckets.add(timestamp, value);
+				} catch (NumberFormatException e) {
+					// not a number don't care about it
+				}
 			}
 		}
 		log.info("found " + result.size() + " records");
@@ -260,7 +268,8 @@ public class Database {
 	public void persistDummyRecords() {
 		long t = System.currentTimeMillis();
 		Random r = new Random();
-		for (int i = 0; i < 1000; i++) {
+		int n = 1000;
+		for (int i = 0; i < n; i++) {
 			long time = t - TimeUnit.HOURS.toMillis(1)
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
 			String id = UUID.randomUUID().toString();
@@ -270,6 +279,8 @@ public class Database {
 			persistDocument(TABLE_DUMMY, time, id, "specialNumber",
 					specialNumber + "", OType.STRING);
 		}
-		log.info("persisted 1000 random values from the last hour to table Dummy");
+		db.commit();
+		log.info("persisted " + n
+				+ " random values from the last hour to table " + TABLE_DUMMY);
 	}
 }

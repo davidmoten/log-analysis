@@ -24,7 +24,7 @@ public class QueryServlet extends HttpServlet {
 			System.getProperty("db.url", "remote:localhost/logs"), "admin",
 			"admin");
 
-	private static boolean haveConfigured = false;
+	private static boolean firstTime = true;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -47,11 +47,9 @@ public class QueryServlet extends HttpServlet {
 
 	private synchronized Database getDatabase(DatabaseFactory factory) {
 		Database db = factory.create();
-		if (!haveConfigured) {
-			db.configureDatabase();
+		if (firstTime) {
 			db.persistDummyRecords();
 		}
-		haveConfigured = true;
 		return db;
 	}
 
