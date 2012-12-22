@@ -20,9 +20,14 @@ public class DataServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO get url from config
-		String url = "http://localhost:9191/query?sql="
-				+ req.getParameter("sql") + "&start="
+		// TODO get url from config or system property
+
+		String sql = "select logTimestamp, logValue from "
+				+ req.getParameter("table") + " where logKey = '"
+				+ req.getParameter("field") + "'"
+				+ " and logValue is not null order by logTimestamp";
+
+		String url = "http://localhost:9191/query?sql=" + sql + "&start="
 				+ req.getParameter("start") + "&interval="
 				+ req.getParameter("interval") + "&buckets="
 				+ req.getParameter("buckets") + "&metric="

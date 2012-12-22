@@ -2,10 +2,10 @@
 	
 function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric,plot,refresh,sqlElement) {
 	
-	var sql = "select logTimestamp, logValue from " 
-				+ tablename + " where logKey = '" + field + "'" +
-				" and logValue is not null order by logTimestamp";
-	sql = sql.replace(new RegExp(" ", 'g'), "%20");
+//	var sql = "select logTimestamp, logValue from " 
+//				+ tablename + " where logKey = '" + field + "'" +
+//				" and logValue is not null order by logTimestamp";
+//	sql = sql.replace(new RegExp(" ", 'g'), "%20");
 
 	var barOptions = {
 		show : true,
@@ -94,12 +94,10 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		    $.plot(plot, [ series, meanGraph, sdLowerGraph,
 				sdUpperGraph, extraMetricGraph ], options);
 	}
-	sqlElement.text(sql.replace(new RegExp("%20", 'g'), " "));
 	
 	function refreshGraph() {
-		var sql2 = sqlElement.val().replace(new RegExp(" ", 'g'), "%20");
 
-		var dataurl = "data?sql=" + sql2 + "&start=" + startTime
+		var dataurl = "data?table="+ tablename + "&field=" + field + "&start=" + startTime
 				+ "&interval=" + interval + "&buckets=" + buckets
 				+ "&metric=" + metric;
 		console.log("dataurl=" + dataurl);
