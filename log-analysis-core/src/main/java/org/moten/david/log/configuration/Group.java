@@ -2,10 +2,22 @@ package org.moten.david.log.configuration;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import com.google.common.collect.Lists;
 
+/**
+ * A group of log files and a parser definition.
+ * 
+ * @author dave
+ * 
+ */
 public class Group {
+
+	@XmlElement(required = false)
 	public List<Log> log = Lists.newArrayList();
+
+	@XmlElement(required = false)
 	public Parser parser;
 
 	public Group(List<Log> log, Parser parser) {
