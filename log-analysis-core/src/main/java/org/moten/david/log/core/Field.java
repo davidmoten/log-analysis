@@ -1,5 +1,12 @@
 package org.moten.david.log.core;
 
+/**
+ * 
+ * Constants for field names.
+ * 
+ * @author dave
+ * 
+ */
 public class Field {
 	public static final String FIELD_MSG = "logMsg";
 	public static final String FIELD_LOGGER = "logLogger";

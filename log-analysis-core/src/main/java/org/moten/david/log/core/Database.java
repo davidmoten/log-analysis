@@ -83,11 +83,25 @@ public class Database {
 		return db;
 	}
 
+	/**
+	 * Closes the connection to the database returns a new instance of
+	 * {@link Database}.
+	 * 
+	 * @return
+	 */
 	public Database reconnect() {
 		close();
 		return new Database(url, username, password);
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param db
+	 * @param url
+	 * @param username
+	 * @param password
+	 */
 	public Database(ODatabaseDocumentTx db, String url, String username,
 			String password) {
 		this.db = db;
@@ -97,6 +111,8 @@ public class Database {
 	}
 
 	/**
+	 * Creates the logs database in the filesystem.
+	 * 
 	 * @param location
 	 * @return
 	 */
@@ -127,6 +143,11 @@ public class Database {
 		configureDatabase(db);
 	}
 
+	/**
+	 * Sets up fields and indexes.
+	 * 
+	 * @param db
+	 */
 	private static void configureDatabase(ODatabaseDocumentTx db) {
 		try {
 			OSchema schema = db.getMetadata().getSchema();
@@ -172,10 +193,19 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Indicate to orientdb that database is being used from another thread
+	 * instead.
+	 */
 	public void useInCurrentThread() {
 		ODatabaseRecordThreadLocal.INSTANCE.set(db);
 	}
 
+	/**
+	 * Persist a log entry to the database.
+	 * 
+	 * @param entry
+	 */
 	public void persist(LogEntry entry) {
 		// create a new document (row in table)
 		// persist the full message, timestamp, level logger and threadName
@@ -259,6 +289,12 @@ public class Database {
 		return new ValueAndType(s, OType.STRING);
 	}
 
+	/**
+	 * Return the result of an aggregated/non-aggregated query.
+	 * 
+	 * @param query
+	 * @return
+	 */
 	public Buckets execute(BucketQuery query) {
 		log.info(query.toString());
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
@@ -281,6 +317,11 @@ public class Database {
 		return buckets;
 	}
 
+	/**
+	 * Returns the current size of the database in bytes.
+	 * 
+	 * @return
+	 */
 	public long size() {
 
 		return db.getSize();
@@ -290,6 +331,9 @@ public class Database {
 		return db.countClass(TABLE_ENTRY);
 	}
 
+	/**
+	 * Closes the database connection.
+	 */
 	public void close() {
 		db.close();
 	}

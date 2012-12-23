@@ -2,25 +2,53 @@ package org.moten.david.log.core;
 
 import java.util.Map;
 
+/**
+ * Encapsulates a partially parsed log line.
+ * 
+ * @author dave
+ * 
+ */
 public class LogEntry {
 
 	private final long time;
 	private final Map<String, String> properties;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param time
+	 * @param properties
+	 */
 	public LogEntry(long time, Map<String, String> properties) {
 		super();
 		this.time = time;
 		this.properties = properties;
 	}
 
+	/**
+	 * Returns the time in epoch ms for the log entry.
+	 * 
+	 * @return
+	 */
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns the parsed properties of the log line not including the parsing
+	 * of the log message.
+	 * 
+	 * @return
+	 */
 	public Map<String, String> getProperties() {
 		return properties;
 	}
 
+	/**
+	 * Returns the body of the log line.
+	 * 
+	 * @return
+	 */
 	public String getMessage() {
 		return properties.get(Field.FIELD_MSG);
 	}
