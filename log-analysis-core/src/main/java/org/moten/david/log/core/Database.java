@@ -44,6 +44,7 @@ public class Database {
 
 	private static final String TABLE_DUMMY = "Dummy";
 
+	// TODO remove dependency of Database on MessageSplitter
 	private final MessageSplitter splitter = new MessageSplitter();
 
 	private final ODatabaseDocumentTx db;

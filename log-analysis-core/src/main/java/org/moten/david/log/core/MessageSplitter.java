@@ -9,8 +9,8 @@ import com.google.common.collect.Maps;
 
 public class MessageSplitter {
 
-	private final Pattern pattern = Pattern
-			.compile("(\\b[a-zA-Z](?:\\w| )*)=([^;|,]*)(;|\\||,|$)");
+	public static final String MESSAGE_PATTERN_DEFAULT = "(\\b[a-zA-Z](?:\\w| )*)=([^;|,]*)(;|\\||,|$)";
+	private final Pattern pattern = Pattern.compile(MESSAGE_PATTERN_DEFAULT);
 
 	public Map<String, String> split(String s) {
 		if (s == null || s.length() == 0)
