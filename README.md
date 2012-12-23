@@ -10,6 +10,13 @@ Non-aggregated:
 Aggregated:
 <img src="https://raw.github.com/davidmoten/log-analysis/master/docs/screen2.png"/>
 
+Features
+==============
+* pattern based log parsing
+* fast parsing, persistence and query
+* simplified datetime input (last day,last hour etc)
+* parses single line and two line logging (e.g. java.util.Logging)
+* tails log files, handles rollover, deletion (using apache Tailer)
 
 Architecture
 ==============
@@ -66,6 +73,8 @@ To stop, run
 
 Todo
 ===========
-Not much left to do, the core is in and working. 
+Not much left to do, all appears to be working.
+* complete javadoc
+* add more documentation to this site!
+* improve unit test coverage 
 
-* handle split line java.util.logging style logs 
