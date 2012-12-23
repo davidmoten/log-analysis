@@ -7,7 +7,7 @@
             <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
             <timezone>UTC</timezone>
             <multiline>false</multiline>
-    </parser>
+	</parser>
     <group>
         <log>
             <path>/ausdev/container/logs/cts/cts.log</path>
