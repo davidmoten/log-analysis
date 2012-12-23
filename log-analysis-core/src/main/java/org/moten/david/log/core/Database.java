@@ -27,6 +27,14 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.core.storage.OStorage;
 
 //TODO setup for concurrency, use Filter as per https://github.com/nuvolabase/orientdb/wiki/Java-Web-Apps?
+
+/**
+ * Facade for access to the orient db database either as local or remote
+ * instance.
+ * 
+ * @author dave
+ * 
+ */
 public class Database {
 
 	private static final Logger log = Logger
@@ -46,10 +54,22 @@ public class Database {
 
 	private final String password;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param location
+	 */
 	public Database(File location) {
-		this(connectToDatabase(location), null, null, null);
+		this(createDatabase(location), null, null, null);
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param url
+	 * @param username
+	 * @param password
+	 */
 	public Database(String url, String username, String password) {
 		this(connectToDatabase(url, username, password), url, username,
 				password);
@@ -76,7 +96,11 @@ public class Database {
 		this.password = password;
 	}
 
-	private static ODatabaseDocumentTx connectToDatabase(File location) {
+	/**
+	 * @param location
+	 * @return
+	 */
+	private static ODatabaseDocumentTx createDatabase(File location) {
 		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
 		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
 		OGlobalConfiguration.TX_USE_LOG.setValue(false);

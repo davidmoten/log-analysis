@@ -1,5 +1,12 @@
 package org.moten.david.log.configuration;
 
+/**
+ * 
+ * Parser options.
+ * 
+ * @author dave
+ * 
+ */
 public class Parser {
 	public String pattern;
 	public String patternGroups;
@@ -7,6 +14,16 @@ public class Parser {
 	public String timezone;
 	public boolean multiline;
 
+	/**
+	 * 
+	 * Parser configuration.
+	 * 
+	 * @param pattern
+	 * @param patternGroups
+	 * @param timestampFormat
+	 * @param timezone
+	 * @param multiline
+	 */
 	public Parser(String pattern, String patternGroups, String timestampFormat,
 			String timezone, boolean multiline) {
 		super();
@@ -17,6 +34,9 @@ public class Parser {
 		this.multiline = multiline;
 	}
 
+	/**
+	 * Constructor.
+	 */
 	public Parser() {
 		// required for jaxb
 	}

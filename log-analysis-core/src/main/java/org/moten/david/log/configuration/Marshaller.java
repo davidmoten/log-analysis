@@ -11,6 +11,12 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
+/**
+ * Marshaller for {@link Configuration}.
+ * 
+ * @author dave
+ * 
+ */
 public class Marshaller {
 
 	public static final String NAMESPACE = "http://org.moten.david/log-analysis/configuration";
@@ -19,6 +25,9 @@ public class Marshaller {
 
 	private final Unmarshaller unmarshaller;
 
+	/**
+	 * Constructor.
+	 */
 	public Marshaller() {
 		try {
 			JAXBContext jc = JAXBContext.newInstance(Configuration.class);
@@ -33,6 +42,12 @@ public class Marshaller {
 		}
 	}
 
+	/**
+	 * Marshals {@link Configuration} to xml.
+	 * 
+	 * @param configuration
+	 * @param os
+	 */
 	public synchronized void marshal(Configuration configuration,
 			OutputStream os) {
 		try {
@@ -45,6 +60,12 @@ public class Marshaller {
 		}
 	}
 
+	/**
+	 * Unmarshals xml to {@link Configuration}.
+	 * 
+	 * @param is
+	 * @return
+	 */
 	public synchronized Configuration unmarshal(InputStream is) {
 		StreamSource xml = new StreamSource(is);
 		JAXBElement<Configuration> element;
