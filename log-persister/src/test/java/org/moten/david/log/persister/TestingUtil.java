@@ -1,6 +1,6 @@
 package org.moten.david.log.persister;
 
-import org.moten.david.log.configuration.Parser;
+import org.moten.david.log.persister.config.Parser;
 
 public class TestingUtil {
 

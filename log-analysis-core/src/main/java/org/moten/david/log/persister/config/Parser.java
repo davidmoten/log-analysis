@@ -1,4 +1,4 @@
-package org.moten.david.log.configuration;
+package org.moten.david.log.persister.config;
 
 /**
  * 

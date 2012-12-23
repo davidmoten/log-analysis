@@ -7,12 +7,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import org.moten.david.log.configuration.Configuration;
-import org.moten.david.log.configuration.Group;
-import org.moten.david.log.configuration.Log;
 import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.core.LogFile;
 import org.moten.david.log.core.LogParser;
+import org.moten.david.log.persister.config.Configuration;
+import org.moten.david.log.persister.config.Group;
+import org.moten.david.log.persister.config.Log;
 
 import com.google.common.collect.Lists;
 

@@ -7,8 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.moten.david.log.configuration.Group;
-import org.moten.david.log.configuration.Parser;
+import org.moten.david.log.persister.config.Group;
+import org.moten.david.log.persister.config.Parser;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

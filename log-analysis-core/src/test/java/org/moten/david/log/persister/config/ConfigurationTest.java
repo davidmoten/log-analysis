@@ -1,9 +1,14 @@
-package org.moten.david.log.configuration;
+package org.moten.david.log.persister.config;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.moten.david.log.core.LogParserOptions;
+import org.moten.david.log.persister.config.Configuration;
+import org.moten.david.log.persister.config.Group;
+import org.moten.david.log.persister.config.Log;
+import org.moten.david.log.persister.config.Marshaller;
+import org.moten.david.log.persister.config.Parser;
 
 public class ConfigurationTest {
 

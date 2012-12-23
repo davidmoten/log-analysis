@@ -3,8 +3,8 @@ package org.moten.david.log.persister;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.moten.david.log.configuration.Configuration;
-import org.moten.david.log.configuration.Marshaller;
+import org.moten.david.log.persister.config.Configuration;
+import org.moten.david.log.persister.config.Marshaller;
 
 public class ConfigurationLoadTest {
 
