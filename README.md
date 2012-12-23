@@ -19,18 +19,18 @@ Features
 * tails log files, handles rollover, deletion (using apache Tailer)
 * aggregated or non-aggregated graphs
 * numerous supported metrics including
-** MAX
-** MIN
-** MEAN
-** STANDARD_DEVIATION
-** COUNT
-** SUM
-** VARIANCE
-** SUM_SQUARES
-** FIRST
-** LAST
-** EARLIEST
-** LATEST
+  * MAX
+  * MIN
+  * MEAN
+  * STANDARD_DEVIATION
+  * COUNT
+  * SUM
+  * VARIANCE
+  * SUM_SQUARES
+  * FIRST
+  * LAST
+  * EARLIEST
+  * LATEST
 
 Architecture
 ==============
