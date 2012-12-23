@@ -19,7 +19,7 @@ import javax.xml.transform.stream.StreamSource;
  */
 public class Marshaller {
 
-	public static final String NAMESPACE = "http://org.moten.david/log-analysis/configuration";
+	public static final String NAMESPACE = "http://org.moten.david/log-analysis/persister/configuration";
 
 	private final javax.xml.bind.Marshaller marshaller;
 
