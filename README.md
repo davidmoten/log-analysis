@@ -26,6 +26,15 @@ log-database
 ----------------
 An instance of an orientdb server. Listens for binary connections on port 2424, REST api and html client on port 2480.
 
+The main (currently only) table in the *logs* database is *Entry* with fields:
+
+* logTimestamp - a mandatory long value being the epoch time in ms
+* logId - UUID for the log line
+* logKey - field key
+* logValue - field value
+
+One log line corresponds in the *Entry* table to one row for each key value pair extracted from the log message. Each row will have the same logTimestamp and logId which is a unique String key generated using UUID.randomUUID().
+
 log-persister
 ----------------
 An agent that parses logs and reports their content to *log-database* using binary connections.
