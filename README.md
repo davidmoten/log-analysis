@@ -46,7 +46,7 @@ log-persister
 ----------------
 An agent that parses logs and reports their content to *log-database* using binary connections.
 
-Sample configuration [here]/(https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/sample-persister-configuration.xml).
+Sample configuration [here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/sample-persister-configuration.xml).
 
 log-server
 ----------------
