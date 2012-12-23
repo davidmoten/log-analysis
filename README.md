@@ -46,6 +46,8 @@ log-persister
 ----------------
 An agent that parses logs and reports their content to *log-database* using binary connections.
 
+Sample configuration [here]/(https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/sample-persister-configuration.xml).
+
 log-server
 ----------------
 A jetty web server running on port 9191 that makes binary connections to *log-database* and offers specially formatted json result sets for specific queries (on the http://host:port/data url).
