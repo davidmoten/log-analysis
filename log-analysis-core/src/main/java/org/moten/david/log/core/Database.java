@@ -114,11 +114,15 @@ public class Database {
 					true);
 			entry.createProperty(Field.FIELD_VALUE, OType.STRING).setMandatory(
 					true);
+			entry.createProperty(Field.FIELD_LOG_ID, OType.STRING)
+					.setMandatory(true);
 			entry.createIndex("EntryTimestampIndex",
 					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP);
 			entry.createIndex("EntryTimestampKeyIndex",
 					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP,
 					Field.FIELD_KEY);
+			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.NOTUNIQUE,
+					Field.FIELD_LOG_ID);
 
 			OClass dummy = schema.createClass(TABLE_DUMMY,
 					db.addCluster(TABLE_DUMMY, OStorage.CLUSTER_TYPE.PHYSICAL));
