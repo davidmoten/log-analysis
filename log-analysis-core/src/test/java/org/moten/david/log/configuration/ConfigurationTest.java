@@ -7,6 +7,8 @@ import org.moten.david.log.core.LogParserOptions;
 
 public class ConfigurationTest {
 
+	private static final String PERSISTER_CONFIGURATION_TEST_XML = "/persister-configuration-test.xml";
+
 	@Test
 	public void testMarshall() {
 		Marshaller marshaller = new Marshaller();
@@ -30,7 +32,7 @@ public class ConfigurationTest {
 	public void testUnmarshall() {
 		Marshaller marshaller = new Marshaller();
 		Configuration c = marshaller.unmarshal(ConfigurationTest.class
-				.getResourceAsStream("/configuration-test.xml"));
+				.getResourceAsStream(PERSISTER_CONFIGURATION_TEST_XML));
 		assertEquals("UTC", c.group.get(0).parser.timezone);
 	}
 
@@ -38,7 +40,7 @@ public class ConfigurationTest {
 	public void testLoadLogParserOptions() {
 		Marshaller marshaller = new Marshaller();
 		Configuration c = marshaller.unmarshal(ConfigurationTest.class
-				.getResourceAsStream("/configuration-test.xml"));
+				.getResourceAsStream(PERSISTER_CONFIGURATION_TEST_XML));
 		LogParserOptions options = LogParserOptions.load(c.parser,
 				c.group.get(0));
 		assertEquals("UTC", options.getTimezone());

@@ -27,7 +27,7 @@
 
 	<properties>
 		<logan.db.url>remote:localhost/logs</logan.db.url>
-		<logan.config>${basedir}/src/test/resources/configuration-test.xml</logan.config>
+		<logan.config>${basedir}/src/test/resources/persister-configuration-test.xml</logan.config>
 	</properties>
 
 	<build>
