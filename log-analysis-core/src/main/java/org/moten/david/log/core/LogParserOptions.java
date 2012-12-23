@@ -32,6 +32,13 @@ public class LogParserOptions {
 		this.multiline = multiline;
 	}
 
+	public LogParserOptions(Pattern pattern,
+			BiMap<String, Integer> patternGroups, String timestampFormat,
+			String timezone, boolean multiline) {
+		this(pattern, patternGroups, createDateFormat(timestampFormat),
+				timezone, multiline);
+	}
+
 	public static LogParserOptions load(InputStream is) {
 		Properties p = new Properties();
 		try {
@@ -41,13 +48,17 @@ public class LogParserOptions {
 		}
 		Pattern pattern = Pattern.compile(p.getProperty("pattern"));
 		String timestampFormat = p.getProperty("timestamp.format");
-		DateFormat df = new SimpleDateFormat(timestampFormat + " Z");
+		DateFormat df = createDateFormat(timestampFormat);
 		String timezone = p.getProperty("timestamp.timezone");
 		BiMap<String, Integer> patternGroups = createGroupMap(p
 				.getProperty("pattern.groups"));
 		boolean multiline = "true".equalsIgnoreCase(p.getProperty("multiline"));
 		return new LogParserOptions(pattern, patternGroups, df, timezone,
 				multiline);
+	}
+
+	private static SimpleDateFormat createDateFormat(String timestampFormat) {
+		return new SimpleDateFormat(timestampFormat + " Z");
 	}
 
 	public static LogParserOptions load(Parser defaultParsing, Group group) {
@@ -94,4 +105,5 @@ public class LogParserOptions {
 			map.put(items[i], i + 1);
 		return map;
 	}
+
 }

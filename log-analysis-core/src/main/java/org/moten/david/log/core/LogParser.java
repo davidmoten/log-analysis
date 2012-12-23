@@ -24,6 +24,7 @@ public class LogParser {
 
 	public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS";
 	private final LogParserOptions options;
+	private String previousLine;
 
 	public LogParser(LogParserOptions options) {
 		this.options = options;
@@ -46,47 +47,60 @@ public class LogParser {
 		if (line == null)
 			return null;
 		else {
-			Matcher matcher = options.getPattern().matcher(line);
-			if (matcher.find()) {
-				BiMap<String, Integer> map = options.getPatternGroups();
-				String timestamp = getGroup(matcher,
-						map.get(FIELD_LOG_TIMESTAMP));
-				String level = getGroup(matcher, map.get(FIELD_LOG_LEVEL));
-				String logger = getGroup(matcher, map.get(FIELD_LOGGER));
-				String threadName = getGroup(matcher,
-						map.get(FIELD_THREAD_NAME));
-				String msg = getGroup(matcher, map.get(FIELD_MSG));
-				String method = getGroup(matcher, map.get(FIELD_METHOD));
-
-				Long time;
-				if (timestamp != null && level != null && logger != null) {
-					try {
-						time = options.getTimestampFormat()
-								.parse(timestamp + " " + options.getTimezone())
-								.getTime();
-					} catch (ParseException e) {
-						time = null;
-					}
-				} else
-					time = null;
-
-				Map<String, String> values = Maps.newHashMap();
-				if (level != null)
-					values.put(FIELD_LOG_LEVEL, level);
-				if (logger != null)
-					values.put(FIELD_LOGGER, logger);
-				if (msg != null)
-					values.put(FIELD_MSG, msg);
-				if (threadName != null && threadName.length() > 0)
-					values.put(FIELD_THREAD_NAME, threadName);
-				if (method != null && method.length() > 0)
-					values.put(FIELD_METHOD, method);
-
-				return new LogEntry(time, values);
-			} else
+			if (options.isMultiline() && (previousLine == null)) {
+				previousLine = line;
 				return null;
-
+			} else {
+				StringBuilder candidate = new StringBuilder(line);
+				if (options.isMultiline()) {
+					candidate.insert(0, "ZZZ");
+					candidate.insert(0, previousLine);
+				}
+				Matcher matcher = options.getPattern().matcher(candidate);
+				if (matcher.find()) {
+					previousLine = null;
+					return createLogEntry(matcher);
+				} else {
+					previousLine = line;
+					return null;
+				}
+			}
 		}
+	}
+
+	private LogEntry createLogEntry(Matcher matcher) {
+		BiMap<String, Integer> map = options.getPatternGroups();
+		String timestamp = getGroup(matcher, map.get(FIELD_LOG_TIMESTAMP));
+		String level = getGroup(matcher, map.get(FIELD_LOG_LEVEL));
+		String logger = getGroup(matcher, map.get(FIELD_LOGGER));
+		String threadName = getGroup(matcher, map.get(FIELD_THREAD_NAME));
+		String msg = getGroup(matcher, map.get(FIELD_MSG));
+		String method = getGroup(matcher, map.get(FIELD_METHOD));
+
+		Long time;
+		if (timestamp != null && level != null && logger != null) {
+			try {
+				time = options.getTimestampFormat()
+						.parse(timestamp + " " + options.getTimezone())
+						.getTime();
+			} catch (ParseException e) {
+				time = null;
+			}
+		} else
+			time = null;
+
+		Map<String, String> values = Maps.newHashMap();
+		if (level != null)
+			values.put(FIELD_LOG_LEVEL, level);
+		if (logger != null)
+			values.put(FIELD_LOGGER, logger);
+		if (msg != null)
+			values.put(FIELD_MSG, msg);
+		if (threadName != null && threadName.length() > 0)
+			values.put(FIELD_THREAD_NAME, threadName);
+		if (method != null && method.length() > 0)
+			values.put(FIELD_METHOD, method);
+		return new LogEntry(time, values);
 	}
 
 	private String getGroup(Matcher matcher, Integer index) {

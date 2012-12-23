@@ -52,22 +52,20 @@ Demo
 To test, run 
     ./restart-all.sh 
 which will
-* stop log-server, log-ui
+* stop log-server, log-ui, database
 * mvn clean install
 * start log-database with some dummy data
 * start log-server
 * start log-ui
+All components will be started in the background.
 
 To test go to [http://localhost:9292/](http://localhost:9292/).
 
-To stop, ctrl-c the process started above and run 
+To stop, run 
     ./stop-all.sh
 
 Todo
 ===========
-Not much to do, the core is in and working. 
+Not much left to do, the core is in and working. 
 
 * handle split line java.util.logging style logs 
-
-
-
