@@ -17,24 +17,26 @@ public class DataServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1044384045444686984L;
 
+	private static final String logServerBaseUrl = System.getProperty(
+			"log.server.url", "http://localhost:9191");
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO get url from config or system property
 
 		String sql = "select logTimestamp, logValue from "
 				+ req.getParameter("table") + " where logKey = '"
 				+ req.getParameter("field") + "'"
 				+ " and logValue is not null order by logTimestamp";
 
-		String url = "http://localhost:9191/query?sql=" + sql + "&start="
+		String url = logServerBaseUrl + "/query?sql=" + sql + "&start="
 				+ req.getParameter("start") + "&interval="
 				+ req.getParameter("interval") + "&buckets="
 				+ req.getParameter("buckets") + "&metric="
 				+ req.getParameter("metric");
 
 		url = url.replace(" ", "%20");
-		// TODO properly escape url
+
 		URL u;
 		try {
 			u = new URI(url).toURL();
