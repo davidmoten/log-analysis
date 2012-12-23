@@ -10,28 +10,22 @@
     </parser>
     <group>
         <log>
-            <path>/ausdev/container/logs/cts/cts.log.*</path>
-            <watch>true</watch>
+            <path>/ausdev/container/logs/cts/cts.log</path>
         </log>
-        <log>
+        <log watch="false">
             <path>/ausdev/container/logs/cts/cts.log\..*</path>
-            <watch>false</watch>
         </log>
         <log>
-            <path>/ausdev/container/logs/cts/cts-adapter-ais.log.*</path>
-            <watch>true</watch>
+            <path>/ausdev/container/logs/cts/cts-adapter-ais.log</path>
         </log>
-        <log>
+        <log  watch="false">
             <path>/ausdev/container/logs/cts/cts-adapter-ais.log\..*</path>
-            <watch>false</watch>
         </log>
         <log>
-            <path>/ausdev/container/logs/cts/cts-adapter-flight-info-service.log.*</path>
-            <watch>true</watch>
+            <path>/ausdev/container/logs/cts/cts-adapter-flight-info-service.log</path>
         </log>
-        <log>
+        <log  watch="false">
             <path>/ausdev/container/logs/cts/cts-adapter-flight-info-service.log\..*</path>
-            <watch>false</watch>
         </log>
     </group>
 </ns2:configuration>

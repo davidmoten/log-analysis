@@ -1,5 +1,7 @@
 package org.moten.david.log.persister.config;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 /**
  * A log file to parse and optionally watch.
  * 
@@ -8,7 +10,9 @@ package org.moten.david.log.persister.config;
  */
 public class Log {
 	public String path;
-	public boolean watch;
+
+	@XmlAttribute(required = false)
+	public boolean watch = true;
 
 	/**
 	 * Constructor.
