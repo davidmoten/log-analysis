@@ -15,10 +15,12 @@ import org.apache.commons.io.IOUtils;
 
 public class DataServlet extends HttpServlet {
 
+	private static final String LOG_SERVER_BASE_URL_DEFAULT = "http://localhost:9191";
+
 	private static final long serialVersionUID = 1044384045444686984L;
 
 	private static final String logServerBaseUrl = System.getProperty(
-			"log.server.url", "http://localhost:9191");
+			"log.server.url", LOG_SERVER_BASE_URL_DEFAULT);
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

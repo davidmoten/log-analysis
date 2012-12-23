@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+/**
+ * 
+ * @author dave
+ * 
+ */
 public class Configuration {
 	public String databaseUrl = "remote:localhost/logs";
 	public Parser parser;

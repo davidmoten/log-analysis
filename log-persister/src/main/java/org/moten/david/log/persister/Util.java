@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.moten.david.log.configuration.Log;
-
 public class Util {
 
 	private static final Logger log = Logger.getLogger(Util.class.getName());
@@ -27,17 +25,6 @@ public class Util {
 			}
 		});
 		return Arrays.asList(files);
-	}
-
-	private static Log getLog(String item) {
-		Log lg = null;
-		List<File> files = getFilesFromPathWithRegexFilename(item);
-		if (files != null)
-			for (File file : files) {
-				lg = new Log(file.getPath(), true);
-				log.info("added " + file);
-			}
-		return lg;
 	}
 
 	static String getPath(String item) {

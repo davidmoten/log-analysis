@@ -12,6 +12,7 @@
 	<properties>
 		<jetty.port>9292</jetty.port>
 		<jetty.stop.port>9998</jetty.stop.port>
+		<log.server.url>http://localhost:9191</log.server.url>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -44,6 +45,12 @@
 					<webAppConfig>
 						<contextPath>/</contextPath>
 					</webAppConfig>
+					<systemProperties>
+						<systemProperty>
+							<name>log.server.url</name>
+							<value>${log.server.url}</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>
