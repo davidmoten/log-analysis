@@ -95,3 +95,5 @@ Not much left to do, all appears to be working.
 * add more documentation to this site!
 * improve unit test coverage 
 * multiple field criteria support
+* log viewer
+* add source field to Entry table
