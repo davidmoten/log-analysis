@@ -1,7 +1,17 @@
 package org.moten.david.log.core;
 
+import static org.moten.david.log.core.Field.FIELD_LOGGER;
+import static org.moten.david.log.core.Field.FIELD_LOG_ID;
+import static org.moten.david.log.core.Field.FIELD_LOG_LEVEL;
+import static org.moten.david.log.core.Field.FIELD_LOG_TIMESTAMP;
+import static org.moten.david.log.core.Field.FIELD_MSG;
+
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +25,8 @@ import org.apache.commons.io.FileUtils;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
@@ -352,6 +364,12 @@ public class Database {
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
 			String id = UUID.randomUUID().toString();
 			int specialNumber = i % (r.nextInt(100) + 1);
+			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOG_ID, "" + i,
+					OType.STRING);
+			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOGGER,
+					"something.stuff", OType.STRING);
+			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOG_LEVEL,
+					"INFO", OType.STRING);
 			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_MSG,
 					"specialNumber=" + specialNumber, OType.INTEGER);
 			persistDocument(TABLE_DUMMY, time, id, "specialNumber",
@@ -360,5 +378,56 @@ public class Database {
 		db.commit();
 		log.info("persisted " + n
 				+ " random values from the last hour to table " + TABLE_DUMMY);
+	}
+
+	public Iterable<String> getLogs(long startTime, long finishTime) {
+		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
+				"select from Entry where logTimestamp between " + startTime
+						+ " and " + finishTime
+						+ " order by logTimestamp, logId");
+		final List<ODocument> list = db.query(query);
+		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		final Iterator<String> it = Iterators.transform(list.iterator(),
+				new Function<ODocument, String>() {
+
+					String id;
+					String level;
+					String logger;
+					String msg;
+					private Long time;
+
+					@Override
+					public String apply(ODocument d) {
+						id = d.field(FIELD_LOG_ID);
+						time = d.field(FIELD_LOG_TIMESTAMP);
+						String level = d.field(FIELD_LOG_LEVEL);
+						String logger = d.field(FIELD_LOGGER);
+						String msg = d.field(FIELD_MSG);
+						if (level != null)
+							this.level = level;
+						if (logger != null)
+							this.logger = logger;
+						if (msg != null)
+							this.msg = msg;
+						if (level != null && logger != null && msg != null) {
+							StringBuilder s = new StringBuilder();
+							s.append(df.format(new Date(time)));
+							s.append(' ');
+							s.append(this.level);
+							s.append(' ');
+							s.append(this.logger);
+							s.append(" - ");
+							s.append(this.msg);
+							return s.toString();
+						} else
+							return null;
+					}
+				});
+		return new Iterable<String>() {
+			@Override
+			public Iterator<String> iterator() {
+				return it;
+			}
+		};
 	}
 }

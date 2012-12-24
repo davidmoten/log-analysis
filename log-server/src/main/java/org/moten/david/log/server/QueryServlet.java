@@ -1,5 +1,9 @@
 package org.moten.david.log.server;
 
+import static org.moten.david.log.server.ServletUtil.getMandatoryDouble;
+import static org.moten.david.log.server.ServletUtil.getMandatoryLong;
+import static org.moten.david.log.server.ServletUtil.getMandatoryParameter;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -10,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.moten.david.log.core.Database;
-import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 import org.moten.david.log.query.Metric;
@@ -20,16 +23,10 @@ public class QueryServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5553574830587263509L;
 
-	private final DatabaseFactory factory = new DatabaseFactory(
-			System.getProperty("db.url", "remote:localhost/logs"), "admin",
-			"admin");
-
-	private static boolean firstTime = true;
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		Database db = getDatabase(factory);
+		Database db = ServletUtil.connectToDatabase();
 		try {
 			String sql = getMandatoryParameter(req, "sql");
 			long startTime = getMandatoryLong(req, "start");
@@ -45,16 +42,6 @@ public class QueryServlet extends HttpServlet {
 		}
 	}
 
-	private synchronized Database getDatabase(DatabaseFactory factory) {
-		Database db = factory.create();
-		if (firstTime) {
-			db.persistDummyRecords();
-			firstTime = false;
-		}
-
-		return db;
-	}
-
 	private static String getJson(Database db, String sql, long startTime,
 			double interval, long numBuckets, Metric metric) {
 		BucketQuery q = new BucketQuery(new Date(startTime), interval,
@@ -62,38 +49,6 @@ public class QueryServlet extends HttpServlet {
 		Buckets buckets = db.execute(q);
 		String json = Util.toJson(buckets, metric);
 		return json;
-	}
-
-	private double getMandatoryDouble(HttpServletRequest req, String name) {
-		if (req.getParameter(name) == null)
-			throw new RuntimeException("parameter " + name + " is mandatory");
-		else
-			try {
-				return Double.parseDouble(req.getParameter(name));
-			} catch (NumberFormatException e) {
-				throw new RuntimeException("parameter " + name
-						+ " parsing problem", e);
-			}
-	}
-
-	private long getMandatoryLong(HttpServletRequest req, String name) {
-		if (req.getParameter(name) == null)
-			throw new RuntimeException("parameter '" + name + "' is mandatory");
-		else
-			try {
-				return Long.parseLong(req.getParameter(name));
-			} catch (NumberFormatException e) {
-				throw new RuntimeException("parameter '" + name
-						+ "' could not be parsed as a Long: "
-						+ req.getParameter(name), e);
-			}
-	}
-
-	private String getMandatoryParameter(HttpServletRequest req, String name) {
-		if (req.getParameter(name) != null)
-			return req.getParameter(name);
-		else
-			throw new RuntimeException("parameter " + name + " is mandatory");
 	}
 
 	public static void main(String[] args) {
