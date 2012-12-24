@@ -18,7 +18,8 @@ Features
 * parses single line and two line logging (e.g. java.util.Logging)
 * tails log files, handles rollover, deletion (using apache Tailer)
 * aggregated or non-aggregated graphs
-* numerous supported metrics including
+* single field queries currently
+* numerous supported aggregation metrics including
   * MAX
   * MIN
   * MEAN
@@ -93,4 +94,4 @@ Not much left to do, all appears to be working.
 * complete javadoc
 * add more documentation to this site!
 * improve unit test coverage 
-
+* multiple field criteria support
