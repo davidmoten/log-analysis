@@ -25,6 +25,7 @@ public class LogParser {
 	public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS";
 	private final LogParserOptions options;
 	private String previousLine;
+	private final MessageSplitter splitter = new MessageSplitter();
 
 	public LogParser(LogParserOptions options) {
 		this.options = options;
@@ -100,6 +101,9 @@ public class LogParser {
 			values.put(FIELD_THREAD_NAME, threadName);
 		if (method != null && method.length() > 0)
 			values.put(FIELD_METHOD, method);
+		// persist the split fields from the full message
+		Map<String, String> m = splitter.split(msg);
+		values.putAll(m);
 		return new LogEntry(time, values);
 	}
 

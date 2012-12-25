@@ -1,7 +1,6 @@
 package org.moten.david.log.core;
 
 import static org.moten.david.log.core.Field.FIELD_LOGGER;
-import static org.moten.david.log.core.Field.FIELD_LOG_ID;
 import static org.moten.david.log.core.Field.FIELD_LOG_LEVEL;
 import static org.moten.david.log.core.Field.FIELD_LOG_TIMESTAMP;
 import static org.moten.david.log.core.Field.FIELD_MSG;
@@ -13,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TimeZone;
@@ -56,9 +54,6 @@ public class Database {
 	private static final String TABLE_ENTRY = "Entry";
 
 	private static final String TABLE_DUMMY = "Dummy";
-
-	// TODO remove dependency of Database on MessageSplitter
-	private final MessageSplitter splitter = new MessageSplitter();
 
 	private final ODatabaseDocumentTx db;
 
@@ -228,18 +223,7 @@ public class Database {
 
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null) {
-				persistDocument(timestamp, id, e.getKey(), e.getValue());
-			}
-		}
-
-		// persist the split fields from the full message
-		Map<String, String> map = splitter.split(entry.getMessage());
-		if (map.size() > 0)
-			log.info(map.toString());
-		for (Entry<String, String> e : map.entrySet()) {
-			if (e.getValue() != null) {
 				ValueAndType v = parse(e.getValue());
-				// replace spaces in field names with underscores
 				persistDocument(timestamp, id, e.getKey().replace(" ", "_"),
 						v.value, v.type);
 			}
@@ -261,11 +245,6 @@ public class Database {
 		d.field(Field.FIELD_VALUE, value, type);
 		d.save();
 
-	}
-
-	private void persistDocument(long timestamp, String id, String key,
-			String value) {
-		persistDocument(timestamp, id, key, value, OType.STRING);
 	}
 
 	private static class ValueAndType {
@@ -393,7 +372,6 @@ public class Database {
 		final Iterator<String> it = Iterators.transform(list.iterator(),
 				new Function<ODocument, String>() {
 
-					String id;
 					String level;
 					String logger;
 					String msg;
@@ -401,7 +379,7 @@ public class Database {
 
 					@Override
 					public String apply(ODocument d) {
-						id = d.field(FIELD_LOG_ID);
+						// String id = d.field(FIELD_LOG_ID);
 						time = d.field(FIELD_LOG_TIMESTAMP);
 						String key = d.field(Field.FIELD_KEY);
 						String value = d.field(Field.FIELD_VALUE);
