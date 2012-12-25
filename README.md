@@ -16,7 +16,7 @@ Features
 * fast parsing, persistence and query
 * simplified datetime input (last day,last hour etc)
 * parses single line and two line logging (e.g. java.util.Logging)
-* tails log files, handles rollover, deletion (using apache Tailer)
+* tails log files, handles rollover, deletion (using [Apache commons-io Tailer](http://commons.apache.org/io/apidocs/org/apache/commons/io/input/Tailer.html))
 * aggregated or non-aggregated graphs
 * single field queries currently
 * numerous supported aggregation metrics including
