@@ -15,7 +15,7 @@ import org.moten.david.log.persister.config.Marshaller;
 
 public class Main {
 
-	private static final String DEFAULT_CONFIGURATION_LOCATION = "/log-analysis-configuration.xml";
+	private static final String DEFAULT_CONFIGURATION_LOCATION = "/persister-configuration.xml";
 	private static Logger log = Logger.getLogger(Main.class.getName());
 
 	/**

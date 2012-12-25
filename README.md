@@ -19,6 +19,8 @@ Features
 * tails log files, handles rollover, deletion (using [Apache commons-io Tailer](http://commons.apache.org/io/apidocs/org/apache/commons/io/input/Tailer.html))
 * aggregated or non-aggregated graphs
 * single field queries currently
+* multiple graphs to a page defined by url parameters
+* click on data points shows logs around that time (+/-5min)
 * numerous supported aggregation metrics including
   * MAX
   * MIN
@@ -87,6 +89,22 @@ To test go to [http://localhost:9292/](http://localhost:9292/).
 
 To stop, run 
     ./stop-all.sh
+
+Getting started
+==================
+On host that is to run the database server (and log-server and log-ui components as well):
+    
+    git clone https://github.com/davidmoten/log-analysis.git
+	./restart-all.sh
+
+On a host (can be many) that has logs to be sent to the database:
+
+* create a config file as per [here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/sample-persister-configuration.xml) in say ~/.log-analysis/persister-config.xml.
+
+    git clone https://github.com/davidmoten/log-analysis.git
+    mvn clean install
+    export PERSISTER_CONFIG=~/.log-analysis/persister-config.xml
+    ./start-persister.sh
 
 Todo
 ===========

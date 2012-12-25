@@ -10,6 +10,7 @@
 	<description>Starts orientdb database server</description>
 	<properties>
 		<command>server</command>
+		<logan.config>/persister-configuration.xml</logan.config>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -22,7 +23,6 @@
 			<artifactId>log-analysis-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
