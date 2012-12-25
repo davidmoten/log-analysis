@@ -102,6 +102,7 @@ On a host (can be many) that has logs to be sent to the database:
 
 * create a config file as per [here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/sample-persister-configuration.xml) in say ~/.log-analysis/persister-config.xml.
 
+
     git clone https://github.com/davidmoten/log-analysis.git
     cd log-analysis
     mvn clean install
