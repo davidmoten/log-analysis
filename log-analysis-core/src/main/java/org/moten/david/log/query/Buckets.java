@@ -4,6 +4,12 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+/**
+ * A group of contiguous buckets.
+ * 
+ * @author dave
+ * 
+ */
 public class Buckets {
 
 	private final List<Bucket> buckets = Lists.newArrayList();

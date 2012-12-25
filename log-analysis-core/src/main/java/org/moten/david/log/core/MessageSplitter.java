@@ -7,6 +7,12 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Maps;
 
+/**
+ * Extracts key=value pairs from a log line message.
+ * 
+ * @author dave
+ * 
+ */
 public class MessageSplitter {
 
 	public static final String MESSAGE_PATTERN_DEFAULT = "(\\b[a-zA-Z](?:\\w| )*)=([^;|,]*)(;|\\||,|$)";

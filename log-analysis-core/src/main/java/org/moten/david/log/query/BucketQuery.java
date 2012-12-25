@@ -3,6 +3,16 @@ package org.moten.david.log.query;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import org.moten.david.log.core.Field;
+import org.moten.david.log.orientdb.SqlSelect;
+
+/**
+ * Generates sql for an aggregated query from startTime,
+ * intervalSizeMs,numIntervals and sql base.
+ * 
+ * @author dave
+ * 
+ */
 public class BucketQuery {
 
 	private static final Logger log = Logger.getLogger(BucketQuery.class
@@ -24,9 +34,10 @@ public class BucketQuery {
 			n = 1;
 		else
 			n = numIntervals;
-		String timeClause = "logTimestamp between " + startTime.getTime()
-				+ " and " + Math.ceil(startTime.getTime() + intervalSizeMs * n);
-		Sql sq = new Sql(sql);
+		String timeClause = Field.FIELD_LOG_TIMESTAMP + " between "
+				+ startTime.getTime() + " and "
+				+ Math.ceil(startTime.getTime() + intervalSizeMs * n);
+		SqlSelect sq = new SqlSelect(sql);
 		this.sql = sq.and(timeClause).toString();
 		log.info("sql = " + this.sql);
 	}
@@ -50,7 +61,7 @@ public class BucketQuery {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("NumericQuery [startTime=");
+		builder.append("BucketQuery [startTime=");
 		builder.append(startTime.getTime());
 		builder.append(", intervalSizeMs=");
 		builder.append(intervalSizeMs);

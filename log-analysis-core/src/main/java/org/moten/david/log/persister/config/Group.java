@@ -20,16 +20,30 @@ public class Group {
 	@XmlElement(required = false)
 	public Parser parser;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param log
+	 * @param parser
+	 */
 	public Group(List<Log> log, Parser parser) {
 		super();
 		this.log = log;
 		this.parser = parser;
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param log
+	 */
 	public Group(List<Log> log) {
 		this(log, null);
 	}
 
+	/**
+	 * Constructor.
+	 */
 	public Group() {
 		// no-args constructor required by jaxb
 	}

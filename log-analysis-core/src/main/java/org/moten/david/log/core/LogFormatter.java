@@ -5,7 +5,14 @@ import java.io.StringWriter;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
+/**
+ * Provides single line log formatting for a Logger.
+ * 
+ * @author dave
+ * 
+ */
 class LogFormatter extends Formatter {
+
 	@Override
 	public String format(final LogRecord r) {
 		StringBuilder sb = new StringBuilder();

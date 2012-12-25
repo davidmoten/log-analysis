@@ -13,6 +13,12 @@ import org.moten.david.log.persister.config.Parser;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+/**
+ * Options for a {@link LogParser}.
+ * 
+ * @author dave
+ * 
+ */
 public class LogParserOptions {
 
 	private final Pattern pattern;
@@ -23,6 +29,16 @@ public class LogParserOptions {
 	private final String timezone;
 	private final boolean multiline;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param pattern
+	 * @param patternGroups
+	 * @param messagePattern
+	 * @param timestampFormat
+	 * @param timezone
+	 * @param multiline
+	 */
 	public LogParserOptions(Pattern pattern,
 			BiMap<String, Integer> patternGroups, Pattern messagePattern,
 			DateFormat timestampFormat, String timezone, boolean multiline) {
@@ -35,6 +51,16 @@ public class LogParserOptions {
 		this.multiline = multiline;
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param pattern
+	 * @param patternGroups
+	 * @param messagePattern
+	 * @param timestampFormat
+	 * @param timezone
+	 * @param multiline
+	 */
 	public LogParserOptions(Pattern pattern,
 			BiMap<String, Integer> patternGroups, Pattern messagePattern,
 			String timestampFormat, String timezone, boolean multiline) {
@@ -42,7 +68,7 @@ public class LogParserOptions {
 				createDateFormat(timestampFormat), timezone, multiline);
 	}
 
-	public static LogParserOptions load(InputStream is) {
+	private static LogParserOptions load(InputStream is) {
 		Properties p = new Properties();
 		try {
 			p.load(is);
@@ -66,42 +92,96 @@ public class LogParserOptions {
 		return new SimpleDateFormat(timestampFormat + " Z");
 	}
 
-	public static LogParserOptions load(Parser defaultParsing, Group group) {
-		Parser parsing = defaultParsing;
+	/**
+	 * Returns {@link LogParser} options given default {@link Parser} and a
+	 * {@link Group}.
+	 * 
+	 * @param defaultParser
+	 * @param group
+	 * @return
+	 */
+	public static LogParserOptions load(Parser defaultParser, Group group) {
+		Parser parser = defaultParser;
 		if (group.parser != null)
-			parsing = group.parser;
+			parser = group.parser;
 
-		Pattern pattern = Pattern.compile(parsing.pattern);
-		Pattern messagePattern = Pattern.compile(parsing.messagePattern);
-		DateFormat df = new SimpleDateFormat(parsing.timestampFormat);
-		BiMap<String, Integer> patternGroups = createGroupMap(parsing.patternGroups);
+		Pattern pattern = Pattern.compile(parser.pattern);
+		Pattern messagePattern = Pattern.compile(parser.messagePattern);
+		DateFormat df = new SimpleDateFormat(parser.timestampFormat);
+		BiMap<String, Integer> patternGroups = createGroupMap(parser.patternGroups);
 		return new LogParserOptions(pattern, patternGroups, messagePattern, df,
-				parsing.timezone, parsing.multiline);
+				parser.timezone, parser.multiline);
 	}
 
+	/**
+	 * Returns {@link LogParserOptions} from properties in
+	 * /log-parser.properties on classpath.
+	 * 
+	 * @return
+	 */
 	public static LogParserOptions load() {
 		return load(LogParserOptions.class
 				.getResourceAsStream("/log-parser.properties"));
 	}
 
+	/**
+	 * Returns the log line high level {@link Pattern} (not including the regex
+	 * for extraction of key values from log message).
+	 * 
+	 * @return
+	 */
 	public Pattern getPattern() {
 		return pattern;
 	}
 
+	/**
+	 * Returns the positions of standard log line properties in the pattern.
+	 * logTimestamp -> 1 means that logTimestamp is group 1 in the regex
+	 * pattern.
+	 * 
+	 * @return
+	 */
 	public BiMap<String, Integer> getPatternGroups() {
 		return patternGroups;
 	}
 
+	/**
+	 * Returns {@link DateFormat} in use once the timestap format is combined
+	 * with the timezone.
+	 * 
+	 * @return
+	 */
 	public DateFormat getTimestampFormat() {
 		return timestampFormat;
 	}
 
+	/**
+	 * Timezone for the log line timestamp part.
+	 * 
+	 * @return
+	 */
 	public String getTimezone() {
 		return timezone;
 	}
 
+	/**
+	 * Returns true if and only if the logs are split over lines like for
+	 * instance default java.util.logging logs.
+	 * 
+	 * @return
+	 */
 	public boolean isMultiline() {
 		return multiline;
+	}
+
+	/**
+	 * Returns the message regex {@link Pattern} used to extract keys and values
+	 * from the log line message.
+	 * 
+	 * @return
+	 */
+	public Pattern getMessagePattern() {
+		return messagePattern;
 	}
 
 	private static BiMap<String, Integer> createGroupMap(String list) {
@@ -110,10 +190,6 @@ public class LogParserOptions {
 		for (int i = 0; i < items.length; i++)
 			map.put(items[i], i + 1);
 		return map;
-	}
-
-	public Pattern getMessagePattern() {
-		return messagePattern;
 	}
 
 }

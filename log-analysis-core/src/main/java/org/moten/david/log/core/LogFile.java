@@ -9,6 +9,14 @@ import java.util.logging.Logger;
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
 
+/**
+ * Starts a thread using a given {@link ExecutorService} to load all logs from a
+ * {@link File} and then monitor the file for new lines and load them too as
+ * they arrive.
+ * 
+ * @author dave
+ * 
+ */
 public class LogFile {
 
 	private static Logger log = Logger.getLogger(LogFile.class.getName());
@@ -19,6 +27,14 @@ public class LogFile {
 	private final LogParser parser;
 	private final ExecutorService executor;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param file
+	 * @param checkIntervalMs
+	 * @param parser
+	 * @param executor
+	 */
 	public LogFile(File file, long checkIntervalMs, LogParser parser,
 			ExecutorService executor) {
 		this.file = file;
@@ -38,6 +54,12 @@ public class LogFile {
 			}
 	}
 
+	/**
+	 * Starts a thread that tails a file from the start and reports extracted
+	 * info from the lines to the database.
+	 * 
+	 * @param factory
+	 */
 	public void tail(DatabaseFactory factory) {
 
 		TailerListener listener = createListener(factory.create());
@@ -48,6 +70,9 @@ public class LogFile {
 		executor.execute(tailer);
 	}
 
+	/**
+	 * Stops the tailer (and thus its thread).
+	 */
 	public void stop() {
 		if (tailer != null)
 			tailer.stop();

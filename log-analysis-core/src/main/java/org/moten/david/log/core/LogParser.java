@@ -16,6 +16,9 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.Maps;
 
 /**
+ * Parses log lines. Handles multiline logs by buffering previous line then
+ * checking for a pattern match against the concatenation of the previous and
+ * current line.
  * 
  * @author dxm
  * 
@@ -27,11 +30,19 @@ public class LogParser {
 	private String previousLine;
 	private final MessageSplitter splitter;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param options
+	 */
 	public LogParser(LogParserOptions options) {
 		this.options = options;
 		splitter = new MessageSplitter(options.getMessagePattern());
 	}
 
+	/**
+	 * Constructor loads from /log-parser.properties on classpath.
+	 */
 	public LogParser() {
 		this(LogParserOptions.load());
 	}
@@ -81,16 +92,31 @@ public class LogParser {
 
 		Long time;
 		if (timestamp != null && level != null && logger != null) {
-			try {
-				time = options.getTimestampFormat()
-						.parse(timestamp + " " + options.getTimezone())
-						.getTime();
-			} catch (ParseException e) {
-				time = null;
-			}
+			time = parseTime(timestamp);
 		} else
 			time = null;
 
+		Map<String, String> values = getValues(level, logger, threadName, msg,
+				method);
+		// persist the split fields from the full message
+		Map<String, String> m = splitter.split(msg);
+		values.putAll(m);
+		return new LogEntry(time, values);
+	}
+
+	private Long parseTime(String timestamp) {
+		Long time;
+		try {
+			time = options.getTimestampFormat()
+					.parse(timestamp + " " + options.getTimezone()).getTime();
+		} catch (ParseException e) {
+			time = null;
+		}
+		return time;
+	}
+
+	private Map<String, String> getValues(String level, String logger,
+			String threadName, String msg, String method) {
 		Map<String, String> values = Maps.newHashMap();
 		if (level != null)
 			values.put(FIELD_LOG_LEVEL, level);
@@ -102,10 +128,7 @@ public class LogParser {
 			values.put(FIELD_THREAD_NAME, threadName);
 		if (method != null && method.length() > 0)
 			values.put(FIELD_METHOD, method);
-		// persist the split fields from the full message
-		Map<String, String> m = splitter.split(msg);
-		values.putAll(m);
-		return new LogEntry(time, values);
+		return values;
 	}
 
 	private String getGroup(Matcher matcher, Integer index) {

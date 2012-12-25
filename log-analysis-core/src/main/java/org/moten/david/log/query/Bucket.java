@@ -1,5 +1,12 @@
 package org.moten.david.log.query;
 
+/**
+ * Aggregates metrics about coordinate pairs where the x-axis coordinate is a
+ * {@link Long} timestamp.
+ * 
+ * @author dave
+ * 
+ */
 public class Bucket {
 
 	private final double start;
@@ -30,6 +37,13 @@ public class Bucket {
 		this(timestamp, 0);
 	}
 
+	/**
+	 * Adds the coordinate pair to the bucket and updates aggregate data like
+	 * sum, count and others.
+	 * 
+	 * @param timestamp
+	 * @param value
+	 */
 	public void add(long timestamp, double value) {
 		sum += value;
 		sumSquares += value * value;
@@ -53,14 +67,29 @@ public class Bucket {
 		}
 	}
 
+	/**
+	 * Returns the first value reported to the bucket.
+	 * 
+	 * @return
+	 */
 	public Double first() {
 		return first;
 	}
 
+	/**
+	 * Returns the sum of the squares of the values reported to the bucket.
+	 * 
+	 * @return
+	 */
 	public Double sumSquares() {
 		return sumSquares;
 	}
 
+	/**
+	 * Returns the mean (average) of the values reported to the bucket.
+	 * 
+	 * @return
+	 */
 	public Double mean() {
 		if (count == 0)
 			return null;
@@ -68,6 +97,11 @@ public class Bucket {
 			return sum / count;
 	}
 
+	/**
+	 * Returns the standard deviation of the values reported to the bucket.
+	 * 
+	 * @return
+	 */
 	public Double standardDeviation() {
 		if (count == 0)
 			return null;
@@ -114,6 +148,13 @@ public class Bucket {
 		return sum;
 	}
 
+	/**
+	 * Returns the value of the given Metric across all the values reported to
+	 * this bucket.
+	 * 
+	 * @param metric
+	 * @return
+	 */
 	public Double get(Metric metric) {
 		if (metric == Metric.EARLIEST)
 			return earliest();

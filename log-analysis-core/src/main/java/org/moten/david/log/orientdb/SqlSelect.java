@@ -1,4 +1,4 @@
-package org.moten.david.log.query;
+package org.moten.david.log.orientdb;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -8,14 +8,21 @@ import java.util.regex.Pattern;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class Sql {
+/**
+ * Parses and manipulates orientdb select statements.
+ * 
+ * @author dave
+ * 
+ */
+public class SqlSelect {
+
 	private final Map<String, String> clauses;
 
 	// SELECT [<Projections>] FROM <Target> [LET <Assignment>*] [WHERE
 	// <Condition>*] [GROUP BY <Field>] [ORDER BY <Fields>* [ASC|DESC]*] [SKIP
 	// <SkipRecords>] [LIMIT <MaxRecords>]
 
-	public Sql(String sql) {
+	public SqlSelect(String sql) {
 		sql = Pattern.compile("group by", Pattern.CASE_INSENSITIVE)
 				.matcher(sql).replaceFirst("group_by");
 		sql = Pattern.compile("order by", Pattern.CASE_INSENSITIVE)
@@ -45,7 +52,7 @@ public class Sql {
 			clauses.put(currentKeyword, clause.toString());
 	}
 
-	private Sql(Map<String, String> clauses) {
+	private SqlSelect(Map<String, String> clauses) {
 		this.clauses = clauses;
 	}
 
@@ -77,13 +84,13 @@ public class Sql {
 		return clauses.get("limit");
 	}
 
-	public Sql where(String where) {
+	public SqlSelect where(String where) {
 		Map<String, String> m = Maps.newHashMap(clauses);
 		m.put("where", where);
-		return new Sql(m);
+		return new SqlSelect(m);
 	}
 
-	public Sql and(String whereClause) {
+	public SqlSelect and(String whereClause) {
 		if (getWhere() == null)
 			return where(whereClause);
 		else {
