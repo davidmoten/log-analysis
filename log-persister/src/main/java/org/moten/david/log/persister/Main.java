@@ -53,7 +53,7 @@ public class Main {
 				is = new FileInputStream(configLocation);
 			else
 				throw new RuntimeException(
-						"configuration xml not found. Set property log.analysis.configuration to a file on classpath or filesystem.");
+						"configuration xml not found. Set property logan.config to a file on classpath or filesystem.");
 		}
 		Configuration configuration = new Marshaller().unmarshal(is);
 		return configuration;

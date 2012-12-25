@@ -10,7 +10,6 @@
 	<description>Starts orientdb database server</description>
 	<properties>
 		<command>server</command>
-		<logan.config>/persister-configuration.xml</logan.config>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -26,7 +26,6 @@
 	</dependencies>
 
 	<properties>
-		<logan.db.url>remote:localhost/logs</logan.db.url>
 		<logan.config>${basedir}/src/test/resources/persister-configuration-test.xml</logan.config>
 	</properties>
 
@@ -48,10 +47,6 @@
 					<mainClass>org.moten.david.log.persister.Main</mainClass>
 					<workingDirectory>${base.dir}</workingDirectory>
 					<systemProperties>
-						<systemProperty>
-							<key>logan.db.url</key>
-							<value>${logan.db.url}</value>
-						</systemProperty>
 						<systemProperty>
 							<key>logan.config</key>
 							<value>${logan.config}</value>
