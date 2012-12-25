@@ -20,7 +20,7 @@
 	    <!--  java util logging example, place ZZZ between first and second line patterns as below -->
 		<parser>
 			<pattern>^(\d\d/\d\d/\d\d\d\d \d\d?:\d\d:\d\d (?:(?:AM)|(?:PM)))+(\S+) +(\S+)ZZZ(\S+): (.*)$</pattern>
-			<patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
+			<patternGroups>logTimestamp,logLogger,logMethod,logLevel,logMsg</patternGroups>
 			<messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
 			<timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
 			<timezone>UTC</timezone>
