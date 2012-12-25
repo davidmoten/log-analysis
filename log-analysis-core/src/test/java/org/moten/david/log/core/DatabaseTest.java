@@ -52,8 +52,8 @@ public class DatabaseTest {
 		System.out.println("done in " + ms + "ms");
 		System.out.println("rate=" + (1000 * n2 / ms) + " lines/s");
 		Buckets r = p.execute(new BucketQuery(new Date(0), 1000, 20, "select "
-				+ Field.FIELD_LOG_TIMESTAMP
-				+ ", logTimestamp as value from Entry"));
+				+ Field.FIELD_LOG_TIMESTAMP + ", " + Field.FIELD_LOG_TIMESTAMP
+				+ " as value from Entry"));
 		System.out.println(r);
 		p.close();
 	}
