@@ -129,19 +129,19 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		    });
 
 		
-		var p;
+		var plotObject;
 		if (metric=="COUNT")
-			p=$.plot(plot, [ series, extraMetricGraph ], options);
+			plotObject=$.plot(plot, [ series, extraMetricGraph ], options);
 		else 
-		    p=$.plot(plot, [ series, meanGraph, sdLowerGraph,
+			plotObject=$.plot(plot, [ series, meanGraph, sdLowerGraph,
 				sdUpperGraph, extraMetricGraph ], options);
 		 plot.bind("plotclick", function (event, pos, item) {
 		        if (item) {
-		            $("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
-		              var x = item.datapoint[0].toFixed(2),
-                      y = item.datapoint[1].toFixed(2);
+		            //$("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
+		              var x = item.datapoint[0].toFixed(2);
+//                    var y = item.datapoint[1].toFixed(2);
     
-		            //p.highlight(item.series, item.datapoint);
+		            //plotObject.highlight(item.series, item.datapoint);
 		            var gap=300000;
 		            var startT=Math.floor(Number(x)-gap);
 		            var finishT=Math.floor(Number(x)+gap);
