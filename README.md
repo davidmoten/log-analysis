@@ -76,9 +76,11 @@ A jetty web server running on port 9292 that presents graphs using json sourced 
 Demo
 =============
 To test, run 
+
     git clone https://github.com/davidmoten/log-analysis.git
     cd log-analysis
     ./restart-all.sh 
+
 which will
 * stop log-server, log-ui, database
 * mvn clean install
@@ -90,6 +92,7 @@ All components will be started in the background.
 To test go to [http://localhost:9292/](http://localhost:9292/).
 
 To stop, run 
+
     ./stop-all.sh
 
 Getting started
