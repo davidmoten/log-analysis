@@ -371,7 +371,7 @@ public class Database {
 			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOG_LEVEL,
 					"INFO", OType.STRING);
 			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_MSG,
-					"specialNumber=" + specialNumber, OType.INTEGER);
+					"specialNumber=" + specialNumber, OType.STRING);
 			persistDocument(TABLE_DUMMY, time, id, "specialNumber",
 					specialNumber + "", OType.STRING);
 		}
@@ -380,11 +380,12 @@ public class Database {
 				+ " random values from the last hour to table " + TABLE_DUMMY);
 	}
 
-	public Iterable<String> getLogs(long startTime, long finishTime) {
+	public Iterable<String> getLogs(String table, long startTime,
+			long finishTime) {
 		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
-				"select from Entry where logTimestamp between " + startTime
-						+ " and " + finishTime
-						+ " order by logTimestamp, logId");
+				"select from " + table + " where logTimestamp between "
+						+ startTime + " and " + finishTime
+						+ " order by logTimestamp asc,logId asc");
 		final List<ODocument> list = db.query(query);
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		final Iterator<String> it = Iterators.transform(list.iterator(),
@@ -400,16 +401,18 @@ public class Database {
 					public String apply(ODocument d) {
 						id = d.field(FIELD_LOG_ID);
 						time = d.field(FIELD_LOG_TIMESTAMP);
-						String level = d.field(FIELD_LOG_LEVEL);
-						String logger = d.field(FIELD_LOGGER);
-						String msg = d.field(FIELD_MSG);
-						if (level != null)
-							this.level = level;
-						if (logger != null)
-							this.logger = logger;
-						if (msg != null)
-							this.msg = msg;
-						if (level != null && logger != null && msg != null) {
+						String key = d.field(Field.FIELD_KEY);
+						String value = d.field(Field.FIELD_VALUE);
+
+						if (FIELD_LOG_LEVEL.equals(key))
+							this.level = value;
+						if (FIELD_LOGGER.equals(key))
+							this.logger = value;
+						if (FIELD_MSG.equals(key))
+							this.msg = value;
+
+						if (this.level != null && this.logger != null
+								&& this.msg != null) {
 							StringBuilder s = new StringBuilder();
 							s.append(df.format(new Date(time)));
 							s.append(' ');
@@ -418,6 +421,9 @@ public class Database {
 							s.append(this.logger);
 							s.append(" - ");
 							s.append(this.msg);
+							this.level = null;
+							this.logger = null;
+							this.msg = null;
 							return s.toString();
 						} else
 							return null;

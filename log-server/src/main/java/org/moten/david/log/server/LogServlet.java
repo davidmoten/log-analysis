@@ -23,8 +23,13 @@ public class LogServlet extends HttpServlet {
 		try {
 			long startTime = getMandatoryLong(req, "start");
 			long finishTime = getMandatoryLong(req, "finish");
+			String table;
+			if (req.getParameter("table") == null)
+				table = "Entry";
+			else
+				table = req.getParameter("table");
 			PrintWriter out = resp.getWriter();
-			for (String line : db.getLogs(startTime, finishTime)) {
+			for (String line : db.getLogs(table, startTime, finishTime)) {
 				if (line != null)
 					out.println(line);
 			}
