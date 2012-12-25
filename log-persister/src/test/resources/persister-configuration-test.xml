@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:configuration xmlns:ns2="http://org.moten.david/log-analysis/persister/configuration">
+<ns2:configuration
+	xmlns:ns2="http://org.moten.david/log-analysis/persister/configuration">
 	<databaseUrl>remote:localhost/logs</databaseUrl>
+	<!--  standard log4j pattern -->
 	<parser>
-	    <pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+) +(\S+)? ?- (.*)$</pattern>
-	    <patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
-	    <messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
-	    <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
-	    <timezone>UTC</timezone>
-	    <multiline>false</multiline>
-    </parser>
-    <group>
-        <log>
-            <path>./src/test/resources/test.log</path>
-        </log>
-    </group>
+		<pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+)+(\S+)? ?- (.*)$</pattern>
+		<patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
+		<messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
+		<timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
+		<timezone>UTC</timezone>
+		<multiline>false</multiline>
+	</parser>
+	<group>
+		<log>
+			<path>./src/test/resources/test.log</path>
+		</log>
+	</group>
+	<group>
+	    <!--  java util logging example, place ZZZ between first and second line patterns as below -->
+		<parser>
+			<pattern>^(\d\d/\d\d/\d\d\d\d \d\d?:\d\d:\d\d (?:(?:AM)|(?:PM)))+(\S+) +(\S+)ZZZ(\S+): (.*)$</pattern>
+			<patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
+			<messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
+			<timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
+			<timezone>UTC</timezone>
+			<multiline>false</multiline>
+		</parser>
+		<log>
+			<path>./src/test/resources/test-util-logging.log</path>
+		</log>
+	</group>
 </ns2:configuration>
