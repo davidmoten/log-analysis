@@ -118,7 +118,7 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		                        y = item.datapoint[1].toFixed(2);
 		                    
 		                    showTooltip(item.pageX, item.pageY,
-		                                item.series.label + " of " + x + " = " + y);
+		                                item.series.label + " = " + y);
 		                }
 		            }
 		            else {
@@ -138,7 +138,12 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		 plot.bind("plotclick", function (event, pos, item) {
 		        if (item) {
 		            $("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
-		            p.highlight(item.series, item.datapoint);
+		              var x = item.datapoint[0].toFixed(2),
+                      y = item.datapoint[1].toFixed(2);
+    
+		            //p.highlight(item.series, item.datapoint);
+		              var interval = 300000;
+		            window.open('http://localhost:9191/log?start=' + Math.floor(x-interval) + '&finish='+Math.floor(x+interval)+'&table=Dummy', 'logWindow', '');
 		        }
 		    });
 	}

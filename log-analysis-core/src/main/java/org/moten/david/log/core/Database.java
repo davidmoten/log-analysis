@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -388,6 +389,7 @@ public class Database {
 						+ " order by logTimestamp asc,logId asc");
 		final List<ODocument> list = db.query(query);
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final Iterator<String> it = Iterators.transform(list.iterator(),
 				new Function<ODocument, String>() {
 
