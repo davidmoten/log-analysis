@@ -142,8 +142,10 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
                       y = item.datapoint[1].toFixed(2);
     
 		            //p.highlight(item.series, item.datapoint);
-		              var interval = 300000;
-		            window.open('http://localhost:9191/log?start=' + Math.floor(x-interval) + '&finish='+Math.floor(x+interval)+'&table=Dummy', 'logWindow', '');
+		            var gap=300000;
+		            var startT=Math.floor(Number(x)-gap);
+		            var finishT=Math.floor(Number(x)+gap);
+		            window.open('http://localhost:9191/log?start=' + startT + '&finish='+ finishT +'&table=Dummy', 'logWindow', '');
 		        }
 		    });
 	}
