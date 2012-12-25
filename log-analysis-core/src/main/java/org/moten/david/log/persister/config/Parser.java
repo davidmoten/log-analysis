@@ -1,5 +1,9 @@
 package org.moten.david.log.persister.config;
 
+import javax.xml.bind.annotation.XmlElement;
+
+import org.moten.david.log.core.MessageSplitter;
+
 /**
  * 
  * Parser options.
@@ -8,11 +12,17 @@ package org.moten.david.log.persister.config;
  * 
  */
 public class Parser {
+	@XmlElement(required = true)
 	public String pattern;
+	@XmlElement(required = true)
 	public String patternGroups;
-	public String messagePattern;
+	@XmlElement(defaultValue = MessageSplitter.MESSAGE_PATTERN_DEFAULT)
+	public String messagePattern = MessageSplitter.MESSAGE_PATTERN_DEFAULT;
+	@XmlElement(required = true)
 	public String timestampFormat;
-	public String timezone;
+	@XmlElement(defaultValue = "UTC")
+	public String timezone = "UTC";
+	@XmlElement(required = false, defaultValue = "false")
 	public boolean multiline;
 
 	/**

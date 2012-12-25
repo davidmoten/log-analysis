@@ -41,6 +41,8 @@ public class LogParserTest {
 
 		Pattern pattern = Pattern
 				.compile("^(\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d?:\\d\\d:\\d\\d (?:(?:AM)|(?:PM))) +(\\S+) +(\\S+)ZZZ(\\S+): (.*)$");
+		Pattern messagePattern = Pattern
+				.compile(MessageSplitter.MESSAGE_PATTERN_DEFAULT);
 		String format = "dd/MM/yyyy hh:mm:ss a";
 		BiMap<String, Integer> map = HashBiMap.create(5);
 		map.put(Field.FIELD_LOG_TIMESTAMP, 1);
@@ -49,8 +51,8 @@ public class LogParserTest {
 		map.put(Field.FIELD_LOG_LEVEL, 4);
 		map.put(Field.FIELD_MSG, 5);
 
-		LogParserOptions options = new LogParserOptions(pattern, map, format,
-				"UTC", true);
+		LogParserOptions options = new LogParserOptions(pattern, map,
+				messagePattern, format, "UTC", true);
 		LogParser p = new LogParser(options);
 		assertNull(p.parse(line1));
 		{

@@ -17,26 +17,29 @@ public class LogParserOptions {
 
 	private final Pattern pattern;
 	private final BiMap<String, Integer> patternGroups;
+	private final Pattern messagePattern;
+
 	private final DateFormat timestampFormat;
 	private final String timezone;
 	private final boolean multiline;
 
 	public LogParserOptions(Pattern pattern,
-			BiMap<String, Integer> patternGroups, DateFormat timestampFormat,
-			String timezone, boolean multiline) {
+			BiMap<String, Integer> patternGroups, Pattern messagePattern,
+			DateFormat timestampFormat, String timezone, boolean multiline) {
 		super();
 		this.pattern = pattern;
 		this.patternGroups = patternGroups;
+		this.messagePattern = messagePattern;
 		this.timestampFormat = timestampFormat;
 		this.timezone = timezone;
 		this.multiline = multiline;
 	}
 
 	public LogParserOptions(Pattern pattern,
-			BiMap<String, Integer> patternGroups, String timestampFormat,
-			String timezone, boolean multiline) {
-		this(pattern, patternGroups, createDateFormat(timestampFormat),
-				timezone, multiline);
+			BiMap<String, Integer> patternGroups, Pattern messagePattern,
+			String timestampFormat, String timezone, boolean multiline) {
+		this(pattern, patternGroups, messagePattern,
+				createDateFormat(timestampFormat), timezone, multiline);
 	}
 
 	public static LogParserOptions load(InputStream is) {
@@ -47,14 +50,16 @@ public class LogParserOptions {
 			throw new RuntimeException(e);
 		}
 		Pattern pattern = Pattern.compile(p.getProperty("pattern"));
+		Pattern messagePattern = Pattern.compile(p
+				.getProperty("message.pattern"));
 		String timestampFormat = p.getProperty("timestamp.format");
 		DateFormat df = createDateFormat(timestampFormat);
 		String timezone = p.getProperty("timestamp.timezone");
 		BiMap<String, Integer> patternGroups = createGroupMap(p
 				.getProperty("pattern.groups"));
 		boolean multiline = "true".equalsIgnoreCase(p.getProperty("multiline"));
-		return new LogParserOptions(pattern, patternGroups, df, timezone,
-				multiline);
+		return new LogParserOptions(pattern, patternGroups, messagePattern, df,
+				timezone, multiline);
 	}
 
 	private static SimpleDateFormat createDateFormat(String timestampFormat) {
@@ -67,9 +72,10 @@ public class LogParserOptions {
 			parsing = group.parser;
 
 		Pattern pattern = Pattern.compile(parsing.pattern);
+		Pattern messagePattern = Pattern.compile(parsing.messagePattern);
 		DateFormat df = new SimpleDateFormat(parsing.timestampFormat);
 		BiMap<String, Integer> patternGroups = createGroupMap(parsing.patternGroups);
-		return new LogParserOptions(pattern, patternGroups, df,
+		return new LogParserOptions(pattern, patternGroups, messagePattern, df,
 				parsing.timezone, parsing.multiline);
 	}
 
@@ -104,6 +110,10 @@ public class LogParserOptions {
 		for (int i = 0; i < items.length; i++)
 			map.put(items[i], i + 1);
 		return map;
+	}
+
+	public Pattern getMessagePattern() {
+		return messagePattern;
 	}
 
 }

@@ -25,10 +25,11 @@ public class LogParser {
 	public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS";
 	private final LogParserOptions options;
 	private String previousLine;
-	private final MessageSplitter splitter = new MessageSplitter();
+	private final MessageSplitter splitter;
 
 	public LogParser(LogParserOptions options) {
 		this.options = options;
+		splitter = new MessageSplitter(options.getMessagePattern());
 	}
 
 	public LogParser() {
