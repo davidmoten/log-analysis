@@ -27,6 +27,7 @@ import org.moten.david.log.query.Buckets;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
@@ -345,6 +346,18 @@ public class Database {
 	 */
 	public void close() {
 		db.close();
+	}
+
+	public List<String> getKeys() {
+		String sql = "select " + Field.FIELD_KEY + " from Entry group by "
+				+ Field.FIELD_KEY;
+		List<ODocument> rows = db.query(new OSQLSynchQuery<ODocument>(sql));
+		return Lists.transform(rows, new Function<ODocument, String>() {
+			@Override
+			public String apply(ODocument d) {
+				return d.field(Field.FIELD_KEY);
+			}
+		});
 	}
 
 	/**

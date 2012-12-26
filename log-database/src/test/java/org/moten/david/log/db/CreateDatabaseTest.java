@@ -16,6 +16,7 @@ public class CreateDatabaseTest {
 		Database d = new Database(file);
 		d.configureDatabase();
 		// d.persistDummyRecords();
+
 		d.close();
 
 	}

@@ -14,6 +14,16 @@
 		<servlet-name>Log</servlet-name>
 		<servlet-class>org.moten.david.log.server.LogServlet</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>Keys</servlet-name>
+		<servlet-class>org.moten.david.log.server.KeysServlet</servlet-class>
+	</servlet>
+ 	 	
+	<servlet-mapping>
+		<servlet-name>Keys</servlet-name>
+		<url-pattern>/keys</url-pattern>
+	</servlet-mapping>
  	 	
 	<servlet-mapping>
 		<servlet-name>Query</servlet-name>

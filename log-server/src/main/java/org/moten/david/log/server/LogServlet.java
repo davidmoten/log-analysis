@@ -20,6 +20,7 @@ public class LogServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		Database db = ServletUtil.connectToDatabase();
+		System.out.println("keys=" + db.getKeys());
 		try {
 			long startTime = getMandatoryLong(req, "start");
 			long finishTime = getMandatoryLong(req, "finish");

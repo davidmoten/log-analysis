@@ -1,9 +1,12 @@
 package org.moten.david.log.core;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -25,6 +28,9 @@ public class DatabaseTest {
 			LogEntry entry = new LogEntry(t + i, map);
 			p.persist(entry);
 		}
+		List<String> keys = p.getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("size", keys.get(0));
 		p.close();
 	}
 
