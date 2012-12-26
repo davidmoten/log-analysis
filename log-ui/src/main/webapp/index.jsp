@@ -1,4 +1,8 @@
 <html>
+<head>
+<script type="text/javascript" src="js/flot/jquery.js"></script>
+</head>
+<body>
 <h2>Log Analysis</h2>
 <h3>Sample graphs</h3>
 <ul>
@@ -15,7 +19,11 @@
 <form style="font-size: 12px; margin-left: 50px;" action="graph.html"
 	method="get">
 	<p>
-		Title: <input type="text" name="title" value="Graph"></input>
+		Title: <input type="text" name="title1" value="Graph"></input>
+	</p>
+	<p>
+		<input type="radio" name="table" value="Entry" >Entry</input>
+		<input type="radio" name="table" value="Dummy" checked="checked">Dummy</input>
 	</p>
 	<p>
 		Buckets: <input type="text" name="buckets" value="24"
@@ -59,7 +67,7 @@
 	</select>
 	</p>
 	<p>
-		Field: <input type="text" name="field1" value="elapsedTimeSeconds"></input>
+		Field: <select id="field1" name="field1"></select>
 	</p>
 	<p>
 		Width: <input type="text" name="width" value="1000px"></input>
@@ -69,4 +77,11 @@
 	</p>
 	<input type="submit" value="View graph" />
 </form>
+<script type="text/javascript">
+	$(function() {
+		$("#field1").append("<option value='specialNumber'>specialNumber</option>");
+	});
+</script>
+
+</body>
 </html>

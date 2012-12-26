@@ -28,7 +28,7 @@ public class DatabaseTest {
 			LogEntry entry = new LogEntry(t + i, map);
 			p.persist(entry);
 		}
-		List<String> keys = p.getKeys();
+		List<String> keys = p.getKeys("Entry");
 		assertEquals(1, keys.size());
 		assertEquals("size", keys.get(0));
 		p.close();

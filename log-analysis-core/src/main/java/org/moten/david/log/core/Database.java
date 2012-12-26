@@ -348,9 +348,9 @@ public class Database {
 		db.close();
 	}
 
-	public List<String> getKeys() {
-		String sql = "select " + Field.FIELD_KEY + " from Entry group by "
-				+ Field.FIELD_KEY;
+	public List<String> getKeys(String table) {
+		String sql = "select " + Field.FIELD_KEY + " from " + table
+				+ " group by " + Field.FIELD_KEY;
 		List<ODocument> rows = db.query(new OSQLSynchQuery<ODocument>(sql));
 		return Lists.transform(rows, new Function<ODocument, String>() {
 			@Override

@@ -1,5 +1,8 @@
 package org.moten.david.log.server;
 
+import static org.moten.david.log.server.ServletUtil.connectToDatabase;
+import static org.moten.david.log.server.ServletUtil.getParameter;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -16,9 +19,10 @@ public class KeysServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		Database db = ServletUtil.connectToDatabase();
+		Database db = connectToDatabase();
 		StringBuilder s = new StringBuilder();
-		for (String key : db.getKeys()) {
+		String table = getParameter(req, "table", "Entry");
+		for (String key : db.getKeys(table)) {
 			if (s.length() > 0)
 				s.append(",");
 			s.append("\"");

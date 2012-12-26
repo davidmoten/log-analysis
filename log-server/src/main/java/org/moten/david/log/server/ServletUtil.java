@@ -54,4 +54,11 @@ public class ServletUtil {
 			throw new RuntimeException("parameter " + name + " is mandatory");
 	}
 
+	public static String getParameter(HttpServletRequest req, String name,
+			String defaultValue) {
+		if (req.getParameter(name) != null)
+			return req.getParameter(name);
+		else
+			return defaultValue;
+	}
 }

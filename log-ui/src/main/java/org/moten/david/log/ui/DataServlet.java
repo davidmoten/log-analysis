@@ -28,8 +28,7 @@ public class DataServlet extends HttpServlet {
 
 		String sql = "select logTimestamp, logValue from "
 				+ req.getParameter("table") + " where logKey = '"
-				+ req.getParameter("field") + "'"
-				+ " and logValue is not null order by logTimestamp";
+				+ req.getParameter("field") + "'" + " order by logTimestamp";
 
 		String url = logServerBaseUrl + "/query?sql=" + sql + "&start="
 				+ req.getParameter("start") + "&interval="
