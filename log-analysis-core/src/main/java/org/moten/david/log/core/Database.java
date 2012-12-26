@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -26,10 +27,12 @@ import org.moten.david.log.query.Buckets;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.id.ORID;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.metadata.schema.OType;
@@ -54,6 +57,8 @@ public class Database {
 	private static final String TABLE_ENTRY = "Entry";
 
 	private static final String TABLE_DUMMY = "Dummy";
+
+	private static final String TABLE_LINE = "Line";
 
 	private final ODatabaseDocumentTx db;
 
@@ -221,22 +226,33 @@ public class Database {
 		long timestamp = entry.getTime();
 		String id = UUID.randomUUID().toString();
 
+		ODocument d = new ODocument(TABLE_LINE);
+		d.field(Field.FIELD_LOG_TIMESTAMP, timestamp);
+		d.field(Field.FIELD_LOG_ID, id);
+
+		Set<ORID> entries = Sets.newHashSet();
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null) {
 				ValueAndType v = parse(e.getValue());
-				persistDocument(timestamp, id, e.getKey().replace(" ", "_"),
-						v.value, v.type);
+				ODocument doc = persistDocument(timestamp, id, e.getKey()
+						.replace(" ", "_"), v.value, v.type);
+				entries.add(doc.getIdentity());
 			}
 		}
+
+		// TODO create line record that points to the entries
+		// d.field(Field.FIELD_ENTRIES, OType.EMBEDDEDSET);
+
+		d.save();
 		db.commit();
 	}
 
-	private void persistDocument(long timestamp, String id, String key,
+	private ODocument persistDocument(long timestamp, String id, String key,
 			Object value, OType type) {
-		persistDocument(TABLE_ENTRY, timestamp, id, key, value, type);
+		return persistDocument(TABLE_ENTRY, timestamp, id, key, value, type);
 	}
 
-	private void persistDocument(String table, long timestamp, String id,
+	private ODocument persistDocument(String table, long timestamp, String id,
 			String key, Object value, OType type) {
 		ODocument d = new ODocument(table);
 		d.field(Field.FIELD_LOG_TIMESTAMP, timestamp);
@@ -244,7 +260,7 @@ public class Database {
 		d.field(Field.FIELD_KEY, key);
 		d.field(Field.FIELD_VALUE, value, type);
 		d.save();
-
+		return d;
 	}
 
 	private static class ValueAndType {
