@@ -30,6 +30,7 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		series.points = {
 			show : true
 		};
+		
 		var options = {
 			xaxis : {
 				mode : "time",
@@ -53,13 +54,22 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 	        }
 			//,colors: ["#d18b2c", "#dba255","#dba255", "#919733","#919733"]
 		};
-
 		var finishTime = startTime + interval * n;
+		if (thePlot !=null){
+			options.xaxis.min=thePlot.getAxes().xaxis.min;
+			options.xaxis.max=thePlot.getAxes().xaxis.max;
+		} else {
+			options.xaxis.min=startTime;
+			options.xaxis.max=finishTime;
+		}
+		
+		var xStart = options.xaxis.min;
+		var xFinish = options.xaxis.max;
 
 		var meanGraph = {
 			label:"mean",
-			data : [ [ startTime, series.stats.MEAN ],
-					[ finishTime, series.stats.MEAN ] ],
+			data : [ [ xStart, series.stats.MEAN ],
+					[ xFinish, series.stats.MEAN ] ],
 			lines : {
 				show : true
 			}
@@ -69,8 +79,8 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		console.log("extraMetric="+metricValue);
 		var extraMetricGraph = {
 			label:extraMetric.toLowerCase(),
-			data : [ [ startTime, metricValue ],
-					[ finishTime, metricValue ] ],
+			data : [ [ xStart, metricValue ],
+					[ xFinish, metricValue ] ],
 			lines : {
 				show : true
 			}
@@ -79,11 +89,11 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 				label:"mean+sd",
 			data : [
 					[
-							startTime,
+							xStart,
 							series.stats.MEAN
 									+ series.stats.STANDARD_DEVIATION ],
 					[
-							finishTime,
+							xFinish,
 							series.stats.MEAN
 									+ series.stats.STANDARD_DEVIATION ] ],
 			lines : {
@@ -94,11 +104,11 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 			label: "mean-sd",
 			data : [
 					[
-							startTime,
+							xStart,
 							series.stats.MEAN
 									- series.stats.STANDARD_DEVIATION ],
 					[
-							finishTime,
+							xFinish,
 							series.stats.MEAN
 									- series.stats.STANDARD_DEVIATION ] ],
 			lines : {
@@ -150,6 +160,16 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		else 
 			thePlot=$.plot(plot, [ series, meanGraph, sdLowerGraph,
 				sdUpperGraph, extraMetricGraph ], options);
+		var panning = false;
+		 plot.bind('plotpan', function (event, p) {
+		        panning = true;
+		    });
+		 //refresh the graph once stopped panning
+		 plot.bind("mouseup", function (event, pos, item){
+			 if (panning)
+				 refresh.click();
+			 panning = false;
+		 });
 		 plot.bind("plotclick", function (event, pos, item) {
 		        if (item) {
 		            //$("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
