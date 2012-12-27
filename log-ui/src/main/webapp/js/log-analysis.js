@@ -35,7 +35,7 @@ function drawGraph(field, tablename, buckets, interval, startTime, metric,
 		var options = {
 			xaxis : {
 				mode : "time",
-				timeformat : "%H:%M",
+				timeformat : "%H:%M\n%d/%m",
 				zoomRange : null,
 				panRange : null
 			},
