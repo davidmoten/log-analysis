@@ -184,6 +184,19 @@ function drawGraph(field, tablename, buckets, interval, startTime, metric,
 						'');
 			}
 		});
+//		var scrolling = false;
+//		
+//		plot.scroll(function(event){
+//			scrolling = true;
+//			console.log("scrolling");
+//			setInterval(function() {
+//				scrolling = false;
+//			},500);
+//			setInterval(function() {
+//				if (!scrolling)
+//					refresh.click();
+//			},1000);
+//		});
 	}
 
 	function refreshGraph(startTime, interval, buckets) {
