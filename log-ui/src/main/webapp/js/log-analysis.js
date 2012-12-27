@@ -1,12 +1,11 @@
-
+//
+// log-analysis javascript library supporting log-ui component.
+//
+// Author: Dave Moten Dec 2012.
+//
 	
 function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric,plot,refresh,sqlElement) {
 	
-//	var sql = "select logTimestamp, logValue from " 
-//				+ tablename + " where logKey = '" + field + "'" +
-//				" and logValue is not null order by logTimestamp";
-//	sql = sql.replace(new RegExp(" ", 'g'), "%20");
-
 	var barOptions = {
 		show : true,
 		align : "center",
@@ -215,6 +214,7 @@ function addGraph(main,graphId) {
 	var tablename = getURLParameter("table");
 	if (tablename == null || tablename == "null")
 		tablename = "Entry";
+
 	var buckets = Number(getURLParameter("buckets"));
 	var interval = extractPeriod(getURLParameter("interval"));
 	var title = getURLParameter("title"+ graphId);
@@ -232,9 +232,15 @@ function addGraph(main,graphId) {
 	var finishTime = getURLParameter("finish");
 	if (finishTime == "now") {
 		var startTime = now - n * interval;
-	} else
+	} else if (finishTime !== "null"){
 		//TOOD parse finish time/start time from url parameters
-		startTime = now - n * interval;
+	    var duration = extractPeriod(finishTime);
+	    startTime = now - duration - n * interval;
+    } else {
+    	var s = getURLParameter("start");
+    	var duration = extractPeriod(s);
+    	startTime = now - duration;
+    }
 	var metric = getURLParameter("metric");
 	var extraMetric = getURLParameter("extraMetric");
 
