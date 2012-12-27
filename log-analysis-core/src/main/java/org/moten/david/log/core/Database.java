@@ -381,6 +381,8 @@ public class Database {
 					"specialNumber=" + specialNumber, OType.STRING);
 			persistDocument(TABLE_DUMMY, time, id, "specialNumber",
 					specialNumber + "", OType.STRING);
+			persistDocument(TABLE_DUMMY, time, id, "executionTimeSeconds",
+					specialNumber * Math.random() + "", OType.STRING);
 		}
 		db.commit();
 		log.info("persisted " + n

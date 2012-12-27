@@ -122,3 +122,4 @@ Not much left to do, all appears to be working.
 * improve unit test coverage 
 * multiple field criteria support
 * add source field to Entry table
+* switch to embedded map with index
