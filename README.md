@@ -19,6 +19,7 @@ Features
 * tails log files, handles rollover, deletion (using [Apache commons-io Tailer](http://commons.apache.org/io/apidocs/org/apache/commons/io/input/Tailer.html))
 * aggregated or non-aggregated graphs
 * single field queries currently
+* zoom in/out and pan
 * multiple graphs to a page defined by url parameters
 * click on data points shows logs around that time (+/-5min)
 * numerous supported aggregation metrics including

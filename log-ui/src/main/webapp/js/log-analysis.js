@@ -58,6 +58,10 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		if (thePlot !=null){
 			options.xaxis.min=thePlot.getAxes().xaxis.min;
 			options.xaxis.max=thePlot.getAxes().xaxis.max;
+			if (buckets==0)
+				barOptions.barWidth=1;
+			else
+				barOptions.barWidth = (options.xaxis.max-options.xaxis.min)/n;
 		} else {
 			options.xaxis.min=startTime;
 			options.xaxis.max=finishTime;
