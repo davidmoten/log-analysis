@@ -11,6 +11,8 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		align : "center",
 		barWidth : interval
 	};
+	
+	var thePlot=null;
 
 	function onDataReceived(series) {
 		console.log(series);
@@ -31,10 +33,25 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		var options = {
 			xaxis : {
 				mode : "time",
-				timeformat : "%H:%M"
+				timeformat : "%H:%M",
+				zoomRange: null, 
+				panRange: null
 			},
-			grid: { hoverable: true, clickable: true }
-		//,colors: ["#d18b2c", "#dba255","#dba255", "#919733","#919733"]
+			yaxis : {
+				zoomRange: null, 
+				panRange: null
+			},
+			grid: { 
+				hoverable: true, 
+				clickable: true 
+			},
+	        zoom: {
+	            interactive: true
+	        },
+	        pan: {
+	            interactive: true
+	        }
+			//,colors: ["#d18b2c", "#dba255","#dba255", "#919733","#919733"]
 		};
 
 		var finishTime = startTime + interval * n;
@@ -128,11 +145,10 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		    });
 
 		
-		var plotObject;
 		if (metric=="COUNT")
-			plotObject=$.plot(plot, [ series, extraMetricGraph ], options);
+			thePlot=$.plot(plot, [ series, extraMetricGraph ], options);
 		else 
-			plotObject=$.plot(plot, [ series, meanGraph, sdLowerGraph,
+			thePlot=$.plot(plot, [ series, meanGraph, sdLowerGraph,
 				sdUpperGraph, extraMetricGraph ], options);
 		 plot.bind("plotclick", function (event, pos, item) {
 		        if (item) {
@@ -149,7 +165,7 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 		    });
 	}
 	
-	function refreshGraph() {
+	function refreshGraph(startTime,interval,buckets) {
 
 		var dataurl = "data?table="+ tablename + "&field=" + field + "&start=" + startTime
 				+ "&interval=" + interval + "&buckets=" + buckets
@@ -168,10 +184,15 @@ function drawGraph(field,tablename,buckets,interval,startTime,metric,extraMetric
 			timeout : 60000
 		});
 	}
-	refreshGraph();
+	
+	refreshGraph(startTime,interval,buckets);
 	refresh.click(function(event) {
 		event.preventDefault();
-		refreshGraph();
+		var xaxis = thePlot.getAxes().xaxis;
+		var newStartTime = Math.floor(xaxis.min);
+		var newInterval = xaxis.max-xaxis.min;
+		if (buckets>0) newInterval = newInterval/buckets;
+		refreshGraph(newStartTime,newInterval,buckets);
 	});
 
 }
