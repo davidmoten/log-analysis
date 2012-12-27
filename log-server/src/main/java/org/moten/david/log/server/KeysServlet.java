@@ -30,6 +30,6 @@ public class KeysServlet extends HttpServlet {
 			s.append("\"");
 		}
 		resp.setContentType("application/json");
-		resp.getWriter().print("{ keys: [" + s.toString() + "] }");
+		resp.getWriter().print("{ \"keys\": [" + s.toString() + "] }");
 	}
 }

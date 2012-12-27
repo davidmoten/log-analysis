@@ -373,8 +373,6 @@ public class Database {
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
 			String id = UUID.randomUUID().toString();
 			int specialNumber = i % (r.nextInt(100) + 1);
-			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOG_ID, "" + i,
-					OType.STRING);
 			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOGGER,
 					"something.stuff", OType.STRING);
 			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOG_LEVEL,

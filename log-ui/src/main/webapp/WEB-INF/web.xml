@@ -20,17 +20,27 @@
 			<param-value>*</param-value>
 		</init-param>
 	</filter>
-	
+
 	<filter-mapping>
 		<filter-name>cross-origin</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<servlet>
 		<servlet-name>Data</servlet-name>
 		<servlet-class>org.moten.david.log.ui.DataServlet</servlet-class>
 	</servlet>
- 	 	
+
+	<servlet>
+		<servlet-name>Keys</servlet-name>
+		<servlet-class>org.moten.david.log.ui.KeysServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Keys</servlet-name>
+		<url-pattern>/keys</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>Data</servlet-name>
 		<url-pattern>/data</url-pattern>

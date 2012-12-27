@@ -79,7 +79,27 @@
 </form>
 <script type="text/javascript">
 	$(function() {
-		$("#field1").append("<option value='specialNumber'>specialNumber</option>");
+		//$("#field1").append("<option value='specialNumber'>specialNumber</option>");
+		
+		function receivedKeys(data){
+			console.log(data);
+			for (var i=0;i<data.keys.length;i++){
+				var key = data.keys[i];
+				$("#field1").append("<option value='"+ key + "'>" + key + "</option>");
+			}
+		};
+		
+		var url = "keys?table=Dummy";
+		$.ajax({
+			url : url,
+			method : 'GET',
+			dataType : 'json',
+			success : receivedKeys,
+			error : function(request, textStatus, errorThrown) {
+				console.log("error="+errorThrown);
+			},
+			timeout : 60000
+		});
 	});
 </script>
 
