@@ -143,6 +143,12 @@ Looking at the patternGroups the first matching group will be identified as the 
 
 The key-value parts of the logMsg are parsed by the *message pattern* described below.
 
+Multiline
+---------------
+The default java.util.logging pattern is a multiline (two line) pattern. Two line patterns are configured as below:
+
+TODO
+
 Message pattern
 ----------------
     <messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
