@@ -75,6 +75,7 @@ Demo
 =============
 To test, run 
 
+    cd <YOUR_WORKSPACE>
     git clone https://github.com/davidmoten/log-analysis.git
     cd log-analysis
     ./restart-all.sh 
@@ -112,6 +113,21 @@ Create a config file as per [here](https://raw.github.com/davidmoten/log-analysi
     mvn clean install
     export PERSISTER_CONFIG=~/.log-analysis/persister-config.xml
     ./start-persister.sh
+    
+Pattern matching
+===================
+The *log-persister* configuration file ([here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/persister-configuration-test.xml)) refers to two patterns:
+* line pattern (and its pattern groups)
+* message pattern
+
+Line pattern
+----------------
+
+Message pattern
+----------------
+
+
+
 
 Todo
 ===========
