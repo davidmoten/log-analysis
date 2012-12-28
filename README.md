@@ -151,7 +151,7 @@ Above is the default message pattern used by log-persister. A matching key-value
 * key must start with a letter
 * key can contain whitespace and any legal java identifier character
 * key is separated from value by =
-* value part is delimited at its termination by semicolon (*;*), comma (*,*), vertical bar(*|*) or end of line
+* value part is delimited at its termination by semicolon (;), comma (,), vertical bar(|) or end of line
 
 
 Todo
