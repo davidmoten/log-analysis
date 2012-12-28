@@ -101,7 +101,8 @@ public class LogParser {
 		// persist the split fields from the full message
 		Map<String, String> m = splitter.split(msg);
 		values.putAll(m);
-		return new LogEntry(source, time, values);
+		values.put(Field.FIELD_SOURCE, source);
+		return new LogEntry(time, values);
 	}
 
 	private Long parseTime(String timestamp) {

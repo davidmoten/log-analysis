@@ -340,16 +340,28 @@ public class Database {
 			long time = t - TimeUnit.HOURS.toMillis(1)
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
 			int specialNumber = i % (r.nextInt(100) + 1);
-			Map<String, String> map = Maps.newHashMap();
-			LogEntry entry = new LogEntry("dummy-source", time, map);
-			map.put(Field.FIELD_LOGGER, "something.stuff");
-			map.put(Field.FIELD_LOG_LEVEL, "INFO");
-			double x = specialNumber * Math.random();
-			map.put(Field.FIELD_MSG, "specialNumber=" + specialNumber
-					+ ",executionTimeSeconds=" + x);
-			map.put("specialNumber", x + "");
-			map.put("executionTimeSeconds", x + "");
-			persist(entry);
+			{
+				Map<String, String> map = Maps.newHashMap();
+				LogEntry entry = new LogEntry(time, map);
+				map.put(Field.FIELD_LOGGER, "something.stuff");
+				map.put(Field.FIELD_LOG_LEVEL, "INFO");
+				double x = specialNumber * Math.random();
+				map.put(Field.FIELD_MSG, "specialNumber=" + specialNumber
+						+ ",executionTimeSeconds=" + x);
+				map.put("specialNumber", x + "");
+				map.put("executionTimeSeconds", x + "");
+				persist(entry);
+			}
+			{
+				Map<String, String> map = Maps.newHashMap();
+				LogEntry entry = new LogEntry(time, map);
+				map.put(Field.FIELD_LOGGER, "another.logger");
+				map.put(Field.FIELD_LOG_LEVEL, "DEBUG");
+				long m = Math.round(100 * Math.random());
+				map.put(Field.FIELD_MSG, "numberProcessed=" + m);
+				map.put("numberProcessed", m + "");
+				persist(entry);
+			}
 		}
 		log.info("persisted " + n
 				+ " random values from the last hour to table " + TABLE_ENTRY);
@@ -357,8 +369,10 @@ public class Database {
 
 	public Iterable<String> getLogs(long startTime, long finishTime) {
 		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
-				"select from Entry where logTimestamp between " + startTime
-						+ " and " + finishTime);
+				"select from " + TABLE_ENTRY + " where "
+						+ Field.FIELD_LOG_TIMESTAMP + " between " + startTime
+						+ " and " + finishTime + " order by "
+						+ Field.FIELD_LOG_TIMESTAMP);
 		List<ODocument> entries = db.query(query);
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));

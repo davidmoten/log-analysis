@@ -19,4 +19,5 @@ public class Field {
 	public static final String FIELD_VALUE = "logValue";
 	public static final String FIELD_ENTRIES = "entries";
 	public static final String FIELD_PROPS = "logProps";
+	public static final String FIELD_SOURCE = "logSource";
 }

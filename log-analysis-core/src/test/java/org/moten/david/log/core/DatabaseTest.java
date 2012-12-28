@@ -24,7 +24,7 @@ public class DatabaseTest {
 		for (int i = 1; i <= 1000; i++) {
 			Map<String, String> map = Maps.newHashMap();
 			map.put("size", i % 27 + "");
-			LogEntry entry = new LogEntry("test", t + i, map);
+			LogEntry entry = new LogEntry(t + i, map);
 			p.persist(entry);
 		}
 		// TODO enable this test below
