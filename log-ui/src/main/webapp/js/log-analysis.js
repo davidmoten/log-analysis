@@ -180,7 +180,7 @@ function drawGraph(field, tablename, buckets, interval, startTime, metric,
 				var startT = Math.floor(Number(x) - gap);
 				var finishT = Math.floor(Number(x) + gap);
 				window.open('http://localhost:9191/log?start=' + startT
-						+ '&finish=' + finishT + '&table=Dummy', 'logWindow',
+						+ '&finish=' + finishT , 'logWindow',
 						'');
 			}
 		});

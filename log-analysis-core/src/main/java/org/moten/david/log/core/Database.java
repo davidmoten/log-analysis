@@ -2,12 +2,16 @@ package org.moten.david.log.core;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -17,7 +21,8 @@ import org.apache.commons.io.FileUtils;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
@@ -351,7 +356,56 @@ public class Database {
 	}
 
 	public Iterable<String> getLogs(long startTime, long finishTime) {
-		ArrayList<String> list = Lists.newArrayList("not implemented");
-		return list;
+		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
+				"select from Entry where logTimestamp between " + startTime
+						+ " and " + finishTime);
+		List<ODocument> entries = db.query(query);
+		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+		final Iterator<String> it = Iterators.transform(entries.iterator(),
+				new Function<ODocument, String>() {
+
+					@Override
+					public String apply(ODocument input) {
+						return getLine(df, input);
+					}
+				});
+
+		return new Iterable<String>() {
+
+			@Override
+			public Iterator<String> iterator() {
+				return it;
+			}
+		};
+	}
+
+	private static String getLine(DateFormat df, ODocument d) {
+		Long t = d.field(Field.FIELD_LOG_TIMESTAMP);
+		Map<String, ODocument> map = d.field(Field.FIELD_PROPS);
+		String level = getValueAsString(map, Field.FIELD_LOG_LEVEL);
+		String logger = getValueAsString(map, Field.FIELD_LOGGER);
+		String threadName = getValueAsString(map, Field.FIELD_THREAD_NAME);
+		String method = getValueAsString(map, Field.FIELD_METHOD);
+		String msg = getValueAsString(map, Field.FIELD_MSG);
+		StringBuffer s = new StringBuffer();
+		s.append(df.format(new Date(t)));
+		s.append(level);
+		s.append(logger);
+		s.append(method);
+		s.append(threadName);
+		s.append(" - ");
+		s.append(msg);
+		return s.toString();
+	}
+
+	private static String getValueAsString(Map<String, ODocument> map,
+			String key) {
+		ODocument d = map.get(key);
+		if (d == null)
+			return "";
+		else
+			return " " + d.field(Field.FIELD_VALUE);
 	}
 }
