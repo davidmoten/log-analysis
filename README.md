@@ -116,17 +116,42 @@ Create a config file as per [here](https://raw.github.com/davidmoten/log-analysi
     
 Pattern matching
 ===================
-The *log-persister* configuration file ([here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/persister-configuration-test.xml)) refers to two patterns:
+The *log-persister* configuration file ([here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/persister-configuration-test.xml)) refers to two patterns. Here's a fragment concerning patterns:
+
+    <pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+)+(\S+)? ?- (.*)$</pattern>
+    <patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
+    <messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
+
 * line pattern (and its pattern groups)
 * message pattern
 
 Line pattern
 ----------------
+    <pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+)+(\S+)? ?- (.*)$</pattern>
+    <patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>
+    
+The above pattern is a java regular expression for parsing a typical log4j log line of the form below:
+
+    2012-11-29 04:39:19.846 INFO  au.gov.amsa.er.craft.tracking.CraftpicProviderDirect - number of craft = 7379
+    
+Looking at the patternGroups the first matching group will be identified as the *logTimestamp*, second matching group as the *logLevel* (INFO in this case), and so on:
+* *logTimestamp* = 2012-11-29 04:39:19.846 (actually the epoch ms value)
+* *logLevel* = INFO
+* *logLogger* = au.gov.amsa.er.craft.tracking.CraftpicProviderDirect
+* *threadName* = null (not present)
+* *logMsg* = 'number of craft = 7379'
+
+The key-value parts of the logMsg are parsed by the *message pattern* described below.
 
 Message pattern
 ----------------
+    <messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
 
-
+Above is the default message pattern used by log-persister. A matching key-value pair in a log message satisfies these properties:
+* key must start with a letter
+* key can contain whitespace and any legal java identifier character
+* key is separated from value by =
+* value part is delimited at its termination by ';','|',',' or end of line
 
 
 Todo
