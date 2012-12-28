@@ -3,7 +3,7 @@ package org.moten.david.log.core;
 import java.util.Map;
 
 /**
- * Encapsulates a partially parsed log line.
+ * Encapsulates a parsed log line.
  * 
  * @author dave
  * 
@@ -12,6 +12,7 @@ class LogEntry {
 
 	private final long time;
 	private final Map<String, String> properties;
+	private final String source;
 
 	/**
 	 * Constructor.
@@ -19,8 +20,8 @@ class LogEntry {
 	 * @param time
 	 * @param properties
 	 */
-	public LogEntry(long time, Map<String, String> properties) {
-		super();
+	public LogEntry(String source, long time, Map<String, String> properties) {
+		this.source = source;
 		this.time = time;
 		this.properties = properties;
 	}
@@ -53,11 +54,17 @@ class LogEntry {
 		return properties.get(Field.FIELD_MSG);
 	}
 
+	public String getSource() {
+		return source;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("LogEntry [time=");
 		builder.append(time);
+		builder.append(", source=");
+		builder.append(source);
 		builder.append(", properties=");
 		builder.append(properties);
 		builder.append("]");

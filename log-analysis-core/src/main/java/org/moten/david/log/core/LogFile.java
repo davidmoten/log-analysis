@@ -97,7 +97,7 @@ public class LogFile {
 			public synchronized void handle(String line) {
 				try {
 					db.useInCurrentThread();
-					LogEntry entry = parser.parse(line);
+					LogEntry entry = parser.parse(file.getName(), line);
 					if (entry != null)
 						db.persist(entry);
 				} catch (RuntimeException e) {

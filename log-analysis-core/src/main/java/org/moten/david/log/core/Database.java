@@ -341,7 +341,7 @@ public class Database {
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
 			int specialNumber = i % (r.nextInt(100) + 1);
 			Map<String, String> map = Maps.newHashMap();
-			LogEntry entry = new LogEntry(time, map);
+			LogEntry entry = new LogEntry("dummy-source", time, map);
 			map.put(Field.FIELD_LOGGER, "something.stuff");
 			map.put(Field.FIELD_LOG_LEVEL, "INFO");
 			double x = specialNumber * Math.random();

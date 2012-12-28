@@ -12,8 +12,6 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.junit.Test;
-import org.moten.david.log.query.BucketQuery;
-import org.moten.david.log.query.Buckets;
 
 import com.google.common.collect.Maps;
 
@@ -26,7 +24,7 @@ public class DatabaseTest {
 		for (int i = 1; i <= 1000; i++) {
 			Map<String, String> map = Maps.newHashMap();
 			map.put("size", i % 27 + "");
-			LogEntry entry = new LogEntry(t + i, map);
+			LogEntry entry = new LogEntry("test", t + i, map);
 			p.persist(entry);
 		}
 		// TODO enable this test below
@@ -61,10 +59,6 @@ public class DatabaseTest {
 		long ms = System.currentTimeMillis() - timer;
 		System.out.println("done in " + ms + "ms");
 		System.out.println("rate=" + (1000 * n2 / ms) + " lines/s");
-		Buckets r = p.execute(new BucketQuery(new Date(0), 1000, 20, "select "
-				+ Field.FIELD_LOG_TIMESTAMP + ", " + Field.FIELD_LOG_TIMESTAMP
-				+ " as value from Entry"));
-		System.out.println(r);
 		p.close();
 	}
 
@@ -74,7 +68,7 @@ public class DatabaseTest {
 		for (int i = 0; i < n; i++) {
 			long t = i;
 			String line = df.format(new Date(t)) + lineMessage;
-			LogEntry entry = parser.parse(line);
+			LogEntry entry = parser.parse("test", line);
 			p.persist(entry);
 		}
 

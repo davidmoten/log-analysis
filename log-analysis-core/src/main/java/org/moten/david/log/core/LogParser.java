@@ -56,7 +56,7 @@ public class LogParser {
 	 * @param line
 	 * @return
 	 */
-	public synchronized LogEntry parse(String line) {
+	public synchronized LogEntry parse(String source, String line) {
 		if (line == null)
 			return null;
 		else {
@@ -72,7 +72,7 @@ public class LogParser {
 				Matcher matcher = options.getPattern().matcher(candidate);
 				if (matcher.find()) {
 					previousLine = null;
-					return createLogEntry(matcher);
+					return createLogEntry(source, matcher);
 				} else {
 					previousLine = line;
 					return null;
@@ -81,7 +81,7 @@ public class LogParser {
 		}
 	}
 
-	private LogEntry createLogEntry(Matcher matcher) {
+	private LogEntry createLogEntry(String source, Matcher matcher) {
 		BiMap<String, Integer> map = options.getPatternGroups();
 		String timestamp = getGroup(matcher, map.get(FIELD_LOG_TIMESTAMP));
 		String level = getGroup(matcher, map.get(FIELD_LOG_LEVEL));
@@ -101,7 +101,7 @@ public class LogParser {
 		// persist the split fields from the full message
 		Map<String, String> m = splitter.split(msg);
 		values.putAll(m);
-		return new LogEntry(time, values);
+		return new LogEntry(source, time, values);
 	}
 
 	private Long parseTime(String timestamp) {

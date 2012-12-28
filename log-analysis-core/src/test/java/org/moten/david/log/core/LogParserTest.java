@@ -21,7 +21,7 @@ public class LogParserTest {
 	public void testParseLine() {
 		String line = "2012-11-29 04:39:02.941   INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor - fixes queue size = 0";
 		LogParser p = new LogParser();
-		LogEntry entry = p.parse(line);
+		LogEntry entry = p.parse("test", line);
 		assertNotNull(entry);
 		assertEquals(1354163942941L, entry.getTime());
 		assertEquals("INFO", entry.getProperties().get(Field.FIELD_LOG_LEVEL));
@@ -54,9 +54,9 @@ public class LogParserTest {
 		LogParserOptions options = new LogParserOptions(pattern, map,
 				messagePattern, format, "UTC", true);
 		LogParser p = new LogParser(options);
-		assertNull(p.parse(line1));
+		assertNull(p.parse("test", line1));
 		{
-			LogEntry entry = p.parse(line2);
+			LogEntry entry = p.parse("test", line2);
 			assertNotNull(entry);
 			assertEquals(1356245884000L, entry.getTime());
 			assertEquals("INFO",
@@ -69,10 +69,10 @@ public class LogParserTest {
 					"persisted random values=1000 from the last hour to table Dummy",
 					entry.getProperties().get(Field.FIELD_MSG));
 		}
-		assertNull(p.parse(line3));
-		assertNull(p.parse(line4));
+		assertNull(p.parse("test", line3));
+		assertNull(p.parse("test", line4));
 		{
-			LogEntry entry = p.parse(line5);
+			LogEntry entry = p.parse("test", line5);
 			assertNotNull(entry);
 			assertEquals(1356246008000L, entry.getTime());
 			assertEquals("DEBUG",
@@ -91,7 +91,7 @@ public class LogParserTest {
 	public void testParseLineWithThreadName() {
 		String line = "2012-11-29 04:39:02.941   INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor thread_name-1 - fixes queue size = 0";
 		LogParser p = new LogParser();
-		LogEntry entry = p.parse(line);
+		LogEntry entry = p.parse("test", line);
 		assertNotNull(entry);
 		assertEquals("INFO", entry.getProperties().get(Field.FIELD_LOG_LEVEL));
 		assertEquals("au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor",
@@ -105,7 +105,7 @@ public class LogParserTest {
 	@Test
 	public void testParseNullLineReturnsNull() {
 		LogParser p = new LogParser();
-		LogEntry entry = p.parse(null);
+		LogEntry entry = p.parse("test", null);
 		assertNull(entry);
 	}
 
@@ -118,7 +118,7 @@ public class LogParserTest {
 		MessageSplitter splitter = new MessageSplitter();
 		while ((line = reader.readLine()) != null) {
 			System.out.println(line);
-			LogEntry entry = p.parse(line);
+			LogEntry entry = p.parse("test", line);
 			if (entry != null) {
 				Map<String, String> map = splitter.split(entry.getProperties()
 						.get(Field.FIELD_MSG));
