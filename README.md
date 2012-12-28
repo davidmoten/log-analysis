@@ -84,6 +84,7 @@ which will
 * mvn clean install
 * start log-server
 * start log-ui
+
 All components will be started in the background.
 
 Load some dummy data by clicking on [http://localhost:9191/load](http://localhost:9191/load).
