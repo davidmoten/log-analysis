@@ -1,21 +1,13 @@
 package org.moten.david.log.core;
 
-import static org.moten.david.log.core.Field.FIELD_LOGGER;
-import static org.moten.david.log.core.Field.FIELD_LOG_LEVEL;
-import static org.moten.david.log.core.Field.FIELD_LOG_TIMESTAMP;
-import static org.moten.david.log.core.Field.FIELD_MSG;
-
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -25,19 +17,18 @@ import org.apache.commons.io.FileUtils;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
-import com.orientechnologies.orient.core.id.ORID;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.core.storage.OStorage;
 
@@ -56,10 +47,6 @@ public class Database {
 			.getLogger(Database.class.getName());
 
 	private static final String TABLE_ENTRY = "Entry";
-
-	private static final String TABLE_DUMMY = "Dummy";
-
-	private static final String TABLE_LINE = "Line";
 
 	private final ODatabaseDocumentTx db;
 
@@ -168,30 +155,27 @@ public class Database {
 			OSchema schema = db.getMetadata().getSchema();
 			OClass entry = schema.createClass(TABLE_ENTRY,
 					db.addCluster(TABLE_ENTRY, OStorage.CLUSTER_TYPE.PHYSICAL));
-			entry.createProperty(Field.FIELD_LOG_TIMESTAMP, OType.LONG)
-					.setMandatory(true);
-			entry.createProperty(Field.FIELD_KEY, OType.STRING).setMandatory(
-					true);
-			entry.createProperty(Field.FIELD_VALUE, OType.STRING).setMandatory(
-					true);
+
 			entry.createProperty(Field.FIELD_LOG_ID, OType.STRING)
 					.setMandatory(true);
+			entry.createProperty(Field.FIELD_LOG_TIMESTAMP, OType.LONG)
+					.setMandatory(true);
+			entry.createProperty(Field.FIELD_PROPS, OType.EMBEDDEDMAP)
+					.setMandatory(true);
+
+			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.UNIQUE,
+					Field.FIELD_LOG_ID);
 			entry.createIndex("EntryTimestampIndex",
 					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP);
-			entry.createIndex("EntryTimestampKeyIndex",
-					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP,
-					Field.FIELD_KEY);
 			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.NOTUNIQUE,
 					Field.FIELD_LOG_ID);
-
-			OClass dummy = schema.createClass(TABLE_DUMMY,
-					db.addCluster(TABLE_DUMMY, OStorage.CLUSTER_TYPE.PHYSICAL));
-			dummy.createProperty(Field.FIELD_LOG_TIMESTAMP, OType.LONG)
-					.setMandatory(true);
-			dummy.createIndex("DummyTimestampIndex",
-					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP);
-
 			db.getMetadata().getSchema().save();
+			db.command(
+					new OCommandSQL(
+							"CREATE INDEX EntryPropsKeyIndex ON Entry ("
+									+ Field.FIELD_PROPS + " by key) NOTUNIQUE"))
+					.execute();
+			db.getMetadata().getIndexManager().reload();
 
 			db.commit();
 		} catch (RuntimeException e) {
@@ -227,41 +211,23 @@ public class Database {
 		long timestamp = entry.getTime();
 		String id = UUID.randomUUID().toString();
 
-		ODocument d = new ODocument(TABLE_LINE);
-		d.field(Field.FIELD_LOG_TIMESTAMP, timestamp);
+		ODocument d = new ODocument(TABLE_ENTRY);
+		d.field(Field.FIELD_LOG_TIMESTAMP, timestamp, OType.LONG);
 		d.field(Field.FIELD_LOG_ID, id);
 
-		Set<ORID> entries = Sets.newHashSet();
+		Map<String, ODocument> map = Maps.newHashMap();
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null) {
 				ValueAndType v = parse(e.getValue());
-				ODocument doc = persistDocument(timestamp, id, e.getKey()
-						.replace(" ", "_"), v.value, v.type);
-				entries.add(doc.getIdentity());
+				map.put(e.getKey(), new ODocument().field(Field.FIELD_VALUE,
+						v.value, v.type));
 			}
 		}
-
-		// TODO create line record that points to the entries
-		// d.field(Field.FIELD_ENTRIES, OType.EMBEDDEDSET);
+		d.field(Field.FIELD_PROPS, map, OType.EMBEDDEDMAP);
 
 		d.save();
+
 		db.commit();
-	}
-
-	private ODocument persistDocument(long timestamp, String id, String key,
-			Object value, OType type) {
-		return persistDocument(TABLE_ENTRY, timestamp, id, key, value, type);
-	}
-
-	private ODocument persistDocument(String table, long timestamp, String id,
-			String key, Object value, OType type) {
-		ODocument d = new ODocument(table);
-		d.field(Field.FIELD_LOG_TIMESTAMP, timestamp);
-		d.field(Field.FIELD_LOG_ID, id);
-		d.field(Field.FIELD_KEY, key);
-		d.field(Field.FIELD_VALUE, value, type);
-		d.save();
-		return d;
 	}
 
 	private static class ValueAndType {
@@ -315,8 +281,12 @@ public class Database {
 			Long timestamp = doc.field(Field.FIELD_LOG_TIMESTAMP);
 			if (doc.field(Field.FIELD_VALUE) != null) {
 				try {
-					double value = Double.parseDouble((String) doc
-							.field(Field.FIELD_VALUE));
+					Object o = doc.field(Field.FIELD_VALUE);
+					double value;
+					if (o instanceof Number) {
+						value = ((Number) o).doubleValue();
+					} else
+						value = Double.parseDouble(o.toString());
 					buckets.add(timestamp, value);
 				} catch (NumberFormatException e) {
 					// not a number don't care about it
@@ -348,101 +318,40 @@ public class Database {
 		db.close();
 	}
 
-	public List<String> getKeys(String table) {
-		String sql = "select " + Field.FIELD_KEY + " from " + table
-				+ " group by " + Field.FIELD_KEY;
-		List<ODocument> rows = db.query(new OSQLSynchQuery<ODocument>(sql));
-		return Lists.transform(rows, new Function<ODocument, String>() {
-			@Override
-			public String apply(ODocument d) {
-				return d.field(Field.FIELD_KEY);
-			}
-		});
+	public Set<String> getKeys() {
+		// TODO implement getKeys
+		return Sets.newHashSet("specialNumber");
 	}
 
 	/**
-	 * Persists 1000 random values in the range with times randomly selected
-	 * from the the last hour.
-	 */
+	 * Persists 1000 random values in the range with times randomly selected.
+	 * */
 	public void persistDummyRecords() {
+		log.info("persisting dummy values");
 		long t = System.currentTimeMillis();
 		Random r = new Random();
 		int n = 1000;
 		for (int i = 0; i < n; i++) {
 			long time = t - TimeUnit.HOURS.toMillis(1)
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
-			String id = UUID.randomUUID().toString();
 			int specialNumber = i % (r.nextInt(100) + 1);
-			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOGGER,
-					"something.stuff", OType.STRING);
-			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_LOG_LEVEL,
-					"INFO", OType.STRING);
-			persistDocument(TABLE_DUMMY, time, id, Field.FIELD_MSG,
-					"specialNumber=" + specialNumber, OType.STRING);
-			persistDocument(TABLE_DUMMY, time, id, "specialNumber",
-					specialNumber + "", OType.STRING);
-			persistDocument(TABLE_DUMMY, time, id, "executionTimeSeconds",
-					specialNumber * Math.random() + "", OType.STRING);
+			Map<String, String> map = Maps.newHashMap();
+			LogEntry entry = new LogEntry(time, map);
+			map.put(Field.FIELD_LOGGER, "something.stuff");
+			map.put(Field.FIELD_LOG_LEVEL, "INFO");
+			double x = specialNumber * Math.random();
+			map.put(Field.FIELD_MSG, "specialNumber=" + specialNumber
+					+ ",executionTimeSeconds=" + x);
+			map.put("specialNumber", x + "");
+			map.put("executionTimeSeconds", x + "");
+			persist(entry);
 		}
-		db.commit();
 		log.info("persisted " + n
-				+ " random values from the last hour to table " + TABLE_DUMMY);
+				+ " random values from the last hour to table " + TABLE_ENTRY);
 	}
 
-	public Iterable<String> getLogs(String table, long startTime,
-			long finishTime) {
-		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
-				"select from " + table + " where logTimestamp between "
-						+ startTime + " and " + finishTime
-						+ " order by logTimestamp asc,logId asc");
-		final List<ODocument> list = db.query(query);
-		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		df.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final Iterator<String> it = Iterators.transform(list.iterator(),
-				new Function<ODocument, String>() {
-
-					String level;
-					String logger;
-					String msg;
-					private Long time;
-
-					@Override
-					public String apply(ODocument d) {
-						// String id = d.field(FIELD_LOG_ID);
-						time = d.field(FIELD_LOG_TIMESTAMP);
-						String key = d.field(Field.FIELD_KEY);
-						String value = d.field(Field.FIELD_VALUE);
-
-						if (FIELD_LOG_LEVEL.equals(key))
-							this.level = value;
-						if (FIELD_LOGGER.equals(key))
-							this.logger = value;
-						if (FIELD_MSG.equals(key))
-							this.msg = value;
-
-						if (this.level != null && this.logger != null
-								&& this.msg != null) {
-							StringBuilder s = new StringBuilder();
-							s.append(df.format(new Date(time)));
-							s.append(' ');
-							s.append(this.level);
-							s.append(' ');
-							s.append(this.logger);
-							s.append(" - ");
-							s.append(this.msg);
-							this.level = null;
-							this.logger = null;
-							this.msg = null;
-							return s.toString();
-						} else
-							return null;
-					}
-				});
-		return new Iterable<String>() {
-			@Override
-			public Iterator<String> iterator() {
-				return it;
-			}
-		};
+	public Iterable<String> getLogs(long startTime, long finishTime) {
+		ArrayList<String> list = Lists.newArrayList("not implemented");
+		return list;
 	}
 }

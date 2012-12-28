@@ -1,7 +1,6 @@
 package org.moten.david.log.server;
 
 import static org.moten.david.log.server.ServletUtil.connectToDatabase;
-import static org.moten.david.log.server.ServletUtil.getParameter;
 
 import java.io.IOException;
 
@@ -21,8 +20,7 @@ public class KeysServlet extends HttpServlet {
 			throws ServletException, IOException {
 		Database db = connectToDatabase();
 		StringBuilder s = new StringBuilder();
-		String table = getParameter(req, "table", "Entry");
-		for (String key : db.getKeys(table)) {
+		for (String key : db.getKeys()) {
 			if (s.length() > 0)
 				s.append(",");
 			s.append("\"");

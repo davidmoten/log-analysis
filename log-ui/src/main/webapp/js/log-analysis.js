@@ -40,8 +40,8 @@ function drawGraph(field, tablename, buckets, interval, startTime, metric,
 				panRange : null
 			},
 			yaxis : {
-				zoomRange : null,
-				panRange : null
+				zoomRange : false,
+				panRange : false
 			},
 			grid : {
 				hoverable : true,

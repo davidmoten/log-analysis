@@ -1,7 +1,6 @@
 package org.moten.david.log.server;
 
 import static org.moten.david.log.server.ServletUtil.getMandatoryLong;
-import static org.moten.david.log.server.ServletUtil.getParameter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,9 +23,8 @@ public class LogServlet extends HttpServlet {
 		try {
 			long startTime = getMandatoryLong(req, "start");
 			long finishTime = getMandatoryLong(req, "finish");
-			String table = getParameter(req, "table", "Entry");
 			PrintWriter out = resp.getWriter();
-			for (String line : db.getLogs(table, startTime, finishTime)) {
+			for (String line : db.getLogs(startTime, finishTime)) {
 				if (line != null)
 					out.println(line);
 			}
