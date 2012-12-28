@@ -19,7 +19,17 @@
 		<servlet-name>Keys</servlet-name>
 		<servlet-class>org.moten.david.log.server.KeysServlet</servlet-class>
 	</servlet>
+
+	<servlet>
+		<servlet-name>LoadDummyRecords</servlet-name>
+		<servlet-class>org.moten.david.log.server.LoadDummyRecordsServlet</servlet-class>
+	</servlet>
  	 	
+	<servlet-mapping>
+		<servlet-name>LoadDummyRecords</servlet-name>
+		<url-pattern>/load</url-pattern>
+	</servlet-mapping>
+		 	
 	<servlet-mapping>
 		<servlet-name>Keys</servlet-name>
 		<url-pattern>/keys</url-pattern>

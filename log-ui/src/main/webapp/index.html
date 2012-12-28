@@ -13,6 +13,7 @@
 			href="graph.html?buckets=60&finish=now&interval=1m&metric=MAX&extraMetric=MAX&field1=specialNumber&width=1000px&height=500px&title1=Demonstration - maximum aggregated by minute for the last hour">Last
 				hour, aggregated by minute</a></li>
 		<li><a href="amsa.html">AMSA graphs</a></li>
+		<li><a href="http://localhost:9191/load">Load dummy records into database for last hour</a>
 	</ul>
 
 	<h3>Build a graph</h3>
@@ -88,9 +89,8 @@
 							"<option value='"+ key + "'>" + key + "</option>");
 				}
 			}
-			;
 
-			var url = "keys?table=Dummy";
+			var url = "keys";
 			$.ajax({
 				url : url,
 				method : 'GET',

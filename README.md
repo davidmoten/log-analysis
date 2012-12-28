@@ -82,10 +82,11 @@ To test, run
 which will
 * stop log-server, log-ui, database
 * mvn clean install
-* start log-database with some dummy data
 * start log-server
 * start log-ui
 All components will be started in the background.
+
+Load some dummy data by clicking on [http://localhost:9191/load](http://localhost:9191/load).
 
 To test go to [http://localhost:9292/](http://localhost:9292/).
 
