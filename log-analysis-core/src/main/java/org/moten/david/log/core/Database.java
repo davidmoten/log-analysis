@@ -211,7 +211,7 @@ public class Database {
 	 * 
 	 * @param entry
 	 */
-	public void persist(LogEntry entry) {
+	private void persist(LogEntry entry, boolean commit) {
 		// create a new document (row in table)
 		// persist the full message, timestamp, level logger and threadName
 		long timestamp = entry.getTime();
@@ -232,8 +232,12 @@ public class Database {
 		d.field(Field.FIELD_PROPS, map, OType.EMBEDDEDMAP);
 
 		d.save();
+		if (commit)
+			db.commit();
+	}
 
-		db.commit();
+	public void persist(LogEntry entry) {
+		persist(entry, true);
 	}
 
 	private static class ValueAndType {
@@ -330,7 +334,7 @@ public class Database {
 	}
 
 	/**
-	 * Persists 1000 random values in the range with times randomly selected.
+	 * Persists n random values in the range with times randomly selected.
 	 * 
 	 * @param n
 	 * */
@@ -353,7 +357,7 @@ public class Database {
 						+ ",executionTimeSeconds=" + x);
 				map.put("specialNumber", x + "");
 				map.put("executionTimeSeconds", x + "");
-				persist(entry);
+				persist(entry,false);
 			}
 			{
 				Map<String, String> map = Maps.newHashMap();
@@ -363,12 +367,16 @@ public class Database {
 				long m = Math.round(100 * Math.random());
 				map.put(Field.FIELD_MSG, "numberProcessed=" + m);
 				map.put("numberProcessed", m + "");
-				persist(entry);
+				persist(entry,false);
 			}
+			if (i % 1000 == 0)
+				log.info("written " + i + " records");
 		}
 		db.declareIntent(null);
+		db.commit();
 		log.info("persisted " + n
 				+ " random values from the last hour to table " + TABLE_ENTRY);
+		log.info("database size=" + db.getSize());
 	}
 
 	public Iterable<String> getLogs(long startTime, long finishTime) {
