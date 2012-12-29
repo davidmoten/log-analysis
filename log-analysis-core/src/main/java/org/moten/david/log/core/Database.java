@@ -286,8 +286,13 @@ public class Database {
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
 				query.getSql());
 		List<ODocument> result = db.query(sqlQuery);
+		log.info("query result returned");
 		Buckets buckets = new Buckets(query);
+		int i = 0;
 		for (ODocument doc : result) {
+			i++;
+			if (i % 1000 == 0)
+				log.info(i + " records");
 			Long timestamp = doc.field(Field.FIELD_LOG_TIMESTAMP);
 			if (doc.field(Field.FIELD_VALUE) != null) {
 				try {
@@ -357,7 +362,7 @@ public class Database {
 						+ ",executionTimeSeconds=" + x);
 				map.put("specialNumber", x + "");
 				map.put("executionTimeSeconds", x + "");
-				persist(entry,false);
+				persist(entry, false);
 			}
 			{
 				Map<String, String> map = Maps.newHashMap();
@@ -367,7 +372,7 @@ public class Database {
 				long m = Math.round(100 * Math.random());
 				map.put(Field.FIELD_MSG, "numberProcessed=" + m);
 				map.put("numberProcessed", m + "");
-				persist(entry,false);
+				persist(entry, false);
 			}
 			if (i % 1000 == 0)
 				log.info("written " + i + " records");
