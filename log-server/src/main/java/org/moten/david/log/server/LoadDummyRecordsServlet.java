@@ -14,7 +14,9 @@ public class LoadDummyRecordsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		ServletUtil.connectToDatabase().persistDummyRecords();
+		long n = ServletUtil.getLong(req, "n", 1000);
+		ServletUtil.connectToDatabase().persistDummyRecords(n);
+		resp.getWriter().print("loaded");
 	}
 
 }

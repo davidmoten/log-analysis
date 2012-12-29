@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.moten.david.log.core.Database;
 import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.persister.config.Configuration;
 import org.moten.david.log.persister.config.Marshaller;
@@ -29,10 +28,6 @@ public class Main {
 		setupLogging();
 		DatabaseFactory provider = new DatabaseFactory(
 				configuration.databaseUrl, "admin", "admin");
-		Database db = provider.create();
-		db.persistDummyRecords();
-		db.close();
-		log.info("loaded dummy records");
 		Watcher w = new Watcher(provider, configuration);
 		w.start();
 	}

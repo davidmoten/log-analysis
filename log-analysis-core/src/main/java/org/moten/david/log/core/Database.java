@@ -29,6 +29,7 @@ import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.metadata.schema.OType;
@@ -330,16 +331,18 @@ public class Database {
 
 	/**
 	 * Persists 1000 random values in the range with times randomly selected.
+	 * 
+	 * @param n
 	 * */
-	public void persistDummyRecords() {
+	public void persistDummyRecords(long n) {
 		log.info("persisting dummy values");
+		db.declareIntent(new OIntentMassiveInsert());
 		long t = System.currentTimeMillis();
 		Random r = new Random();
-		int n = 1000;
-		for (int i = 0; i < n; i++) {
+		for (long i = 0; i < n; i++) {
 			long time = t - TimeUnit.HOURS.toMillis(1)
 					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
-			int specialNumber = i % (r.nextInt(100) + 1);
+			long specialNumber = i % (r.nextInt(100) + 1);
 			{
 				Map<String, String> map = Maps.newHashMap();
 				LogEntry entry = new LogEntry(time, map);
@@ -363,6 +366,7 @@ public class Database {
 				persist(entry);
 			}
 		}
+		db.declareIntent(null);
 		log.info("persisted " + n
 				+ " random values from the last hour to table " + TABLE_ENTRY);
 	}

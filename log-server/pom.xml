@@ -14,6 +14,7 @@
 		<jetty.stop.port>9999</jetty.stop.port>
 		<db.url>remote:localhost/logs</db.url>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.moten.david.log</groupId>

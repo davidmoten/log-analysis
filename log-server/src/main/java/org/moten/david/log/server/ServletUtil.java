@@ -56,4 +56,13 @@ public class ServletUtil {
 		else
 			return defaultValue;
 	}
+
+	public static long getLong(HttpServletRequest req, String name,
+			long defaultValue) {
+		String s = req.getParameter(name);
+		if (s == null)
+			return defaultValue;
+		else
+			return Long.parseLong(s);
+	}
 }
