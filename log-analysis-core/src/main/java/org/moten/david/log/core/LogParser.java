@@ -1,11 +1,11 @@
 package org.moten.david.log.core;
 
-import static org.moten.david.log.core.Field.FIELD_LOGGER;
-import static org.moten.david.log.core.Field.FIELD_LOG_LEVEL;
-import static org.moten.david.log.core.Field.FIELD_LOG_TIMESTAMP;
-import static org.moten.david.log.core.Field.FIELD_METHOD;
-import static org.moten.david.log.core.Field.FIELD_MSG;
-import static org.moten.david.log.core.Field.FIELD_THREAD_NAME;
+import static org.moten.david.log.core.Field.LOGGER;
+import static org.moten.david.log.core.Field.LEVEL;
+import static org.moten.david.log.core.Field.TIMESTAMP;
+import static org.moten.david.log.core.Field.METHOD;
+import static org.moten.david.log.core.Field.MSG;
+import static org.moten.david.log.core.Field.THREAD_NAME;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -83,15 +83,15 @@ public class LogParser {
 
 	private LogEntry createLogEntry(String source, Matcher matcher) {
 		BiMap<String, Integer> map = options.getPatternGroups();
-		String timestamp = getGroup(matcher, map.get(FIELD_LOG_TIMESTAMP));
-		String level = getGroup(matcher, map.get(FIELD_LOG_LEVEL));
-		String logger = getGroup(matcher, map.get(FIELD_LOGGER));
-		String threadName = getGroup(matcher, map.get(FIELD_THREAD_NAME));
-		String msg = getGroup(matcher, map.get(FIELD_MSG));
-		String method = getGroup(matcher, map.get(FIELD_METHOD));
+		String timestamp = getGroup(matcher, map.get(TIMESTAMP));
+		String level = getGroup(matcher, map.get(LEVEL));
+		String logger = getGroup(matcher, map.get(LOGGER));
+		String threadName = getGroup(matcher, map.get(THREAD_NAME));
+		String msg = getGroup(matcher, map.get(MSG));
+		String method = getGroup(matcher, map.get(METHOD));
 
 		Long time;
-		if (timestamp != null && level != null && logger != null) {
+		if (timestamp != null) {
 			time = parseTime(timestamp);
 		} else
 			time = null;
@@ -101,7 +101,7 @@ public class LogParser {
 		// persist the split fields from the full message
 		Map<String, String> m = splitter.split(msg);
 		values.putAll(m);
-		values.put(Field.FIELD_SOURCE, source);
+		values.put(Field.SOURCE, source);
 		return new LogEntry(time, values);
 	}
 
@@ -120,15 +120,15 @@ public class LogParser {
 			String threadName, String msg, String method) {
 		Map<String, String> values = Maps.newHashMap();
 		if (level != null)
-			values.put(FIELD_LOG_LEVEL, level);
+			values.put(LEVEL, level);
 		if (logger != null)
-			values.put(FIELD_LOGGER, logger);
+			values.put(LOGGER, logger);
 		if (msg != null)
-			values.put(FIELD_MSG, msg);
+			values.put(MSG, msg);
 		if (threadName != null && threadName.length() > 0)
-			values.put(FIELD_THREAD_NAME, threadName);
+			values.put(THREAD_NAME, threadName);
 		if (method != null && method.length() > 0)
-			values.put(FIELD_METHOD, method);
+			values.put(METHOD, method);
 		return values;
 	}
 

@@ -49,7 +49,7 @@ class LogEntry {
 	 * @return
 	 */
 	public String getMessage() {
-		return properties.get(Field.FIELD_MSG);
+		return properties.get(Field.MSG);
 	}
 
 	@Override

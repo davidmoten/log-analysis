@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.moten.david.log.core.Database;
+import org.moten.david.log.core.Field;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 import org.moten.david.log.query.Metric;
@@ -76,11 +77,14 @@ public class QueryServlet extends HttpServlet {
 		Database db = new Database("remote:localhost/logs", "admin", "admin");
 		// db.configureDatabase();
 		// db.persistDummyRecords(100000);
-		String json = getJson(
-				db,
-				"select logTimestamp, logProps[specialNumber].logValue as logValue from Entry where (logProps containskey 'specialNumber') order by logTimestamp",
-				System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1),
-				TimeUnit.MINUTES.toMillis(1), 60, Metric.MEAN);
+
+		String json = getJson(db, "select " + Field.TIMESTAMP + ", "
+				+ Field.PROPS + "[specialNumber]." + Field.VALUE
+				+ " as " + Field.VALUE + " from Entry where ("
+				+ Field.PROPS + " containskey 'specialNumber') order by "
+				+ Field.TIMESTAMP, System.currentTimeMillis()
+				- TimeUnit.HOURS.toMillis(1), TimeUnit.MINUTES.toMillis(1), 60,
+				Metric.MEAN);
 		System.out.println(json);
 	}
 

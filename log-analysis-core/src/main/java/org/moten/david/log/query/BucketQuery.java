@@ -42,7 +42,7 @@ public class BucketQuery {
 			n = 1;
 		else
 			n = numIntervals;
-		String timeClause = Field.FIELD_LOG_TIMESTAMP + " between "
+		String timeClause = Field.TIMESTAMP + " between "
 				+ startTime.getTime() + " and "
 				+ Math.ceil(startTime.getTime() + intervalSizeMs * n);
 		SqlSelect sq = new SqlSelect(sql);

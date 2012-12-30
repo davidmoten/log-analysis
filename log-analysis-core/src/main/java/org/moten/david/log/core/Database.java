@@ -162,24 +162,24 @@ public class Database {
 			OClass entry = schema.createClass(TABLE_ENTRY,
 					db.addCluster(TABLE_ENTRY, OStorage.CLUSTER_TYPE.PHYSICAL));
 
-			entry.createProperty(Field.FIELD_LOG_ID, OType.STRING)
+			entry.createProperty(Field.LOG_ID, OType.STRING)
 					.setMandatory(true);
-			entry.createProperty(Field.FIELD_LOG_TIMESTAMP, OType.LONG)
+			entry.createProperty(Field.TIMESTAMP, OType.LONG)
 					.setMandatory(true);
-			entry.createProperty(Field.FIELD_PROPS, OType.EMBEDDEDMAP)
+			entry.createProperty(Field.PROPS, OType.EMBEDDEDMAP)
 					.setMandatory(true);
 
 			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.UNIQUE,
-					Field.FIELD_LOG_ID);
+					Field.LOG_ID);
 			entry.createIndex("EntryTimestampIndex",
-					OClass.INDEX_TYPE.NOTUNIQUE, Field.FIELD_LOG_TIMESTAMP);
+					OClass.INDEX_TYPE.NOTUNIQUE, Field.TIMESTAMP);
 			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.NOTUNIQUE,
-					Field.FIELD_LOG_ID);
+					Field.LOG_ID);
 			db.getMetadata().getSchema().save();
 			db.command(
 					new OCommandSQL(
 							"CREATE INDEX EntryPropsKeyIndex ON Entry ("
-									+ Field.FIELD_PROPS + " by key) NOTUNIQUE"))
+									+ Field.PROPS + " by key) NOTUNIQUE"))
 					.execute();
 			db.getMetadata().getIndexManager().reload();
 
@@ -218,18 +218,18 @@ public class Database {
 		String id = UUID.randomUUID().toString();
 
 		ODocument d = new ODocument(TABLE_ENTRY);
-		d.field(Field.FIELD_LOG_TIMESTAMP, timestamp, OType.LONG);
-		d.field(Field.FIELD_LOG_ID, id);
+		d.field(Field.TIMESTAMP, timestamp, OType.LONG);
+		d.field(Field.LOG_ID, id);
 
 		Map<String, ODocument> map = Maps.newHashMap();
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null) {
 				ValueAndType v = parse(e.getValue());
-				map.put(e.getKey(), new ODocument().field(Field.FIELD_VALUE,
+				map.put(e.getKey(), new ODocument().field(Field.VALUE,
 						v.value, v.type));
 			}
 		}
-		d.field(Field.FIELD_PROPS, map, OType.EMBEDDEDMAP);
+		d.field(Field.PROPS, map, OType.EMBEDDEDMAP);
 
 		d.save();
 		if (commit)
@@ -293,10 +293,10 @@ public class Database {
 			i++;
 			if (i % 1000 == 0)
 				log.info(i + " records");
-			Long timestamp = doc.field(Field.FIELD_LOG_TIMESTAMP);
-			if (doc.field(Field.FIELD_VALUE) != null) {
+			Long timestamp = doc.field(Field.TIMESTAMP);
+			if (doc.field(Field.VALUE) != null) {
 				try {
-					Object o = doc.field(Field.FIELD_VALUE);
+					Object o = doc.field(Field.VALUE);
 					double value;
 					if (o instanceof Number) {
 						value = ((Number) o).doubleValue();
@@ -355,10 +355,10 @@ public class Database {
 			{
 				Map<String, String> map = Maps.newHashMap();
 				LogEntry entry = new LogEntry(time, map);
-				map.put(Field.FIELD_LOGGER, "something.stuff");
-				map.put(Field.FIELD_LOG_LEVEL, "INFO");
+				map.put(Field.LOGGER, "something.stuff");
+				map.put(Field.LEVEL, "INFO");
 				double x = specialNumber * Math.random();
-				map.put(Field.FIELD_MSG, "specialNumber=" + specialNumber
+				map.put(Field.MSG, "specialNumber=" + specialNumber
 						+ ",executionTimeSeconds=" + x);
 				map.put("specialNumber", x + "");
 				map.put("executionTimeSeconds", x + "");
@@ -367,10 +367,10 @@ public class Database {
 			{
 				Map<String, String> map = Maps.newHashMap();
 				LogEntry entry = new LogEntry(time, map);
-				map.put(Field.FIELD_LOGGER, "another.logger");
-				map.put(Field.FIELD_LOG_LEVEL, "DEBUG");
+				map.put(Field.LOGGER, "another.logger");
+				map.put(Field.LEVEL, "DEBUG");
 				long m = Math.round(100 * Math.random());
-				map.put(Field.FIELD_MSG, "numberProcessed=" + m);
+				map.put(Field.MSG, "numberProcessed=" + m);
 				map.put("numberProcessed", m + "");
 				persist(entry, false);
 			}
@@ -387,9 +387,9 @@ public class Database {
 	public Iterable<String> getLogs(long startTime, long finishTime) {
 		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
 				"select from " + TABLE_ENTRY + " where "
-						+ Field.FIELD_LOG_TIMESTAMP + " between " + startTime
+						+ Field.TIMESTAMP + " between " + startTime
 						+ " and " + finishTime + " order by "
-						+ Field.FIELD_LOG_TIMESTAMP);
+						+ Field.TIMESTAMP);
 		List<ODocument> entries = db.query(query);
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -413,13 +413,13 @@ public class Database {
 	}
 
 	private static String getLine(DateFormat df, ODocument d) {
-		Long t = d.field(Field.FIELD_LOG_TIMESTAMP);
-		Map<String, ODocument> map = d.field(Field.FIELD_PROPS);
-		String level = getValueAsString(map, Field.FIELD_LOG_LEVEL);
-		String logger = getValueAsString(map, Field.FIELD_LOGGER);
-		String threadName = getValueAsString(map, Field.FIELD_THREAD_NAME);
-		String method = getValueAsString(map, Field.FIELD_METHOD);
-		String msg = getValueAsString(map, Field.FIELD_MSG);
+		Long t = d.field(Field.TIMESTAMP);
+		Map<String, ODocument> map = d.field(Field.PROPS);
+		String level = getValueAsString(map, Field.LEVEL);
+		String logger = getValueAsString(map, Field.LOGGER);
+		String threadName = getValueAsString(map, Field.THREAD_NAME);
+		String method = getValueAsString(map, Field.METHOD);
+		String msg = getValueAsString(map, Field.MSG);
 		StringBuffer s = new StringBuffer();
 		s.append(df.format(new Date(t)));
 		s.append(level);
@@ -437,6 +437,6 @@ public class Database {
 		if (d == null)
 			return "";
 		else
-			return " " + d.field(Field.FIELD_VALUE);
+			return " " + d.field(Field.VALUE);
 	}
 }

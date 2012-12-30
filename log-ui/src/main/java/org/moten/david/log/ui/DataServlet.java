@@ -26,11 +26,9 @@ public class DataServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		String sql = "select logTimestamp, logProps["
-				+ req.getParameter("field")
-				+ "].logValue as logValue from Entry"
-				+ " where logProps containskey '" + req.getParameter("field")
-				+ "'" + " order by logTimestamp";
+		String sql = "select logTimestamp, props[" + req.getParameter("field")
+				+ "].value as value from Entry" + " where props containskey '"
+				+ req.getParameter("field") + "'" + " order by logTimestamp";
 
 		String url = logServerBaseUrl + "/query?sql=" + sql + "&start="
 				+ req.getParameter("start") + "&interval="

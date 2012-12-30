@@ -24,11 +24,11 @@ public class LogParserTest {
 		LogEntry entry = p.parse("test", line);
 		assertNotNull(entry);
 		assertEquals(1354163942941L, entry.getTime());
-		assertEquals("INFO", entry.getProperties().get(Field.FIELD_LOG_LEVEL));
+		assertEquals("INFO", entry.getProperties().get(Field.LEVEL));
 		assertEquals("au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor",
-				entry.getProperties().get(Field.FIELD_LOGGER));
+				entry.getProperties().get(Field.LOGGER));
 		assertEquals("fixes queue size = 0",
-				entry.getProperties().get(Field.FIELD_MSG));
+				entry.getProperties().get(Field.MSG));
 	}
 
 	@Test
@@ -45,11 +45,11 @@ public class LogParserTest {
 				.compile(MessageSplitter.MESSAGE_PATTERN_DEFAULT);
 		String format = "dd/MM/yyyy hh:mm:ss a";
 		BiMap<String, Integer> map = HashBiMap.create(5);
-		map.put(Field.FIELD_LOG_TIMESTAMP, 1);
-		map.put(Field.FIELD_LOGGER, 2);
-		map.put(Field.FIELD_METHOD, 3);
-		map.put(Field.FIELD_LOG_LEVEL, 4);
-		map.put(Field.FIELD_MSG, 5);
+		map.put(Field.TIMESTAMP, 1);
+		map.put(Field.LOGGER, 2);
+		map.put(Field.METHOD, 3);
+		map.put(Field.LEVEL, 4);
+		map.put(Field.MSG, 5);
 
 		LogParserOptions options = new LogParserOptions(pattern, map,
 				messagePattern, format, "UTC", true);
@@ -60,14 +60,14 @@ public class LogParserTest {
 			assertNotNull(entry);
 			assertEquals(1356245884000L, entry.getTime());
 			assertEquals("INFO",
-					entry.getProperties().get(Field.FIELD_LOG_LEVEL));
+					entry.getProperties().get(Field.LEVEL));
 			assertEquals("org.moten.david.log.core.Database", entry
-					.getProperties().get(Field.FIELD_LOGGER));
+					.getProperties().get(Field.LOGGER));
 			assertEquals("persistDummyRecords",
-					entry.getProperties().get(Field.FIELD_METHOD));
+					entry.getProperties().get(Field.METHOD));
 			assertEquals(
 					"persisted random values=1000 from the last hour to table Dummy",
-					entry.getProperties().get(Field.FIELD_MSG));
+					entry.getProperties().get(Field.MSG));
 		}
 		assertNull(p.parse("test", line3));
 		assertNull(p.parse("test", line4));
@@ -76,13 +76,13 @@ public class LogParserTest {
 			assertNotNull(entry);
 			assertEquals(1356246008000L, entry.getTime());
 			assertEquals("DEBUG",
-					entry.getProperties().get(Field.FIELD_LOG_LEVEL));
+					entry.getProperties().get(Field.LEVEL));
 			assertEquals("org.moten.david.log.core.DatabaseThing", entry
-					.getProperties().get(Field.FIELD_LOGGER));
+					.getProperties().get(Field.LOGGER));
 			assertEquals("persistDummyRecordsAgain",
-					entry.getProperties().get(Field.FIELD_METHOD));
+					entry.getProperties().get(Field.METHOD));
 			assertEquals("something=123",
-					entry.getProperties().get(Field.FIELD_MSG));
+					entry.getProperties().get(Field.MSG));
 
 		}
 	}
@@ -93,13 +93,13 @@ public class LogParserTest {
 		LogParser p = new LogParser();
 		LogEntry entry = p.parse("test", line);
 		assertNotNull(entry);
-		assertEquals("INFO", entry.getProperties().get(Field.FIELD_LOG_LEVEL));
+		assertEquals("INFO", entry.getProperties().get(Field.LEVEL));
 		assertEquals("au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor",
-				entry.getProperties().get(Field.FIELD_LOGGER));
+				entry.getProperties().get(Field.LOGGER));
 		assertEquals("fixes queue size = 0",
-				entry.getProperties().get(Field.FIELD_MSG));
+				entry.getProperties().get(Field.MSG));
 		assertEquals("thread_name-1",
-				entry.getProperties().get(Field.FIELD_THREAD_NAME));
+				entry.getProperties().get(Field.THREAD_NAME));
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class LogParserTest {
 			LogEntry entry = p.parse("test", line);
 			if (entry != null) {
 				Map<String, String> map = splitter.split(entry.getProperties()
-						.get(Field.FIELD_MSG));
+						.get(Field.MSG));
 				if (map.size() > 0)
 					System.out.println(map);
 			}
