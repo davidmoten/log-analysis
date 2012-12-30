@@ -7,6 +7,7 @@ import static org.moten.david.log.server.ServletUtil.getMandatoryParameter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -26,6 +27,7 @@ public class QueryServlet extends HttpServlet {
 			.getName());
 
 	private static final long serialVersionUID = 5553574830587263509L;
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -57,11 +59,14 @@ public class QueryServlet extends HttpServlet {
 		return json;
 	}
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws IOException {
+		
+		setupLogging();
+		System.setProperty("network.lockTimeout", "60000");
+		System.setProperty("network.socketTimeout", "60000");
 		Database db = new Database("remote:localhost/logs", "admin", "admin");
-		db.configureDatabase();
-		db.persistDummyRecords(100000);
+		// db.configureDatabase();
+		// db.persistDummyRecords(100000);
 		String json = getJson(
 				db,
 				"select logTimestamp, logProps[specialNumber].logValue as logValue from Entry where (logProps containskey 'specialNumber') order by logTimestamp",
@@ -69,4 +74,10 @@ public class QueryServlet extends HttpServlet {
 				TimeUnit.MINUTES.toMillis(1), 60, Metric.MEAN);
 		System.out.println(json);
 	}
+
+	private static void setupLogging() throws IOException {
+		LogManager.getLogManager().readConfiguration(
+				Main.class.getResourceAsStream("/my-logging.properties"));
+	}
+
 }

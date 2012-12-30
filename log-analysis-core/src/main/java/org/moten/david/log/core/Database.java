@@ -125,13 +125,13 @@ public class Database {
 	 * @return
 	 */
 	private static ODatabaseDocumentTx createDatabase(File location) {
-		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
-		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
-		OGlobalConfiguration.TX_USE_LOG.setValue(false);
-		OGlobalConfiguration.TX_COMMIT_SYNCH.setValue(true);
-		OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(true);
-		// OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
-		OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
+//		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
+//		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
+//		OGlobalConfiguration.TX_USE_LOG.setValue(false);
+//		OGlobalConfiguration.TX_COMMIT_SYNCH.setValue(true);
+//		OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(true);
+//		// OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
+//		OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
 		try {
 			FileUtils.deleteDirectory(location);
 		} catch (IOException e) {

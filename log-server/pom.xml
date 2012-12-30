@@ -13,6 +13,8 @@
 		<jetty.port>9191</jetty.port>
 		<jetty.stop.port>9999</jetty.stop.port>
 		<db.url>remote:localhost/logs</db.url>
+		<network.lockTimeout>60000</network.lockTimeout>
+		<network.socketTimeout>60000</network.socketTimeout>
 	</properties>
 
 	<dependencies>
@@ -50,6 +52,14 @@
 						<systemProperty>
 							<name>db.url</name>
 							<value>${db.url}</value>
+						</systemProperty>
+						<systemProperty>
+							<name>network.lockTimeout</name>
+							<value>${network.lockTimeout}</value>
+						</systemProperty>
+						<systemProperty>
+							<name>network.socketTimeout</name>
+							<value>${network.socketTimeout}</value>
 						</systemProperty>
 					</systemProperties>
 				</configuration>
