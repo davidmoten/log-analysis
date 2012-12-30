@@ -5,6 +5,7 @@ import static org.moten.david.log.server.ServletUtil.getMandatoryLong;
 import static org.moten.david.log.server.ServletUtil.getMandatoryParameter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
@@ -27,7 +28,6 @@ public class QueryServlet extends HttpServlet {
 			.getName());
 
 	private static final long serialVersionUID = 5553574830587263509L;
-	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -40,9 +40,8 @@ public class QueryServlet extends HttpServlet {
 			long numBuckets = getMandatoryLong(req, "buckets");
 			Metric metric = Metric
 					.valueOf(getMandatoryParameter(req, "metric"));
-			String json = getJson(db, sql, startTime, interval, numBuckets,
-					metric);
-			resp.getWriter().print(json);
+			writeJson(db, sql, startTime, interval, numBuckets, metric,
+					resp.getWriter());
 		} finally {
 			db.close();
 		}
@@ -59,8 +58,18 @@ public class QueryServlet extends HttpServlet {
 		return json;
 	}
 
+	private static void writeJson(Database db, String sql, long startTime,
+			double interval, long numBuckets, Metric metric, PrintWriter writer) {
+		BucketQuery q = new BucketQuery(new Date(startTime), interval,
+				numBuckets, sql);
+		Buckets buckets = db.execute(q);
+		log.info("building json");
+		Util.writeJson(buckets, metric, writer);
+		log.info("built json");
+	}
+
 	public static void main(String[] args) throws IOException {
-		
+
 		setupLogging();
 		System.setProperty("network.lockTimeout", "60000");
 		System.setProperty("network.socketTimeout", "60000");
