@@ -23,6 +23,14 @@ public class BucketQuery {
 	private final long numIntervals;
 	private final String sql;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param startTime
+	 * @param intervalSizeMs
+	 * @param numIntervals
+	 * @param sql
+	 */
 	public BucketQuery(Date startTime, double intervalSizeMs,
 			long numIntervals, String sql) {
 		super();

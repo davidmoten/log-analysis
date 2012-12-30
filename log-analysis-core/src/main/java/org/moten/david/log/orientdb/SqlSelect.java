@@ -22,6 +22,11 @@ public class SqlSelect {
 	// <Condition>*] [GROUP BY <Field>] [ORDER BY <Fields>* [ASC|DESC]*] [SKIP
 	// <SkipRecords>] [LIMIT <MaxRecords>]
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param sql
+	 */
 	public SqlSelect(String sql) {
 		sql = Pattern.compile("group by", Pattern.CASE_INSENSITIVE)
 				.matcher(sql).replaceFirst("group_by");
@@ -56,40 +61,88 @@ public class SqlSelect {
 		this.clauses = clauses;
 	}
 
+	/**
+	 * Returns the select clause.
+	 * 
+	 * @return
+	 */
 	public String getSelect() {
 		return clauses.get("select");
 	}
 
+	/**
+	 * Returns the from clause.
+	 * 
+	 * @return
+	 */
 	public String getFrom() {
 		return clauses.get("from");
 	}
 
+	/**
+	 * Returns the where clause.
+	 * 
+	 * @return
+	 */
 	public String getWhere() {
 		return clauses.get("where");
 	}
 
+	/**
+	 * Returns the group by clause.
+	 * 
+	 * @return
+	 */
 	public String getGroupBy() {
 		return clauses.get("group_by");
 	}
 
+	/**
+	 * Returns the order by clause.
+	 * 
+	 * @return
+	 */
 	public String getOrderBy() {
 		return clauses.get("order_by");
 	}
 
+	/**
+	 * Returns the skip clause.
+	 * 
+	 * @return
+	 */
 	public String getSkip() {
 		return clauses.get("skip");
 	}
 
+	/**
+	 * Returns the limit clause.
+	 * 
+	 * @return
+	 */
 	public String getLimit() {
 		return clauses.get("limit");
 	}
 
+	/**
+	 * Returns a new instance of {@link SqlSelect} with a replaced where clause.
+	 * 
+	 * @param where
+	 * @return
+	 */
 	public SqlSelect where(String where) {
 		Map<String, String> m = Maps.newHashMap(clauses);
 		m.put("where", where);
 		return new SqlSelect(m);
 	}
 
+	/**
+	 * Returns a new instance of {@link SqlSelect} with an additional where
+	 * clause using boolean AND.
+	 * 
+	 * @param whereClause
+	 * @return
+	 */
 	public SqlSelect and(String whereClause) {
 		if (getWhere() == null)
 			return where(whereClause);

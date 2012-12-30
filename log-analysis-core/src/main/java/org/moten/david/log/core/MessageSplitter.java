@@ -18,14 +18,28 @@ public class MessageSplitter {
 	public static final String MESSAGE_PATTERN_DEFAULT = "(\\b[a-zA-Z](?:\\w| )*)=([^;|,]*)(;|\\||,|$)";
 	private final Pattern pattern;
 
+	/**
+	 * Constructor.
+	 */
 	public MessageSplitter() {
 		this(Pattern.compile(MESSAGE_PATTERN_DEFAULT));
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param pattern
+	 */
 	public MessageSplitter(Pattern pattern) {
 		this.pattern = pattern;
 	}
 
+	/**
+	 * Extracts key value pairs using regex pattern defined in the constructor.
+	 * 
+	 * @param s
+	 * @return
+	 */
 	public Map<String, String> split(String s) {
 		if (s == null || s.length() == 0)
 			return Collections.emptyMap();

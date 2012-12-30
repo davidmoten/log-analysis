@@ -2,7 +2,12 @@ package org.moten.david.log.query;
 
 import java.io.PrintWriter;
 
-
+/**
+ * Utility methods for queries/buckets.
+ * 
+ * @author dave
+ * 
+ */
 public class Util {
 
 	public static String toJson(Buckets buckets, Metric metric) {
@@ -37,15 +42,17 @@ public class Util {
 		return s.toString();
 	}
 
-	public static void writeJson(Buckets buckets, Metric metric, PrintWriter writer) {
+	public static void writeJson(Buckets buckets, Metric metric,
+			PrintWriter writer) {
 		writer.print("{ \"data\": [");
 		boolean start = true;
 		for (Bucket bucket : buckets.getBuckets()) {
 			Double value = bucket.get(metric);
 			if (value != null) {
-				if (!start) 
+				if (!start)
 					writer.print(",");
-				else start = false;
+				else
+					start = false;
 				add(writer, bucket, value);
 			}
 		}
@@ -68,7 +75,7 @@ public class Util {
 		writer.println("    }");
 		writer.print("}");
 	}
-	
+
 	private static void add(StringBuilder s, Bucket bucket, Double value) {
 		s.append('[');
 		s.append(bucket.getStart());
@@ -76,7 +83,7 @@ public class Util {
 		s.append(value);
 		s.append(']');
 	}
-	
+
 	private static void add(PrintWriter w, Bucket bucket, Double value) {
 		w.print('[');
 		w.print(bucket.getStart());

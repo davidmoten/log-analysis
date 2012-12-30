@@ -210,10 +210,18 @@ public class Bucket {
 		return builder.toString();
 	}
 
+	/**
+	 * Returns the start time of the bucket (x-coordinate min).
+	 * @return
+	 */
 	public double getStart() {
 		return start;
 	}
 
+	/**
+	 * Returns the width in ms of the bucket.
+	 * @return
+	 */
 	public double getWidth() {
 		return width;
 	}

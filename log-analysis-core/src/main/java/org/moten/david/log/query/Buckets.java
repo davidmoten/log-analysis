@@ -16,6 +16,11 @@ public class Buckets {
 	private final Bucket allBucket;
 	private final BucketQuery query;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param query
+	 */
 	public Buckets(BucketQuery query) {
 		this.query = query;
 		for (int i = 0; i < query.getNumIntervals(); i++)
@@ -25,6 +30,13 @@ public class Buckets {
 				query.getIntervalSizeMs() * query.getNumIntervals());
 	}
 
+	/**
+	 * Aggregates the given (timestamp,value) pair to the individual buckets and
+	 * the all bucket.
+	 * 
+	 * @param timestamp
+	 * @param value
+	 */
 	public void add(long timestamp, double value) {
 		if (collate()) {
 			int bucketIndex = (int) ((timestamp - query.getStartTime()
