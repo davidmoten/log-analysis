@@ -4,11 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.moten.david.log.core.LogParserOptions;
-import org.moten.david.log.persister.config.Configuration;
-import org.moten.david.log.persister.config.Group;
-import org.moten.david.log.persister.config.Log;
-import org.moten.david.log.persister.config.Marshaller;
-import org.moten.david.log.persister.config.Parser;
 
 public class ConfigurationTest {
 
@@ -39,6 +34,8 @@ public class ConfigurationTest {
 		Configuration c = marshaller.unmarshal(ConfigurationTest.class
 				.getResourceAsStream(PERSISTER_CONFIGURATION_TEST_XML));
 		assertEquals("UTC", c.group.get(0).parser.timezone);
+		// get coverage of toString methods
+		System.out.println(c);
 	}
 
 	@Test
