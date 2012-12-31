@@ -42,7 +42,7 @@ public class UtilTest {
 	@Test
 	public void testGetPath() {
 		assertEquals("/src/test/resources/",
-				Util.getPath("/src/test/resources/a\\.[0-9]?\\.log"));
+				Util.getDirectory("/src/test/resources/a\\.[0-9]?\\.log"));
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class UtilTest {
 	@Test
 	public void testParsePath() {
 		assertEquals("/ausdev/container/logs/cts/",
-				Util.getPath("/ausdev/container/logs/cts/cts.log.*"));
+				Util.getDirectory("/ausdev/container/logs/cts/cts.log.*"));
 	}
 
 	@Test

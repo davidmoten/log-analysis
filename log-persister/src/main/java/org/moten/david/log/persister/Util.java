@@ -38,7 +38,7 @@ public class Util {
 	 * @return
 	 */
 	static List<File> getFilesFromPathWithRegexFilename(String s) {
-		String directory = getPath(s);
+		String directory = getDirectory(s);
 		String filenameRegex = getFilename(s);
 		final Pattern pattern = Pattern.compile(filenameRegex);
 		log.info("directory=" + directory + ",filenameRegex=" + filenameRegex);
@@ -55,24 +55,38 @@ public class Util {
 		return Arrays.asList(files);
 	}
 
-	static String getPath(String item) {
+	/**
+	 * Returns the directory of the given file path with a terminating '/'. If
+	 * no directory specified returns blank string.
+	 * 
+	 * @param path
+	 * @return
+	 */
+	static String getDirectory(String path) {
 		// don't use System.getProperty("file.separator") because \ may be used
 		// as part of regex.
-		int i = item.lastIndexOf("/");
+		int i = path.lastIndexOf("/");
 		if (i == -1)
 			return "";
 		else
-			return item.substring(0, i + 1);
+			return path.substring(0, i + 1);
 	}
 
-	static String getFilename(String item) {
+	/**
+	 * Returns the filename portion of a file path. If no directory specified
+	 * returns the given path as the filename.
+	 * 
+	 * @param path
+	 * @return
+	 */
+	static String getFilename(String path) {
 		// don't use System.getProperty("file.separator") because \ may be used
 		// as part of regex.
-		int i = item.lastIndexOf("/");
+		int i = path.lastIndexOf("/");
 		if (i == -1)
-			return item;
+			return path;
 		else
-			return item.substring(i + 1, item.length());
+			return path.substring(i + 1, path.length());
 	}
 
 }
