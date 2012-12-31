@@ -425,8 +425,8 @@ public class Database {
 		String source = getValueAsString(map, Field.SOURCE);
 		StringBuffer s = new StringBuffer();
 		s.append(df.format(new Date(t)));
-		s.append(level);
 		s.append(source);
+		s.append(level);
 		s.append(logger);
 		s.append(method);
 		s.append(threadName);
