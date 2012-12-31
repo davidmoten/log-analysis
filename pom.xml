@@ -12,6 +12,8 @@
 		<guava.version>13.0.1</guava.version>
 		<jetty.plugin.version>8.1.8.v20121106</jetty.plugin.version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<orientdb.network.lockTimeout>60000</orientdb.network.lockTimeout>
+		<orientdb.network.socketTimeout>60000</orientdb.network.socketTimeout>
 		<!-- site properties -->		
 		<cobertura.version>2.5.2</cobertura.version>
 		<checkstyle.version>2.7</checkstyle.version>

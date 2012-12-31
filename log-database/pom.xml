@@ -48,7 +48,7 @@
 					<executable>${project.build.directory}/orientdb-${orientdb.version}/bin/${command}.sh</executable>
 					<workingDirectory>${project.build.directory}/orientdb-${orientdb.version}/bin/</workingDirectory>
 					<environmentVariables>
-					    <JAVA_OPTS>-Xmx2000m -Dfile.mmap.maxMemory=3.2gb -Dnetwork.lockTimeout=60000 -Dnetwork.socketTimeout=60000 -Dnetwork.binary.readResponse.maxTime=60</JAVA_OPTS>
+					    <JAVA_OPTS>-Xmx2000m -Dfile.mmap.maxMemory=3.2gb -Dnetwork.lockTimeout=${orientdb.network.lockTimeout} -Dnetwork.socketTimeout=${orientdb.network.socketTimeout} -Dnetwork.binary.readResponse.maxTime=60</JAVA_OPTS>
 					</environmentVariables>
 				</configuration>
 			</plugin>
