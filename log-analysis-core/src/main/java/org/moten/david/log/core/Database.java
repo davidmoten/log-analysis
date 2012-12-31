@@ -25,7 +25,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
@@ -125,13 +124,13 @@ public class Database {
 	 * @return
 	 */
 	private static ODatabaseDocumentTx createDatabase(File location) {
-//		OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
-//		OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
-//		OGlobalConfiguration.TX_USE_LOG.setValue(false);
-//		OGlobalConfiguration.TX_COMMIT_SYNCH.setValue(true);
-//		OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(true);
-//		// OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
-//		OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
+		// OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
+		// OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
+		// OGlobalConfiguration.TX_USE_LOG.setValue(false);
+		// OGlobalConfiguration.TX_COMMIT_SYNCH.setValue(true);
+		// OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(true);
+		// // OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
+		// OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
 		try {
 			FileUtils.deleteDirectory(location);
 		} catch (IOException e) {
@@ -162,12 +161,11 @@ public class Database {
 			OClass entry = schema.createClass(TABLE_ENTRY,
 					db.addCluster(TABLE_ENTRY, OStorage.CLUSTER_TYPE.PHYSICAL));
 
-			entry.createProperty(Field.LOG_ID, OType.STRING)
-					.setMandatory(true);
+			entry.createProperty(Field.LOG_ID, OType.STRING).setMandatory(true);
 			entry.createProperty(Field.TIMESTAMP, OType.LONG)
 					.setMandatory(true);
-			entry.createProperty(Field.PROPS, OType.EMBEDDEDMAP)
-					.setMandatory(true);
+			entry.createProperty(Field.PROPS, OType.EMBEDDEDMAP).setMandatory(
+					true);
 
 			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.UNIQUE,
 					Field.LOG_ID);
@@ -225,8 +223,8 @@ public class Database {
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null) {
 				ValueAndType v = parse(e.getValue());
-				map.put(e.getKey(), new ODocument().field(Field.VALUE,
-						v.value, v.type));
+				map.put(e.getKey(),
+						new ODocument().field(Field.VALUE, v.value, v.type));
 			}
 		}
 		d.field(Field.PROPS, map, OType.EMBEDDEDMAP);
@@ -386,10 +384,9 @@ public class Database {
 
 	public Iterable<String> getLogs(long startTime, long finishTime) {
 		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
-				"select from " + TABLE_ENTRY + " where "
-						+ Field.TIMESTAMP + " between " + startTime
-						+ " and " + finishTime + " order by "
-						+ Field.TIMESTAMP);
+				"select from " + TABLE_ENTRY + " where " + Field.TIMESTAMP
+						+ " between " + startTime + " and " + finishTime
+						+ " order by " + Field.TIMESTAMP);
 		List<ODocument> entries = db.query(query);
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
