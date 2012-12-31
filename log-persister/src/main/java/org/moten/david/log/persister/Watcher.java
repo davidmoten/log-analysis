@@ -63,8 +63,8 @@ public class Watcher {
 					log.info("starting tail on " + file);
 					LogParserOptions options = LogParserOptions.load(
 							configuration.parser, group);
-					LogFile logFile = new LogFile(file, 500, new LogParser(
-							options), executor);
+					LogFile logFile = new LogFile(file, lg.source, 500,
+							new LogParser(options), executor);
 					logFile.tail(factory);
 					logs.add(logFile);
 				}

@@ -19,7 +19,7 @@ public class LogFileTest {
 			db.configureDatabase();
 			assertEquals(0, db.getNumEntries());
 			LogFile log = new LogFile(new File("src/test/resources/test.log"),
-					300, new LogParser(LogParserOptions.load()),
+					"testing", 300, new LogParser(LogParserOptions.load()),
 					Executors.newFixedThreadPool(3));
 			log.tail(factory);
 			Thread.sleep(1000);
@@ -41,8 +41,8 @@ public class LogFileTest {
 
 	@Test
 	public void testCallingStopWhenNotStartedDoesNotThrowException() {
-		LogFile log = new LogFile(new File("src/test/resources/test.log"), 300,
-				new LogParser(LogParserOptions.load()),
+		LogFile log = new LogFile(new File("src/test/resources/test.log"),
+				"testing", 300, new LogParser(LogParserOptions.load()),
 				Executors.newFixedThreadPool(3));
 		log.stop();
 

@@ -29,6 +29,8 @@ public class LogFile {
 	private final LogParser parser;
 	private final ExecutorService executor;
 
+	private final String source;
+
 	/**
 	 * Constructor.
 	 * 
@@ -37,9 +39,10 @@ public class LogFile {
 	 * @param parser
 	 * @param executor
 	 */
-	public LogFile(File file, long checkIntervalMs, LogParser parser,
-			ExecutorService executor) {
+	public LogFile(File file, String source, long checkIntervalMs,
+			LogParser parser, ExecutorService executor) {
 		this.file = file;
+		this.source = source;
 		this.checkIntervalMs = checkIntervalMs;
 		this.parser = parser;
 		this.executor = executor;
@@ -100,7 +103,7 @@ public class LogFile {
 			public synchronized void handle(String line) {
 				try {
 					db.useInCurrentThread();
-					LogEntry entry = parser.parse(file.getName(), line);
+					LogEntry entry = parser.parse(source, line);
 					if (entry != null)
 						db.persist(entry);
 				} catch (RuntimeException e) {
