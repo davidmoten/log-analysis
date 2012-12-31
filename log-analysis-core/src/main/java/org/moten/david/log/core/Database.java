@@ -356,6 +356,7 @@ public class Database {
 			{
 				Map<String, String> map = Maps.newHashMap();
 				LogEntry entry = new LogEntry(time, map);
+				map.put(Field.SOURCE, "dummy");
 				map.put(Field.LOGGER, "something.stuff");
 				map.put(Field.LEVEL, "INFO");
 				double x = specialNumber * Math.random();
@@ -369,6 +370,7 @@ public class Database {
 				Map<String, String> map = Maps.newHashMap();
 				LogEntry entry = new LogEntry(time, map);
 				map.put(Field.LOGGER, "another.logger");
+				map.put(Field.SOURCE, "dummy");
 				map.put(Field.LEVEL, "DEBUG");
 				long m = Math.round(100 * Math.random());
 				map.put(Field.MSG, "numberProcessed=" + m);
