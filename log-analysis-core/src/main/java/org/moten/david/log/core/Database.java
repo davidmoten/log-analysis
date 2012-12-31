@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
@@ -51,7 +52,7 @@ public class Database {
 	private static final Logger log = Logger
 			.getLogger(Database.class.getName());
 
-	private static final String TABLE_ENTRY = "Entry";
+	public static final String TABLE_ENTRY = "Entry";
 
 	private final ODatabaseDocumentTx db;
 
@@ -123,7 +124,8 @@ public class Database {
 	 * @param location
 	 * @return
 	 */
-	private static ODatabaseDocumentTx createDatabase(File location) {
+	@VisibleForTesting
+	static ODatabaseDocumentTx createDatabase(File location) {
 		// OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
 		// OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
 		// OGlobalConfiguration.TX_USE_LOG.setValue(false);

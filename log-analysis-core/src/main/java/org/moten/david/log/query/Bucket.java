@@ -148,6 +148,10 @@ public class Bucket {
 		return sum;
 	}
 
+	public long count() {
+		return count;
+	}
+
 	/**
 	 * Returns the value of the given Metric across all the values reported to
 	 * this bucket.
@@ -212,6 +216,7 @@ public class Bucket {
 
 	/**
 	 * Returns the start time of the bucket (x-coordinate min).
+	 * 
 	 * @return
 	 */
 	public double getStart() {
@@ -220,6 +225,7 @@ public class Bucket {
 
 	/**
 	 * Returns the width in ms of the bucket.
+	 * 
 	 * @return
 	 */
 	public double getWidth() {
