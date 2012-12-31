@@ -142,6 +142,7 @@ public class Database {
 		String url = "local:" + getPath(location);
 		System.out.println(url);
 		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).create();
+		ODatabaseRecordThreadLocal.INSTANCE.set(db);
 		return db;
 	}
 

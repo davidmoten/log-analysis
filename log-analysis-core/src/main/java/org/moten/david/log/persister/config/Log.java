@@ -11,6 +11,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Log {
 	public String path;
 
+	@XmlAttribute(required = true)
+	public String source;
+
 	@XmlAttribute(required = false)
 	public boolean watch = true;
 
@@ -38,6 +41,8 @@ public class Log {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Log [path=");
 		builder.append(path);
+		builder.append(", source=");
+		builder.append(source);
 		builder.append(", watch=");
 		builder.append(watch);
 		builder.append("]");

@@ -27,6 +27,7 @@ public class DatabaseTest {
 	private static final String DATABASE_TEST_CREATE_2 = "target/test-create2";
 	private static final String DATABASE_TEST_PERSIST_DUMMY = "target/test-persist";
 	private static final String DATABASE_TEST_BUCKET_QUERY = "target/test-bucket-query";
+	private static final String DATABASE_TEST_BUCKET_QUERY_NULL = "target/test-bucket-query-null";
 
 	@Test
 	public void testCreateDbAndPersistRecords() {
@@ -131,7 +132,7 @@ public class DatabaseTest {
 	public void testBucketQueryThrowsNullPointerExceptionGivenNullQuery() {
 		Database db = null;
 		try {
-			db = createAndConnectTo(DATABASE_TEST_BUCKET_QUERY);
+			db = createAndConnectTo(DATABASE_TEST_BUCKET_QUERY_NULL);
 			db.execute(null);
 		} finally {
 			if (db != null)

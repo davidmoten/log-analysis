@@ -2,7 +2,7 @@
 <ns2:configuration xmlns:ns2="http://org.moten.david/log-analysis/persister/configuration">
     <databaseUrl>remote:localhost/logs</databaseUrl>
     <group>
-        <log>
+        <log source="tomcat">
             <path>/home/dave/logs/app/tomcatlog4j.log\..*</path>
         </log>
         <parser>
