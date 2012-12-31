@@ -169,3 +169,4 @@ Not much left to do, all appears to be working.
 * multiple field criteria support
 * add source field to Entry table (*done*)
 * switch to embedded map with index (*done*)
+* allow arbitrary pattern groups
