@@ -1,11 +1,11 @@
 package org.moten.david.log.core;
 
-import static org.moten.david.log.core.Field.LOGGER;
 import static org.moten.david.log.core.Field.LEVEL;
-import static org.moten.david.log.core.Field.TIMESTAMP;
+import static org.moten.david.log.core.Field.LOGGER;
 import static org.moten.david.log.core.Field.METHOD;
 import static org.moten.david.log.core.Field.MSG;
 import static org.moten.david.log.core.Field.THREAD_NAME;
+import static org.moten.david.log.core.Field.TIMESTAMP;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -90,11 +90,7 @@ public class LogParser {
 		String msg = getGroup(matcher, map.get(MSG));
 		String method = getGroup(matcher, map.get(METHOD));
 
-		Long time;
-		if (timestamp != null) {
-			time = parseTime(timestamp);
-		} else
-			time = null;
+		Long time = parseTime(timestamp);
 
 		Map<String, String> values = getValues(level, logger, threadName, msg,
 				method);
