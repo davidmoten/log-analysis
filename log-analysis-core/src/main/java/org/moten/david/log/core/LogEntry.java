@@ -43,15 +43,6 @@ class LogEntry {
 		return properties;
 	}
 
-	/**
-	 * Returns the body of the log line.
-	 * 
-	 * @return
-	 */
-	public String getMessage() {
-		return properties.get(Field.MSG);
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

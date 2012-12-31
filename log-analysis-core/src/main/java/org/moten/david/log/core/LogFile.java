@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
 
+import com.google.common.annotations.VisibleForTesting;
+
 /**
  * Starts a thread using a given {@link ExecutorService} to load all logs from a
  * {@link File} and then monitor the file for new lines and load them too as
@@ -44,7 +46,8 @@ public class LogFile {
 		createFileIfDoesntExist(file);
 	}
 
-	private void createFileIfDoesntExist(File file) {
+	@VisibleForTesting
+	static void createFileIfDoesntExist(File file) {
 		if (!file.exists())
 			try {
 				if (!file.createNewFile())

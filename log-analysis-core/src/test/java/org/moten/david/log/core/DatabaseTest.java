@@ -80,6 +80,8 @@ public class DatabaseTest {
 			long t = i;
 			String line = df.format(new Date(t)) + lineMessage;
 			LogEntry entry = parser.parse("test", line);
+			// get coverage of toString method
+			entry.toString();
 			p.persist(entry);
 		}
 	}
@@ -120,7 +122,7 @@ public class DatabaseTest {
 		db.close();
 	}
 
-	private Database createAndConnectTo(String path) {
+	static Database createAndConnectTo(String path) {
 		new Database(new File(path)).close();
 		return new Database("local:" + path, "admin", "admin");
 	}

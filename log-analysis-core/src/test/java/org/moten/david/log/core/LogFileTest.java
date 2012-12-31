@@ -31,4 +31,11 @@ public class LogFileTest {
 			db.close();
 		}
 	}
+
+	@Test
+	public void testCreateIfDoesntExist() {
+		File file = new File("target/temp" + System.currentTimeMillis());
+		LogFile.createFileIfDoesntExist(file);
+		assertTrue(file.exists());
+	}
 }
