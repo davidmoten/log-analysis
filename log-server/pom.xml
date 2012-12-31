@@ -55,10 +55,6 @@
 							<name>network.lockTimeout</name>
 							<value>${orientdb.network.lockTimeout}</value>
 						</systemProperty>
-						<systemProperty>
-							<name>network.socketTimeout</name>
-							<value>${orientdb.network.socketTimeout}</value>
-						</systemProperty>
 					</systemProperties>
 				</configuration>
 			</plugin>

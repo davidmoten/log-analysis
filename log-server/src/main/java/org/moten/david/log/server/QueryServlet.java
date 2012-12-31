@@ -69,28 +69,25 @@ public class QueryServlet extends HttpServlet {
 		log.info("built json");
 	}
 
+	private static void setupLogging() throws IOException {
+		LogManager.getLogManager().readConfiguration(
+				Main.class.getResourceAsStream("/my-logging.properties"));
+	}
+
 	public static void main(String[] args) throws IOException {
 
 		setupLogging();
 		System.setProperty("network.lockTimeout", "60000");
 		System.setProperty("network.socketTimeout", "60000");
 		Database db = new Database("remote:localhost/logs", "admin", "admin");
-		// db.configureDatabase();
-		// db.persistDummyRecords(100000);
 
 		String json = getJson(db, "select " + Field.TIMESTAMP + ", "
-				+ Field.PROPS + "[specialNumber]." + Field.VALUE
-				+ " as " + Field.VALUE + " from Entry where ("
-				+ Field.PROPS + " containskey 'specialNumber') order by "
-				+ Field.TIMESTAMP, System.currentTimeMillis()
-				- TimeUnit.HOURS.toMillis(1), TimeUnit.MINUTES.toMillis(1), 60,
-				Metric.MEAN);
+				+ Field.PROPS + "[specialNumber]." + Field.VALUE + " as "
+				+ Field.VALUE + " from Entry where (" + Field.PROPS
+				+ " containskey 'specialNumber') order by " + Field.TIMESTAMP,
+				System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1),
+				TimeUnit.MINUTES.toMillis(1), 60, Metric.MEAN);
 		System.out.println(json);
-	}
-
-	private static void setupLogging() throws IOException {
-		LogManager.getLogManager().readConfiguration(
-				Main.class.getResourceAsStream("/my-logging.properties"));
 	}
 
 }
