@@ -7,6 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>log-persister</artifactId>
+	<name>${project.artifactId}</name>
 	<description>Parses log lines and persists to orientdb</description>
 	<dependencies>
 		<dependency>

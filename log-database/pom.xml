@@ -7,6 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>log-database</artifactId>
+	<name>${project.artifactId}</name>
 	<description>Starts orientdb database server</description>
 	<properties>
 		<command>server</command>

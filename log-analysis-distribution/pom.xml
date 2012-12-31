@@ -7,6 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>log-analysis-distribution</artifactId>
+	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
 	<description>distribution with all binaries and scripts</description>
 	<build>
