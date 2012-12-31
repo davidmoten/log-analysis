@@ -420,9 +420,11 @@ public class Database {
 		String threadName = getValueAsString(map, Field.THREAD_NAME);
 		String method = getValueAsString(map, Field.METHOD);
 		String msg = getValueAsString(map, Field.MSG);
+		String source = getValueAsString(map, Field.SOURCE);
 		StringBuffer s = new StringBuffer();
 		s.append(df.format(new Date(t)));
 		s.append(level);
+		s.append(source);
 		s.append(logger);
 		s.append(method);
 		s.append(threadName);
