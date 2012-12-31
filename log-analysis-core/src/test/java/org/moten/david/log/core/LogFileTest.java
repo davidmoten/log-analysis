@@ -38,4 +38,13 @@ public class LogFileTest {
 		LogFile.createFileIfDoesntExist(file);
 		assertTrue(file.exists());
 	}
+
+	@Test
+	public void testCallingStopWhenNotStartedDoesNotThrowException() {
+		LogFile log = new LogFile(new File("src/test/resources/test.log"), 300,
+				new LogParser(LogParserOptions.load()),
+				Executors.newFixedThreadPool(3));
+		log.stop();
+
+	}
 }
