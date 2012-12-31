@@ -3,6 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.moten.david.log</groupId>
 	<artifactId>log-analysis</artifactId>
+	<name>${project.artifactId}</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Parses log lines and persists to orientdb</description>
 	<packaging>pom</packaging>
@@ -26,6 +27,7 @@
 		<m3.site.version>3.0</m3.site.version>
 		<changelog.version>2.2</changelog.version>
 		<coverage.reports.dir>${project.build.directory}/target/coverage-reports</coverage.reports.dir>
+		<junit.version>4.11</junit.version>
 	</properties>
 	<modules>
 		<module>log-analysis-core</module>
