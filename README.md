@@ -123,7 +123,7 @@ The *log-persister* configuration file ([here](https://raw.github.com/davidmoten
     <messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
 
 * line pattern (and its pattern groups)
-* message pattern
+* message pone)attern
 
 Line pattern
 ----------------
@@ -167,5 +167,5 @@ Not much left to do, all appears to be working.
 * add more documentation to this site!
 * improve unit test coverage 
 * multiple field criteria support
-* add source field to Entry table
-* switch to embedded map with index
+* add source field to Entry table (*done*)
+* switch to embedded map with index (*done*)
