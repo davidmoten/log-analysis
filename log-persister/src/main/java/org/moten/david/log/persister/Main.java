@@ -12,12 +12,20 @@ import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.persister.config.Configuration;
 import org.moten.david.log.persister.config.Marshaller;
 
+/**
+ * Reads persister-configuration.xml then starts threads to read/tail log files
+ * and report log lines to <i>log-database</i>.
+ * 
+ * @author dave
+ * 
+ */
 public class Main {
 
 	private static final String DEFAULT_CONFIGURATION_LOCATION = "/persister-configuration.xml";
 	private static Logger log = Logger.getLogger(Main.class.getName());
 
 	/**
+	 * Main method to start the persister.
 	 * 
 	 * @param args
 	 * @throws IOException
