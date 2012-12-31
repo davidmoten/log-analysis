@@ -31,6 +31,9 @@ public class LogParserTest {
 				entry.getProperties().get(Field.MSG));
 	}
 
+	/**
+	 * Tests the multiline use case.
+	 */
 	@Test
 	public void testParseUtilLoggingLines() {
 		String line1 = "23/12/2012 6:58:04 AM org.moten.david.log.core.Database persistDummyRecords";
@@ -59,8 +62,7 @@ public class LogParserTest {
 			LogEntry entry = p.parse("test", line2);
 			assertNotNull(entry);
 			assertEquals(1356245884000L, entry.getTime());
-			assertEquals("INFO",
-					entry.getProperties().get(Field.LEVEL));
+			assertEquals("INFO", entry.getProperties().get(Field.LEVEL));
 			assertEquals("org.moten.david.log.core.Database", entry
 					.getProperties().get(Field.LOGGER));
 			assertEquals("persistDummyRecords",
@@ -75,14 +77,12 @@ public class LogParserTest {
 			LogEntry entry = p.parse("test", line5);
 			assertNotNull(entry);
 			assertEquals(1356246008000L, entry.getTime());
-			assertEquals("DEBUG",
-					entry.getProperties().get(Field.LEVEL));
+			assertEquals("DEBUG", entry.getProperties().get(Field.LEVEL));
 			assertEquals("org.moten.david.log.core.DatabaseThing", entry
 					.getProperties().get(Field.LOGGER));
 			assertEquals("persistDummyRecordsAgain",
 					entry.getProperties().get(Field.METHOD));
-			assertEquals("something=123",
-					entry.getProperties().get(Field.MSG));
+			assertEquals("something=123", entry.getProperties().get(Field.MSG));
 
 		}
 	}
