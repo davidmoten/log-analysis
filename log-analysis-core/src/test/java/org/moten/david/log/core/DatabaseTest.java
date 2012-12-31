@@ -17,6 +17,8 @@ import com.google.common.collect.Maps;
 
 public class DatabaseTest {
 
+	private static final String DATABASE_TEST_CREATE = "target/test-create";
+
 	@Test
 	public void testCreateDbAndPersistRecords() {
 		Database p = new Database(new File("target/test1"));
@@ -71,6 +73,11 @@ public class DatabaseTest {
 			LogEntry entry = parser.parse("test", line);
 			p.persist(entry);
 		}
+	}
 
+	@Test
+	public void testCreateAndConnectToLocalDatabase() {
+		new Database(new File(DATABASE_TEST_CREATE)).close();
+		new Database("local:" + DATABASE_TEST_CREATE, "admin", "admin");
 	}
 }
