@@ -13,6 +13,7 @@ public class ServletUtil {
 
 	public static synchronized Database connectToDatabase() {
 		Database db = factory.create();
+		db.useInCurrentThread();
 		return db;
 	}
 

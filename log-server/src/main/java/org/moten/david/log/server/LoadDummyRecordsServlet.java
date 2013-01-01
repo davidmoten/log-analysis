@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.moten.david.log.core.Database;
+
 public class LoadDummyRecordsServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5743443079037803453L;
@@ -14,9 +16,16 @@ public class LoadDummyRecordsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		long n = ServletUtil.getLong(req, "n", 1000);
-		ServletUtil.connectToDatabase().persistDummyRecords(n);
-		resp.getWriter().print("loaded");
-	}
+		Database db = ServletUtil.connectToDatabase();
+		try {
+			if ("true".equalsIgnoreCase(req.getParameter("configure")))
+				db.configureDatabase();
+			long n = ServletUtil.getLong(req, "n", 1000);
+			db.persistDummyRecords(n);
+			resp.getWriter().print("loaded");
+		} finally {
+			db.close();
+		}
 
+	}
 }

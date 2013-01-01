@@ -77,8 +77,7 @@ public class QueryServlet extends HttpServlet {
 	public static void main(String[] args) throws IOException {
 
 		setupLogging();
-		System.setProperty("network.lockTimeout", "60000");
-		System.setProperty("network.socketTimeout", "60000");
+		System.setProperty("network.lockTimeout", "10000");
 		Database db = new Database("remote:localhost/logs", "admin", "admin");
 
 		String json = getJson(db, "select " + Field.TIMESTAMP + ", "

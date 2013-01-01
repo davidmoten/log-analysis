@@ -1,7 +1,5 @@
 package org.moten.david.log.server;
 
-import static org.moten.david.log.server.ServletUtil.connectToDatabase;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -18,16 +16,20 @@ public class KeysServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		Database db = connectToDatabase();
-		StringBuilder s = new StringBuilder();
-		for (String key : db.getKeys()) {
-			if (s.length() > 0)
-				s.append(",");
-			s.append("\"");
-			s.append(key);
-			s.append("\"");
+		Database db = ServletUtil.connectToDatabase();
+		try {
+			StringBuilder s = new StringBuilder();
+			for (String key : db.getKeys()) {
+				if (s.length() > 0)
+					s.append(",");
+				s.append("\"");
+				s.append(key);
+				s.append("\"");
+			}
+			resp.setContentType("application/json");
+			resp.getWriter().print("{ \"keys\": [" + s.toString() + "] }");
+		} finally {
+			db.close();
 		}
-		resp.setContentType("application/json");
-		resp.getWriter().print("{ \"keys\": [" + s.toString() + "] }");
 	}
 }
