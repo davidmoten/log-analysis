@@ -174,8 +174,6 @@ public class Database {
 					Field.LOG_ID);
 			entry.createIndex("EntryTimestampIndex",
 					OClass.INDEX_TYPE.NOTUNIQUE, Field.TIMESTAMP);
-			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.NOTUNIQUE,
-					Field.LOG_ID);
 			db.getMetadata().getSchema().save();
 			db.command(
 					new OCommandSQL(
