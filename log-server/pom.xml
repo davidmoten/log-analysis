@@ -7,6 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>log-server</artifactId>
+    <name>${project.artifactId}</name>
 	<description>Aggregates data from orientdb remote database via binary connection and reports as JSON</description>
 	<packaging>war</packaging>
 	<properties>
