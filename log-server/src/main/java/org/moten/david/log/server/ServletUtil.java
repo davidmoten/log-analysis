@@ -11,8 +11,14 @@ public class ServletUtil {
 			System.getProperty("db.url", "remote:localhost/logs"), "admin",
 			"admin");
 
+	private static boolean firstTime = true;
+
 	public static synchronized Database connectToDatabase() {
 		Database db = factory.create();
+		if (firstTime) {
+			db.configureDatabase();
+			firstTime = false;
+		}
 		db.useInCurrentThread();
 		return db;
 	}

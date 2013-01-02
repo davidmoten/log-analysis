@@ -25,7 +25,7 @@ public class LoadDummyRecordsServlet extends HttpServlet {
 			}
 			long n = ServletUtil.getLong(req, "n", 1000);
 			db.persistDummyRecords(n);
-			resp.getWriter().print("loaded");
+			resp.getWriter().print("done");
 		} finally {
 			db.close();
 		}
