@@ -87,7 +87,7 @@ which will
 
 All components will be started in the background.
 
-Load some dummy data by clicking on [http://localhost:9191/load](http://localhost:9191/load).
+Configure the db and load some dummy data by clicking on [http://localhost:9191/load](http://localhost:9191/load?n=1000&configure=true).
 
 To test go to [http://localhost:9292/](http://localhost:9292/).
 
@@ -103,7 +103,7 @@ On host that is to run the database server (and log-server and log-ui components
     cd log-analysis
 	./restart-all.sh
 
-Then configure the schema and indexes by going to http://<DB_HOST>:9292/load?n=0&configure=true. (TODO make this automatic).
+Then configure the schema and indexes by going to [http://localhost:9191/load?n=0&configure=true](http://localhost:9191/load?n=0&configure=true) (replace localhost with the db hostname). (TODO make this automatic).
 
 On a host (can be many) that has logs to be sent to the database:
 
@@ -159,7 +159,7 @@ Two line patterns are configured as below:
     <timestampFormat>dd/MM/yyyy hh:mm:ss a</timestampFormat>
     <multiline>true</multiline>
 
-Take special note of the *ZZZ* which delimits line 1 from line2 in the pattern. So effectively the two lines are concatenated using ZZZ between them and then matched against the pattern. In the same way the pattern groups refer to the groups found in the concatenation of the two lines.
+Take special note of the *ZZZ* which delimits line 1 from line 2 in the pattern. So effectively the two lines are concatenated using ZZZ between them and then matched against the pattern. In the same way the pattern groups refer to the groups found in the concatenation of the two lines.
 
 Message pattern
 ----------------
