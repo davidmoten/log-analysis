@@ -180,6 +180,11 @@ public class Database {
 							"CREATE INDEX EntryPropsKeyIndex ON Entry ("
 									+ Field.PROPS + " by key) NOTUNIQUE"))
 					.execute();
+			db.command(
+					new OCommandSQL(
+							"CREATE INDEX EntryValueFullTextIndex ON Entry ("
+									+ Field.PROPS + " by value) FULLTEXT"))
+					.execute();
 			db.getMetadata().getIndexManager().reload();
 
 			db.commit();
