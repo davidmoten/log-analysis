@@ -1,6 +1,5 @@
 log-analysis
 ============
-
 Analyzes log files for the purposes of time series analysis.
 
 Uses [orientdb](https://github.com/nuvolabase/orientdb) for high speed persistence and querying and [flot](http://www.flotcharts.org/) for javascript graphs.
@@ -104,6 +103,8 @@ On host that is to run the database server (and log-server and log-ui components
     cd log-analysis
 	./restart-all.sh
 
+Then configure the schema and indexes by going to http://<DB_HOST>:9292/load?n=0&configure=true. (TODO make this automatic).
+
 On a host (can be many) that has logs to be sent to the database:
 
 Create a config file as per [here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/persister-configuration-test.xml) in say ~/.log-analysis/persister-config.xml.
@@ -163,11 +164,16 @@ Message pattern
     <messagePattern>(\b[a-zA-Z](?:\w| )*)=([^;|,]*)(;|\||,|$)</messagePattern>
 
 Above is the default message pattern used by log-persister. A matching key-value pair in a log message satisfies these properties:
-* key must start with a letter
+* key must start with a letter and be preceded by a word boundary
 * key can contain whitespace and any legal java identifier character
 * key is separated from value by =
 * value part is delimited at its termination by semicolon (;), comma (,), vertical bar(|) or end of line
 
+Timestamp format
+------------------
+    <timestampFormat>dd/MM/yyyy hh:mm:ss a</timestampFormat>
+
+The format is as defined for the [SimpleDateFormat](http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html) class. 
 
 Todo
 ===========
