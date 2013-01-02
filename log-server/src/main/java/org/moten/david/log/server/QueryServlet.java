@@ -35,7 +35,16 @@ public class QueryServlet extends HttpServlet {
 			throws ServletException, IOException {
 		Database db = ServletUtil.connectToDatabase();
 		try {
-			String sql = getMandatoryParameter(req, "sql");
+			String sql;
+			if (req.getParameter("sql") == null) {
+				String field = getMandatoryParameter(req, "field");
+				sql = "select " + Field.TIMESTAMP + ", " + Field.PROPS + "["
+						+ field + "]." + Field.VALUE + " as " + Field.VALUE
+						+ " from " + Database.TABLE_ENTRY + " where "
+						+ Field.PROPS + " containskey '" + field + "'"
+						+ " order by " + Field.TIMESTAMP;
+			} else
+				sql = req.getParameter("sql");
 			long startTime = getMandatoryLong(req, "start");
 			double interval = getMandatoryDouble(req, "interval");
 			long numBuckets = getMandatoryLong(req, "buckets");
