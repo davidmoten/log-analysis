@@ -187,3 +187,4 @@ Not much left to do, all appears to be working.
 * add source field to Entry table (*done*)
 * switch to embedded map with index (*done*)
 * allow arbitrary pattern groups
+* add scripts for running on Windows

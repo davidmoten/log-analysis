@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.moten.david.log.core.LogParserOptions;
 
-public class ConfigurationTest {
+public class MarshallerTest {
 
 	private static final String PERSISTER_CONFIGURATION_TEST_XML = "/persister-configuration-test.xml";
 
@@ -31,7 +31,7 @@ public class ConfigurationTest {
 	@Test
 	public void testUnmarshall() {
 		Marshaller marshaller = new Marshaller();
-		Configuration c = marshaller.unmarshal(ConfigurationTest.class
+		Configuration c = marshaller.unmarshal(MarshallerTest.class
 				.getResourceAsStream(PERSISTER_CONFIGURATION_TEST_XML));
 		assertEquals("UTC", c.group.get(0).parser.timezone);
 		// get coverage of toString methods
@@ -41,7 +41,7 @@ public class ConfigurationTest {
 	@Test
 	public void testLoadLogParserOptions() {
 		Marshaller marshaller = new Marshaller();
-		Configuration c = marshaller.unmarshal(ConfigurationTest.class
+		Configuration c = marshaller.unmarshal(MarshallerTest.class
 				.getResourceAsStream(PERSISTER_CONFIGURATION_TEST_XML));
 		LogParserOptions options = LogParserOptions.load(c.parser,
 				c.group.get(0));
