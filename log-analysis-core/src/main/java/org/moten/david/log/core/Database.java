@@ -185,7 +185,6 @@ public class Database {
 			db.commit();
 		} catch (RuntimeException e) {
 			log.log(Level.WARNING, e.getMessage());
-			throw e;
 		}
 	}
 
