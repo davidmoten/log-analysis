@@ -148,10 +148,12 @@ The key-value parts of the logMsg are parsed by the *message pattern* described 
 Multiline
 ---------------
 The default java.util.logging pattern is a multiline (two line) pattern. Here's an example of a two line log:
+
     23/12/2012 6:58:04 AM org.moten.david.log.core.Database persistDummyRecords
     INFO: persisted random values=1000 from the last hour to table Dummy
 
 Two line patterns are configured as below:
+
     <pattern>^(\d\d/\d\d/\d\d\d\d \d\d?:\d\d:\d\d (?:(?:AM)|(?:PM))) +(\S+) +(\S+)ZZZ(\S+): (.*)$</pattern>
     <patternGroups>logTimestamp,logLogger,logMethod,logLevel,logMsg</patternGroups>
     <timestampFormat>dd/MM/yyyy hh:mm:ss a</timestampFormat>
