@@ -18,4 +18,5 @@ public class Field {
 	public static final String VALUE = "value";
 	public static final String PROPS = "props";
 	public static final String SOURCE = "logSource";
+	public static final String TEXT = "txt";
 }

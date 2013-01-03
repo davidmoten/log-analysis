@@ -32,6 +32,8 @@ public class DataServlet extends HttpServlet {
 				+ req.getParameter("interval") + "&buckets="
 				+ req.getParameter("buckets") + "&metric="
 				+ req.getParameter("metric");
+		if (req.getParameter("text") != null)
+			url += "&text=" + req.getParameter("text");
 
 		url = url.replace(" ", "%20");
 

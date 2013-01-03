@@ -169,21 +169,20 @@ public class Database {
 					.setMandatory(true);
 			entry.createProperty(Field.PROPS, OType.EMBEDDEDMAP).setMandatory(
 					true);
+			entry.createProperty(Field.TEXT, OType.STRING).setMandatory(true);
 
 			entry.createIndex("EntryLogIdIndex", OClass.INDEX_TYPE.UNIQUE,
 					Field.LOG_ID);
 			entry.createIndex("EntryTimestampIndex",
 					OClass.INDEX_TYPE.NOTUNIQUE, Field.TIMESTAMP);
+			entry.createIndex("EntryTextIndex", OClass.INDEX_TYPE.FULLTEXT,
+					Field.TEXT);
+
 			db.getMetadata().getSchema().save();
 			db.command(
 					new OCommandSQL(
 							"CREATE INDEX EntryPropsKeyIndex ON Entry ("
 									+ Field.PROPS + " by key) NOTUNIQUE"))
-					.execute();
-			db.command(
-					new OCommandSQL(
-							"CREATE INDEX EntryValueFullTextIndex ON Entry ("
-									+ Field.PROPS + " by value) FULLTEXT"))
 					.execute();
 			db.getMetadata().getIndexManager().reload();
 
@@ -223,6 +222,7 @@ public class Database {
 		ODocument d = new ODocument(TABLE_ENTRY);
 		d.field(Field.TIMESTAMP, timestamp, OType.LONG);
 		d.field(Field.LOG_ID, id);
+		d.field(Field.TEXT, getString(entry.getProperties()));
 
 		Map<String, ODocument> map = Maps.newHashMap();
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
@@ -237,6 +237,18 @@ public class Database {
 		d.save();
 		if (commit)
 			db.commit();
+	}
+
+	private String getString(Map<String, String> properties) {
+		StringBuilder s = new StringBuilder();
+		s.append(properties.get(Field.LEVEL));
+		s.append(" ");
+		s.append(properties.get(Field.LOGGER));
+		s.append(" ");
+		s.append(properties.get(Field.METHOD));
+		s.append(" ");
+		s.append(properties.get(Field.MSG));
+		return s.toString();
 	}
 
 	public void persist(LogEntry entry) {

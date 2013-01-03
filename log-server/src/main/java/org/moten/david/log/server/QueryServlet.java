@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.moten.david.log.core.Database;
 import org.moten.david.log.core.Field;
+import org.moten.david.log.orientdb.SqlSelect;
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
 import org.moten.david.log.query.Metric;
@@ -43,6 +44,14 @@ public class QueryServlet extends HttpServlet {
 						+ " from " + Database.TABLE_ENTRY + " where "
 						+ Field.PROPS + " containskey '" + field + "'"
 						+ " order by " + Field.TIMESTAMP;
+				if (req.getParameter("text") != null) {
+					SqlSelect ss = new SqlSelect(sql);
+					// TODO protect against sql injection
+					String clause = Field.TEXT + " containstext '"
+							+ req.getParameter("text") + "'";
+					ss = ss.and(clause);
+					sql = ss.toString();
+				}
 			} else
 				sql = req.getParameter("sql");
 			long startTime = getMandatoryLong(req, "start");
