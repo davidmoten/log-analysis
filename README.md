@@ -87,9 +87,9 @@ which will
 
 All components will be started in the background.
 
-Load some dummy data by clicking on [http://localhost:9191/load](http://localhost:9191/load?n=1000).
-
-To test go to [http://localhost:9292/](http://localhost:9292/).
+Go to [http://localhost:9292/](http://localhost:9292/) and 
+* load some dummy data
+* click on sample graphs
 
 To stop, run 
 
