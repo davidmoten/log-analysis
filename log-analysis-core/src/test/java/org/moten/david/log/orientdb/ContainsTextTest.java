@@ -50,6 +50,28 @@ public class ContainsTextTest {
 		save("underneath is the story for you");
 	}
 
+	private static void save(String text) {
+		ODocument d = new ODocument(TABLE);
+		d.field(FIELD_TEXT, text, OType.STRING);
+		d.save();
+	}
+
+	private static void deleteDirectory(String filename) {
+		try {
+			FileUtils.deleteDirectory(new File(filename));
+		} catch (IOException e) {
+			// do nothing
+		}
+	}
+
+	// @Test
+	public void testCountUsingContainsTextOperator() {
+		List<ODocument> list = db.query(new OSQLSynchQuery<ODocument>(
+				"select count(*) from Test1 where text containstext 'you'"));
+		Object count = list.get(0).field("count");
+		assertEquals(2, count);
+	}
+
 	@AfterClass
 	public static void close() {
 		db.close();
@@ -84,20 +106,6 @@ public class ContainsTextTest {
 		List<ODocument> list = db.query(new OSQLSynchQuery<ODocument>(
 				"select * from Test1 where text containstext '" + word + "'"));
 		assertEquals(expectedCount, list.size());
-	}
-
-	private static void save(String text) {
-		ODocument d = new ODocument(TABLE);
-		d.field(FIELD_TEXT, text, OType.STRING);
-		d.save();
-	}
-
-	private static void deleteDirectory(String filename) {
-		try {
-			FileUtils.deleteDirectory(new File(filename));
-		} catch (IOException e) {
-			// do nothing
-		}
 	}
 
 	@Test
