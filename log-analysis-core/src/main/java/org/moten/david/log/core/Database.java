@@ -184,6 +184,7 @@ public class Database {
 							"CREATE INDEX EntryPropsKeyIndex ON Entry ("
 									+ Field.PROPS + " by key) NOTUNIQUE"))
 					.execute();
+			db.getMetadata().getSchema().save();
 			db.getMetadata().getIndexManager().reload();
 
 			db.commit();
