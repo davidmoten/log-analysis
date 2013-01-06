@@ -17,7 +17,6 @@ import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
-import com.orientechnologies.orient.core.serialization.serializer.OStringSerializerHelper;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.core.storage.OStorage;
 
@@ -48,6 +47,13 @@ public class ContainsTextTest {
 
 		save("hello there how are you");
 		save("underneath is the story for you");
+		save("over.table spend");
+	}
+
+	@AfterClass
+	public static void close() {
+		ODatabaseRecordThreadLocal.INSTANCE.set(db);
+		db.close();
 	}
 
 	private static void save(String text) {
@@ -64,6 +70,7 @@ public class ContainsTextTest {
 		}
 	}
 
+	// TODO enable as unit test once is #1255 is fixed in orientdb
 	// @Test
 	public void testCountUsingContainsTextOperator() {
 		List<ODocument> list = db.query(new OSQLSynchQuery<ODocument>(
@@ -72,9 +79,11 @@ public class ContainsTextTest {
 		assertEquals(2, count);
 	}
 
-	@AfterClass
-	public static void close() {
-		db.close();
+	@Test
+	public void testContainsTextOnPeriodDelimiter() {
+		List<ODocument> list = db.query(new OSQLSynchQuery<ODocument>(
+				"select * from Test1 where text containstext 'table'"));
+		assertEquals(1, list.size());
 	}
 
 	@Test
@@ -107,11 +116,4 @@ public class ContainsTextTest {
 				"select * from Test1 where text containstext '" + word + "'"));
 		assertEquals(expectedCount, list.size());
 	}
-
-	@Test
-	public void testSplit() {
-		System.out.println(OStringSerializerHelper.split("hello how are you",
-				' '));
-	}
-
 }
