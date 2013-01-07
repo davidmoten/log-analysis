@@ -107,7 +107,7 @@ public class LogFile {
 					if (entry != null)
 						db.persist(entry);
 				} catch (RuntimeException e) {
-					log.log(Level.SEVERE, e.getMessage(), e);
+					log.log(Level.WARNING, e.getMessage(), e);
 					// reconnect
 					try {
 						db = dbInitial.reconnect();

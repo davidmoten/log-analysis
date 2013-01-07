@@ -52,6 +52,10 @@
 							<key>logan.config</key>
 							<value>${logan.config}</value>
 						</systemProperty>
+						<systemProperty>
+							<name>network.lockTimeout</name>
+							<value>${orientdb.network.lockTimeout}</value>
+						</systemProperty>
 					</systemProperties>
 				</configuration>
 			</plugin>

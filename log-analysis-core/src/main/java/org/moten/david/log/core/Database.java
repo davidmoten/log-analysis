@@ -49,6 +49,10 @@ import com.orientechnologies.orient.core.storage.OStorage;
  */
 public class Database {
 
+	private static final int NETWORK_CONNECTION_POOL_SIZE_MAX = 15;
+
+	private static final int NETWORK_CONNECTION_POOL_SIZE_MIN = 2;
+
 	private static final Logger log = Logger
 			.getLogger(Database.class.getName());
 
@@ -87,6 +91,8 @@ public class Database {
 			String url, String username, String password) {
 		ODatabaseDocumentTx db = ODatabaseDocumentPool.global().acquire(url,
 				username, password);
+		db.setProperty("minPool", NETWORK_CONNECTION_POOL_SIZE_MIN);
+		db.setProperty("maxPool", NETWORK_CONNECTION_POOL_SIZE_MAX);
 		log.info("obtained db for " + url);
 		return db;
 	}
@@ -215,6 +221,7 @@ public class Database {
 	 * @param entry
 	 */
 	private void persist(LogEntry entry, boolean commit) {
+
 		// create a new document (row in table)
 		// persist the full message, timestamp, level logger and threadName
 		long timestamp = entry.getTime();
@@ -229,7 +236,7 @@ public class Database {
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
 			if (e.getValue() != null) {
 				ValueAndType v = parse(e.getValue());
-				map.put(e.getKey(),
+				map.put(cleanKey(e.getKey()),
 						new ODocument().field(Field.VALUE, v.value, v.type));
 			}
 		}
@@ -238,6 +245,10 @@ public class Database {
 		d.save();
 		if (commit)
 			db.commit();
+	}
+
+	private String cleanKey(String key) {
+		return key.replace(" ", "_");
 	}
 
 	private String getString(Map<String, String> properties) {
