@@ -87,7 +87,7 @@ public class LogFile {
 			tailer.stop();
 	}
 
-	private static void incrementCounter() {
+	private synchronized static void incrementCounter() {
 		if (counter.incrementAndGet() % 1000 == 0)
 			log.info(counter + " log lines persisted");
 	}
