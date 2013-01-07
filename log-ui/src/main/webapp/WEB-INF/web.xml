@@ -35,6 +35,16 @@
 		<servlet-name>Keys</servlet-name>
 		<servlet-class>org.moten.david.log.ui.KeysServlet</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>Load</servlet-name>
+		<servlet-class>org.moten.david.log.ui.LoadServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Load</servlet-name>
+		<url-pattern>/load</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Keys</servlet-name>

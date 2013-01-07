@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.moten.david.log.core.Database;
 
-public class LoadDummyRecordsServlet extends HttpServlet {
+public class LoadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5743443079037803453L;
 

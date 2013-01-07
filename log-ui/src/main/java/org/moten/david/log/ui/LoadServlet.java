@@ -13,22 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-public class DataServlet extends HttpServlet {
+public class LoadServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1044384045444686984L;
+	private static final long serialVersionUID = 8469220097421061495L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		String url = Configuration.getLogServerBaseUrl() + "/query?field="
-				+ req.getParameter("field") + "&start="
-				+ req.getParameter("start") + "&interval="
-				+ req.getParameter("interval") + "&buckets="
-				+ req.getParameter("buckets") + "&metric="
-				+ req.getParameter("metric");
-		if (req.getParameter("text") != null)
-			url += "&text=" + req.getParameter("text");
+		boolean configure = "true".equals(req.getParameter("configure"));
+
+		String url = Configuration.getLogServerBaseUrl() + "/load?n="
+				+ req.getParameter("n") + "&configure=" + configure;
 
 		url = url.replace(" ", "%20");
 
@@ -39,9 +35,9 @@ public class DataServlet extends HttpServlet {
 			throw new RuntimeException(e);
 		}
 		InputStream is = u.openStream();
-		String json = IOUtils.toString(is);
+		String reply = IOUtils.toString(is);
 		is.close();
-		resp.setContentType("application/json");
-		resp.getWriter().print(json);
+		resp.setContentType("text/plain");
+		resp.getWriter().print(reply);
 	}
 }

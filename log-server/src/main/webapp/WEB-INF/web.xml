@@ -21,12 +21,12 @@
 	</servlet>
 
 	<servlet>
-		<servlet-name>LoadDummyRecords</servlet-name>
-		<servlet-class>org.moten.david.log.server.LoadDummyRecordsServlet</servlet-class>
+		<servlet-name>Load</servlet-name>
+		<servlet-class>org.moten.david.log.server.LoadServlet</servlet-class>
 	</servlet>
  	 	
 	<servlet-mapping>
-		<servlet-name>LoadDummyRecords</servlet-name>
+		<servlet-name>LoadRecords</servlet-name>
 		<url-pattern>/load</url-pattern>
 	</servlet-mapping>
 		 	
