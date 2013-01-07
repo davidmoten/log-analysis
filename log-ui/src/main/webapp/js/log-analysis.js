@@ -179,7 +179,7 @@ function drawGraph(field, tablename, buckets, interval, startTime, metric,
 				var gap = 300000;
 				var startT = Math.floor(Number(x) - gap);
 				var finishT = Math.floor(Number(x) + gap);
-				window.open('http://localhost:9191/log?start=' + startT
+				window.open('log?start=' + startT
 						+ '&finish=' + finishT , 'logWindow',
 						'');
 			}
