@@ -72,6 +72,9 @@
 								<copy file="${basedir}/src/main/resources/orientdb-server-config.xml"
 									tofile="${project.build.directory}/orientdb-${orientdb.version}/config/orientdb-server-config.xml"
 									overwrite="true" />
+									<copy file="${basedir}/src/main/resources/orient-server-log.properties"
+									tofile="${project.build.directory}/orientdb-${orientdb.version}/config/orient-server-log.properties"
+									overwrite="true" />
 							</tasks>
 						</configuration>
 						<goals>
