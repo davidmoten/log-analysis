@@ -34,6 +34,7 @@ public class Main {
 
 		Configuration configuration = getConfiguration();
 		setupLogging();
+		// TODO put username and password into configuration
 		DatabaseFactory provider = new DatabaseFactory(
 				configuration.databaseUrl, "admin", "admin");
 		Watcher w = new Watcher(provider, configuration);

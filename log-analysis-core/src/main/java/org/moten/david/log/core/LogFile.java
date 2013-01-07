@@ -3,6 +3,7 @@ package org.moten.david.log.core;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +23,8 @@ import com.google.common.annotations.VisibleForTesting;
 public class LogFile {
 
 	private static Logger log = Logger.getLogger(LogFile.class.getName());
+
+	private static AtomicLong counter = new AtomicLong();
 
 	private final File file;
 	private final long checkIntervalMs;
@@ -84,6 +87,11 @@ public class LogFile {
 			tailer.stop();
 	}
 
+	private static void incrementCounter() {
+		if (counter.incrementAndGet() % 1000 == 0)
+			log.info(counter + " log lines persisted");
+	}
+
 	private TailerListener createListener(final Database dbInitial) {
 		return new TailerListener() {
 			private Database db = dbInitial;
@@ -106,6 +114,7 @@ public class LogFile {
 					LogEntry entry = parser.parse(source, line);
 					if (entry != null)
 						db.persist(entry);
+					incrementCounter();
 				} catch (RuntimeException e) {
 					log.log(Level.WARNING, e.getMessage(), e);
 					// reconnect
