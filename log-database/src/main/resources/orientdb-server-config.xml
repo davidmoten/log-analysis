@@ -3,71 +3,69 @@
     <handlers>
         <handler class="com.orientechnologies.orient.server.handler.OJMXPlugin">
             <parameters>
-                <parameter name="enabled" value="false"/>
-                <parameter name="profilerManaged" value="true"/>
+                <parameter value="false" name="enabled"/>
+                <parameter value="true" name="profilerManaged"/>
             </parameters>
         </handler>
         <handler class="com.orientechnologies.orient.server.plugin.mail.OMailPlugin">
             <parameters>
-                <parameter name="enabled" value="false"/>
-                <parameter name="profile.default.mail.smtp.host" value="localhost"/>
-                <parameter name="profile.default.mail.smtp.port" value="25"/>
-                <parameter name="profile.default.mail.smtp.auth" value="true"/>
-                <parameter name="profile.default.mail.smtp.starttls.enable" value="true"/>
-                <parameter name="profile.default.mail.smtp.user" value=""/>
-                <parameter name="profile.default.mail.smtp.password" value=""/>
-                <parameter name="profile.default.mail.date.format" value="yyyy-MM-dd HH:mm:ss"/>
+                <parameter value="true" name="enabled"/>
+                <parameter value="localhost" name="profile.default.mail.smtp.host"/>
+                <parameter value="25" name="profile.default.mail.smtp.port"/>
+                <parameter value="true" name="profile.default.mail.smtp.auth"/>
+                <parameter value="true" name="profile.default.mail.smtp.starttls.enable"/>
+                <parameter value="" name="profile.default.mail.smtp.user"/>
+                <parameter value="" name="profile.default.mail.smtp.password"/>
+                <parameter value="yyyy-MM-dd HH:mm:ss" name="profile.default.mail.date.format"/>
             </parameters>
         </handler>
         <handler class="com.orientechnologies.orient.server.handler.OAutomaticBackup">
             <parameters>
-                <parameter name="enabled" value="false"/>
-                <parameter name="delay" value="4h"/>
-                <parameter name="target.directory" value="backup"/>
-                <parameter name="target.fileName" value="${DBNAME}-${DATE:yyyyMMddHHmmss}.json"/>
-                <parameter name="db.include" value=""/>
-                <parameter name="db.exclude" value=""/>
+                <parameter value="false" name="enabled"/>
+                <parameter value="4h" name="delay"/>
+                <parameter value="backup" name="target.directory"/>
+                <parameter value="${DBNAME}-${DATE:yyyyMMddHHmmss}.json" name="target.fileName"/>
+                <parameter value="" name="db.include"/>
+                <parameter value="" name="db.exclude"/>
             </parameters>
         </handler>
         <handler class="com.orientechnologies.orient.server.handler.OServerSideScriptInterpreter">
             <parameters>
-                <parameter name="enabled" value="false"/>
+                <parameter value="false" name="enabled"/>
             </parameters>
         </handler>
     </handlers>
     <network>
         <protocols>
-            <protocol name="binary" implementation="com.orientechnologies.orient.server.network.protocol.binary.ONetworkProtocolBinary"/>
-            <protocol name="http" implementation="com.orientechnologies.orient.server.network.protocol.http.ONetworkProtocolHttpDb"/>
+            <protocol implementation="com.orientechnologies.orient.server.network.protocol.binary.ONetworkProtocolBinary" name="binary"/>
+            <protocol implementation="com.orientechnologies.orient.server.network.protocol.http.ONetworkProtocolHttpDb" name="http"/>
         </protocols>
         <listeners>
-            <listener ip-address="0.0.0.0" port-range="2424-2430" protocol="binary"/>
-            <listener ip-address="0.0.0.0" port-range="2480-2490" protocol="http">
+            <listener protocol="binary" port-range="2424-2430" ip-address="0.0.0.0"/>
+            <listener protocol="http" port-range="2480-2490" ip-address="0.0.0.0">
                 <commands>
-                    <command pattern="GET|www GET|studio/ GET| GET|*.htm GET|*.html GET|*.xml GET|*.jpeg GET|*.jpg GET|*.png GET|*.gif GET|*.js GET|*.css GET|*.swf GET|*.ico GET|*.txt GET|*.otf GET|*.pjs GET|*.svg" implementation="com.orientechnologies.orient.server.network.protocol.http.command.get.OServerCommandGetStaticContent">
+                    <command implementation="com.orientechnologies.orient.server.network.protocol.http.command.get.OServerCommandGetStaticContent" pattern="GET|www GET|studio/ GET| GET|*.htm GET|*.html GET|*.xml GET|*.jpeg GET|*.jpg GET|*.png GET|*.gif GET|*.js GET|*.css GET|*.swf GET|*.ico GET|*.txt GET|*.otf GET|*.pjs GET|*.svg">
                         <parameters>
-                            <entry name="http.cache:*.htm *.html" value="Cache-Control: no-cache, no-store, max-age=0, must-revalidate\r\nPragma: no-cache"/>
-                            <entry name="http.cache:default" value="Cache-Control: max-age=120"/>
+                            <entry value="Cache-Control: no-cache, no-store, max-age=0, must-revalidate\r\nPragma: no-cache" name="http.cache:*.htm *.html"/>
+                            <entry value="Cache-Control: max-age=120" name="http.cache:default"/>
                         </parameters>
                     </command>
                 </commands>
                 <parameters>
-                    <parameter name="network.http.charset" value="utf-8"/>
+                    <parameter value="utf-8" name="network.http.charset"/>
                 </parameters>
             </listener>
         </listeners>
     </network>
     <storages>
-        <!-- <storage name="temp" path="memory:temp" userName="admin" userPassword="admin" loaded-at-startup="true"/> -->
-        <storage name="logs" path="local:logs"  userName="admin" userPassword="admin" loaded-at-startup="true"/>
+        <storage loaded-at-startup="true" userPassword="admin" userName="admin" path="local:logs" name="logs"/>
     </storages>
     <users>
-        <user name="root" password="74103539972C36DFECEB00CF6CEBDF0BFE70CDBC222742206BACD2883E333770" resources="*"/>
-		<user name="admin" password="admin" resources="*"/>
-        <user name="guest" password="guest" resources="connect,server.listDatabases"/>
+        <user resources="*" password="A77A8F0A777A533264CCBC5EE3B0FC07751AD0CD14B069114E58AB1E8A56A539" name="root"/>
+        <user resources="connect,server.listDatabases" password="guest" name="guest"/>
     </users>
     <properties>
-        <entry name="log.console.level" value="fine"/>
-        <entry name="log.file.level" value="fine"/>
+        <entry value="info" name="log.console.level"/>
+        <entry value="fine" name="log.file.level"/>
     </properties>
 </orient-server>
