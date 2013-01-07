@@ -93,7 +93,7 @@
 									overwrite="true" />
 									<copy file="${basedir}/src/main/resources/orientdb-server-log.properties"
 									tofile="${project.build.directory}/orientdb-${orientdb.version}/config/orient-server-log.properties"
-									overwrite="true" />
+									overwrite="true" /> 
 							</tasks>
 						</configuration>
 						<goals>
