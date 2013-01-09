@@ -203,8 +203,9 @@ public class Database {
 			db.getMetadata().getSchema().save();
 			db.command(
 					new OCommandSQL(
-							"CREATE INDEX EntryPropsKeyIndex ON Entry ("
-									+ Field.PROPS + " by key) NOTUNIQUE"))
+							"CREATE INDEX EntryPropsKeyTimestampIndex ON Entry ("
+									+ Field.PROPS + " by key,"
+									+ Field.TIMESTAMP + ") NOTUNIQUE"))
 					.execute();
 			db.getMetadata().getSchema().save();
 			db.getMetadata().getIndexManager().reload();
