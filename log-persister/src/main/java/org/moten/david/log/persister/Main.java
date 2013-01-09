@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.moten.david.log.core.Database;
 import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.persister.config.Configuration;
 import org.moten.david.log.persister.config.Marshaller;
@@ -36,7 +37,13 @@ public class Main {
 		setupLogging();
 		// TODO put username and password into configuration
 		DatabaseFactory provider = new DatabaseFactory(
-				configuration.databaseUrl, "admin", "admin");
+				configuration.connection.url,
+				configuration.connection.username,
+				configuration.connection.password);
+		Database db = provider.create();
+		// TODO would prefer not to have to do this!
+		db.configureDatabase();
+		db.close();
 		Watcher w = new Watcher(provider, configuration);
 		w.start();
 	}

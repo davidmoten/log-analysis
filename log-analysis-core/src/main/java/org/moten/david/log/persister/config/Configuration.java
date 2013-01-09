@@ -13,8 +13,9 @@ import com.google.common.collect.Lists;
  * 
  */
 public class Configuration {
+
 	@XmlElement(required = true)
-	public String databaseUrl = "remote:localhost/logs";
+	public Connection connection;
 	@XmlElement(required = false)
 	public Parser parser;
 	@XmlElement(required = true)
@@ -42,8 +43,8 @@ public class Configuration {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Configuration [databaseUrl=");
-		builder.append(databaseUrl);
+		builder.append("Configuration [connection=");
+		builder.append(connection);
 		builder.append(", parser=");
 		builder.append(parser);
 		builder.append(", group=");

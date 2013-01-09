@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns2:configuration xmlns:ns2="http://org.moten.david/log-analysis/persister/configuration">
-    <databaseUrl>remote:jenkins.amsa.gov.au/logs</databaseUrl>
+    <connection>
+		<url>remote:jenkins.amsa.gov.au/logs</url>
+		<username>admin</username>
+		<password>admin</password>
+	</connection>
     <parser>
         <pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+) +(\S+)? ?- (.*)$</pattern>
         <patternGroups>logTimestamp,logLevel,logLogger,threadName,logMsg</patternGroups>

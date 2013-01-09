@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns2:configuration
 	xmlns:ns2="http://org.moten.david/log-analysis/persister/configuration">
-	<databaseUrl>remote:localhost/logs</databaseUrl>
+	<connection>
+		<url>remote:localhost/logs</url>
+		<username>admin</username>
+		<password>admin</password>
+	</connection>
 	<!--  standard log4j pattern -->
 	<parser>
 		<pattern>^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d) +(\S+) +(\S+)+(\S+)? ?- (.*)$</pattern>
