@@ -18,11 +18,6 @@ public class LoadServlet extends HttpServlet {
 			throws ServletException, IOException {
 		Database db = ServletUtil.connectToDatabase();
 		try {
-			if ("true".equalsIgnoreCase(req.getParameter("configure"))) {
-				db.configureDatabase();
-				db.close();
-				db = ServletUtil.connectToDatabase();
-			}
 			long n = ServletUtil.getLong(req, "n", 1000);
 			db.persistDummyRecords(n);
 			resp.getWriter().print("done");

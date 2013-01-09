@@ -69,6 +69,8 @@ public class Database {
 
 	private final String password;
 
+	private static boolean firstTime = true;
+
 	/**
 	 * Constructor.
 	 * 
@@ -90,7 +92,7 @@ public class Database {
 				password);
 	}
 
-	public static void createDatabaseIfDoesNotExist(String url) {
+	private static void createDatabaseIfDoesNotExist(String url) {
 		int i = url.indexOf('/');
 		String hostPart = url.substring(0, i);
 		String databaseName = url.substring(i + 1, url.length());
@@ -111,11 +113,16 @@ public class Database {
 
 	private synchronized static ODatabaseDocumentTx connectToDatabase(
 			String url, String username, String password) {
+		if (firstTime)
+			createDatabaseIfDoesNotExist(url);
 		ODatabaseDocumentTx db = ODatabaseDocumentPool.global().acquire(url,
 				username, password);
 		db.setProperty("minPool", NETWORK_CONNECTION_POOL_SIZE_MIN);
 		db.setProperty("maxPool", NETWORK_CONNECTION_POOL_SIZE_MAX);
 		log.info("obtained db for " + url);
+		if (firstTime)
+			configureDatabase(db);
+		firstTime = false;
 		return db;
 	}
 
@@ -154,13 +161,6 @@ public class Database {
 	 */
 	@VisibleForTesting
 	static ODatabaseDocumentTx createDatabase(File location) {
-		// OGlobalConfiguration.STORAGE_KEEP_OPEN.setValue(true);
-		// OGlobalConfiguration.MVRBTREE_NODE_PAGE_SIZE.setValue(2048);
-		// OGlobalConfiguration.TX_USE_LOG.setValue(false);
-		// OGlobalConfiguration.TX_COMMIT_SYNCH.setValue(true);
-		// OGlobalConfiguration.ENVIRONMENT_CONCURRENT.setValue(true);
-		// // OGlobalConfiguration.MVRBTREE_LAZY_UPDATES.setValue(-1);
-		// OGlobalConfiguration.FILE_MMAP_STRATEGY.setValue(1);
 		try {
 			FileUtils.deleteDirectory(location);
 		} catch (IOException e) {
@@ -171,14 +171,8 @@ public class Database {
 		System.out.println(url);
 		ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).create();
 		ODatabaseRecordThreadLocal.INSTANCE.set(db);
-		return db;
-	}
-
-	/**
-	 * Setup indexes.
-	 */
-	public void configureDatabase() {
 		configureDatabase(db);
+		return db;
 	}
 
 	/**

@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.moten.david.log.core.Database;
 import org.moten.david.log.core.DatabaseFactory;
 import org.moten.david.log.persister.config.Configuration;
 import org.moten.david.log.persister.config.Marshaller;
@@ -41,12 +40,6 @@ public class Main {
 				configuration.connection.username,
 				configuration.connection.password);
 
-		// TODO don't want to do this particularly, not from the persister but
-		// is convenient for the moment
-		Database.createDatabaseIfDoesNotExist(configuration.connection.url);
-		Database db = provider.create();
-		db.configureDatabase();
-		db.close();
 		Watcher w = new Watcher(provider, configuration);
 		w.start();
 	}

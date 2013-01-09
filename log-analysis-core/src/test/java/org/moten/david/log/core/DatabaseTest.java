@@ -112,7 +112,6 @@ public class DatabaseTest {
 	@Test
 	public void testPersistDummyRecords() {
 		Database db = createAndConnectTo(DATABASE_TEST_PERSIST_DUMMY);
-		db.configureDatabase();
 		int n = 10;
 		db.persistDummyRecords(n);
 		int count = 0;
@@ -145,7 +144,6 @@ public class DatabaseTest {
 		Database db = null;
 		try {
 			db = createAndConnectTo(DATABASE_TEST_BUCKET_QUERY);
-			db.configureDatabase();
 			int n = 100;
 			db.persistDummyRecords(n);
 			String sql = "select " + Field.TIMESTAMP

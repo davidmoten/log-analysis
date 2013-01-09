@@ -16,7 +16,6 @@ public class LogFileTest {
 		DatabaseFactory factory = new DatabaseFactory(new File("target/test3"));
 		Database db = factory.create();
 		try {
-			db.configureDatabase();
 			assertEquals(0, db.getNumEntries());
 			LogFile log = new LogFile(new File("src/test/resources/test.log"),
 					"testing", 300, new LogParser(LogParserOptions.load()),
