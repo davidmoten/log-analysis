@@ -335,7 +335,7 @@ public class Database {
 		int i = 0;
 		for (ODocument doc : result) {
 			i++;
-			if (i % 1000 == 0)
+			if (i % 10000 == 0)
 				log.info(i + " records");
 			Long timestamp = doc.field(Field.TIMESTAMP);
 			if (doc.field(Field.VALUE) != null) {
