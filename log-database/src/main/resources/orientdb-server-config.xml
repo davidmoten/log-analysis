@@ -86,7 +86,6 @@
 		<!-- Enable/Disable logging. Levels are: finer, fine, finest, info, warning -->
 		<entry name="log.console.level" value="info" />
 		<entry name="log.file.level" value="fine" />
-		<!-- 
-		<entry name="file.mmap.lockMemory" value="false"/> -->
+		<entry name="file.mmap.lockMemory" value="false"/> 
 	</properties>
 </orient-server>
