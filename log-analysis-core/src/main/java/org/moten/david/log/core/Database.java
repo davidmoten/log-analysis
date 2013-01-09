@@ -95,7 +95,8 @@ public class Database {
 		String hostPart = url.substring(0, i);
 		String databaseName = url.substring(i + 1, url.length());
 		try {
-			log.info("creating database if does not exist");
+			log.info("creating database " + hostPart + "/" + databaseName
+					+ " if does not exist");
 			new OServerAdmin(hostPart).connect("root", ROOT_PASSWORD)
 					.createDatabase(databaseName, "local").close();
 			log.info("created");
