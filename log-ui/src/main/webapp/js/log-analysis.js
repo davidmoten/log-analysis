@@ -216,7 +216,7 @@ function drawGraph(field, tablename, buckets, interval, startTime, metric,
 				console.log(errorThrown);
 				$("#error").text(errorThrown);
 			},
-			timeout : 60000
+			timeout : 120000
 		});
 	}
 
