@@ -40,8 +40,11 @@ public class Main {
 				configuration.connection.url,
 				configuration.connection.username,
 				configuration.connection.password);
+
+		// TODO don't want to do this particularly, not from the persister but
+		// is convenient for the moment
+		Database.createDatabaseIfDoesNotExist(configuration.connection.url);
 		Database db = provider.create();
-		// TODO would prefer not to have to do this!
 		db.configureDatabase();
 		db.close();
 		Watcher w = new Watcher(provider, configuration);

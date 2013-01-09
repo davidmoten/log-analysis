@@ -112,9 +112,10 @@ public class LogFile {
 				try {
 					db.useInCurrentThread();
 					LogEntry entry = parser.parse(source, line);
-					if (entry != null)
+					if (entry != null) {
 						db.persist(entry);
-					incrementCounter();
+						incrementCounter();
+					}
 				} catch (RuntimeException e) {
 					log.log(Level.WARNING, e.getMessage(), e);
 					// reconnect

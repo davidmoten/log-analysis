@@ -76,14 +76,17 @@
 		</cluster>
 	</network>
 	<storages>
-		<storage path="local:logs" name="logs" userName="admin" userPassword="admin" loaded-at-startup="true" />
+		<storage path="local:logs" name="logs" userName="admin" userPassword="admin" />
 	</storages>
 	<users>
+		<user resources="*" password="B8172764CBADA2F68674EE690B9D0F01A2EA7EB73005A738DE0DDD052538153F" name="root"/>
+        <user resources="connect,server.listDatabases" password="guest" name="guest"/>
 	</users>
 	<properties>
 		<!-- Enable/Disable logging. Levels are: finer, fine, finest, info, warning -->
 		<entry name="log.console.level" value="info" />
 		<entry name="log.file.level" value="fine" />
-		<entry name="file.mmap.lockMemory" value="false"/>
+		<!-- 
+		<entry name="file.mmap.lockMemory" value="false"/> -->
 	</properties>
 </orient-server>

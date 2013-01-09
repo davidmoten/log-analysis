@@ -26,6 +26,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.orientechnologies.orient.client.remote.OServerAdmin;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
@@ -48,6 +49,8 @@ import com.orientechnologies.orient.core.storage.OStorage;
  * 
  */
 public class Database {
+
+	private static final String ROOT_PASSWORD = "B8172764CBADA2F68674EE690B9D0F01A2EA7EB73005A738DE0DDD052538153F";
 
 	private static final int NETWORK_CONNECTION_POOL_SIZE_MAX = 15;
 
@@ -85,6 +88,24 @@ public class Database {
 	public Database(String url, String username, String password) {
 		this(connectToDatabase(url, username, password), url, username,
 				password);
+	}
+
+	public static void createDatabaseIfDoesNotExist(String url) {
+		int i = url.indexOf('/');
+		String hostPart = url.substring(0, i);
+		String databaseName = url.substring(i + 1, url.length());
+		try {
+			log.info("creating database if does not exist");
+			new OServerAdmin(hostPart).connect("root", ROOT_PASSWORD)
+					.createDatabase(databaseName, "local").close();
+			log.info("created");
+		} catch (RuntimeException e) {
+			log.info("could not create database, perhaps it exists already: "
+					+ e.getMessage());
+		} catch (IOException e) {
+			log.info("could not create database, perhaps it exists already: "
+					+ e.getMessage());
+		}
 	}
 
 	private synchronized static ODatabaseDocumentTx connectToDatabase(

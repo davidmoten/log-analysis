@@ -13,7 +13,7 @@
 		<command>server</command>
 	</properties>
 	<dependencies>
-	<dependency>
+		<dependency>
 			<groupId>org.moten.david.log</groupId>
 			<artifactId>log-analysis-core</artifactId>
 			<version>${project.parent.version}</version>
@@ -49,8 +49,9 @@
 					<executable>${project.build.directory}/orientdb-${orientdb.version}/bin/${command}.sh</executable>
 					<workingDirectory>${project.build.directory}/orientdb-${orientdb.version}/bin/</workingDirectory>
 					<environmentVariables>
-					    <!--  -Dnetwork.socketTimeout=${orientdb.network.socketTimeout} -Dnetwork.binary.readResponse.maxTime=60 -->
-					    <JAVA_OPTS>-Xmx2000m -Dfile.mmap.maxMemory=3.2gb -Dnetwork.lockTimeout=${orientdb.network.lockTimeout}</JAVA_OPTS>
+						<!-- -Dnetwork.socketTimeout=${orientdb.network.socketTimeout} -Dnetwork.binary.readResponse.maxTime=60 -->
+						<JAVA_OPTS>-Xmx2000m -Dfile.mmap.maxMemory=3.2gb
+							-Dnetwork.lockTimeout=${orientdb.network.lockTimeout}</JAVA_OPTS>
 					</environmentVariables>
 				</configuration>
 			</plugin>
@@ -91,9 +92,10 @@
 								<copy file="${basedir}/src/main/resources/orientdb-server-config.xml"
 									tofile="${project.build.directory}/orientdb-${orientdb.version}/config/orientdb-server-config.xml"
 									overwrite="true" />
-									<copy file="${basedir}/src/main/resources/orientdb-server-log.properties"
+								<copy
+									file="${basedir}/src/main/resources/orientdb-server-log.properties"
 									tofile="${project.build.directory}/orientdb-${orientdb.version}/config/orient-server-log.properties"
-									overwrite="true" /> 
+									overwrite="true" />
 							</tasks>
 						</configuration>
 						<goals>
