@@ -99,7 +99,7 @@ public class Database {
 		try {
 			log.info("creating database " + hostPart + "/" + databaseName
 					+ " if does not exist");
-			new OServerAdmin(hostPart).connect("root", ROOT_PASSWORD)
+			new OServerAdmin(url).connect("root", ROOT_PASSWORD)
 					.createDatabase(databaseName, "local").close();
 			log.info("created");
 		} catch (RuntimeException e) {
