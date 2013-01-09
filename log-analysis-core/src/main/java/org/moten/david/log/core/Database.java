@@ -61,7 +61,7 @@ public class Database {
 
 	public static final String TABLE_ENTRY = "Entry";
 
-	private final ODatabaseDocumentTx db;
+	private final ODatabaseDocumentTx Database db;
 
 	private final String url;
 
@@ -97,7 +97,7 @@ public class Database {
 		try {
 			log.info("creating database " + hostPart + "/" + databaseName
 					+ " if does not exist");
-			new OServerAdmin(hostPart).connect("root", ROOT_PASSWORD)
+			new OServerAdmin(url).connect("root", ROOT_PASSWORD)
 					.createDatabase(databaseName, "local").close();
 			log.info("created");
 		} catch (RuntimeException e) {
@@ -140,7 +140,7 @@ public class Database {
 	 */
 	public Database(ODatabaseDocumentTx db, String url, String username,
 			String password) {
-		this.db = db;
+		this.Database db = db;
 		this.url = url;
 		this.username = username;
 		this.password = password;
@@ -178,7 +178,7 @@ public class Database {
 	 * Setup indexes.
 	 */
 	public void configureDatabase() {
-		configureDatabase(db);
+		configureDatabase(Database db);
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class Database {
 	 * instead.
 	 */
 	public void useInCurrentThread() {
-		ODatabaseRecordThreadLocal.INSTANCE.set(db);
+		ODatabaseRecordThreadLocal.INSTANCE.set(Database db);
 	}
 
 	/**
@@ -266,7 +266,7 @@ public class Database {
 
 		d.save();
 		if (commit)
-			db.commit();
+			Database db.commit();
 	}
 
 	private String cleanKey(String key) {
@@ -334,7 +334,7 @@ public class Database {
 		log.info(query.toString());
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
 				query.getSql());
-		List<ODocument> result = db.query(sqlQuery);
+		List<ODocument> result = Database db.query(sqlQuery);
 		log.info("query result returned");
 		Buckets buckets = new Buckets(query);
 		int i = 0;
@@ -368,18 +368,18 @@ public class Database {
 	 */
 	public long size() {
 
-		return db.getSize();
+		return Database db.getSize();
 	}
 
 	public long getNumEntries() {
-		return db.countClass(TABLE_ENTRY);
+		return Database db.countClass(TABLE_ENTRY);
 	}
 
 	/**
 	 * Closes the database connection.
 	 */
 	public void close() {
-		db.close();
+		Database db.close();
 	}
 
 	public Set<String> getKeys() {
@@ -394,7 +394,7 @@ public class Database {
 	 * */
 	public void persistDummyRecords(long n) {
 		log.info("persisting dummy values");
-		db.declareIntent(new OIntentMassiveInsert());
+		Database db.declareIntent(new OIntentMassiveInsert());
 		long t = System.currentTimeMillis();
 		Random r = new Random();
 		for (long i = 0; i < n; i++) {
@@ -428,11 +428,11 @@ public class Database {
 			if (i % 1000 == 0)
 				log.info("written " + i + " records");
 		}
-		db.declareIntent(null);
-		db.commit();
+		Database db.declareIntent(null);
+		Database db.commit();
 		log.info("persisted " + n
 				+ " random values from the last hour to table " + TABLE_ENTRY);
-		log.info("database size=" + db.getSize());
+		log.info("database size=" + Database db.getSize());
 	}
 
 	public Iterable<String> getLogs(long startTime, long finishTime) {
@@ -440,7 +440,7 @@ public class Database {
 				"select from " + TABLE_ENTRY + " where " + Field.TIMESTAMP
 						+ " between " + startTime + " and " + finishTime
 						+ " order by " + Field.TIMESTAMP);
-		List<ODocument> entries = db.query(query);
+		List<ODocument> entries = Database db.query(query);
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -491,4 +491,11 @@ public class Database {
 		else
 			return " " + d.field(Field.VALUE);
 	}
+
+	public static void main(String[] args) {
+		createDatabaseIfDoesNotExist("remote:jenkins.amsa.gov.au/logs");
+		Database db = new Database("remote:jenkins.amsa.gov.au/logs","admin","admin");
+		db.close();
+	}
+
 }
