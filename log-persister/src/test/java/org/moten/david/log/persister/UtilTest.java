@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -27,6 +28,11 @@ public class UtilTest {
 	}
 
 	@Test
+	public void testStringContains() {
+		assertEquals(1, "abc".indexOf("bc"));
+	}
+
+	@Test
 	public void testGetMatchingFiles() {
 		List<File> files = Util
 				.getFilesFromPathWithRegexFilename("src/test/resources/test(2|3)\\.log");
@@ -37,6 +43,50 @@ public class UtilTest {
 		assertTrue(paths.contains("test2.log"));
 		assertTrue(paths.contains("test3.log"));
 		assertEquals(2, files.size());
+	}
+
+	@Test
+	public void testGetMatchingFilesWithDirectoryWildcard() {
+		List<File> files = Util
+				.getFilesFromPathWithRegexFilename("src/test/resources/matching-test/**/.*\\.log");
+		Set<String> set = toSet(files);
+		assertEquals(7, set.size());
+		assertTrue(set.contains("a.log"));
+		assertTrue(set.contains("b.log"));
+		assertTrue(set.contains("c.log"));
+		assertTrue(set.contains("d.log"));
+		assertTrue(set.contains("e.log"));
+		assertTrue(set.contains("f.log"));
+		assertTrue(set.contains("g.log"));
+	}
+
+	@Test
+	public void testGetMatchingFilesWithDirectoryWildcardPrefixed() {
+		List<File> files = Util
+				.getFilesFromPathWithRegexFilename("src/test/resources/matching-test/test**/.*\\.log");
+		Set<String> set = toSet(files);
+		assertEquals(4, set.size());
+		assertTrue(set.contains("a.log"));
+		assertTrue(set.contains("b.log"));
+		assertTrue(set.contains("c.log"));
+		assertTrue(set.contains("d.log"));
+	}
+
+	@Test
+	public void testGetMatchingFilesWithDirectoryWildcardPrefixedWithFullDirectoryName() {
+		List<File> files = Util
+				.getFilesFromPathWithRegexFilename("src/test/resources/matching-test/test1**/.*\\.log");
+		Set<String> set = toSet(files);
+		assertEquals(2, set.size());
+		assertTrue(set.contains("a.log"));
+		assertTrue(set.contains("b.log"));
+	}
+
+	private static Set<String> toSet(Collection<File> files) {
+		Set<String> set = Sets.newHashSet();
+		for (File file : files)
+			set.add(file.getName());
+		return set;
 	}
 
 	@Test

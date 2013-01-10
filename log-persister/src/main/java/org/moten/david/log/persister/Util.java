@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Lists;
+
 /**
  * Persiter utility methods.
  * 
@@ -38,12 +40,60 @@ public class Util {
 	 * @return
 	 */
 	static List<File> getFilesFromPathWithRegexFilename(String s) {
-		String directory = getDirectory(s);
+		List<File> result = Lists.newArrayList();
+		List<File> directories = Lists.newArrayList();
 		String filenameRegex = getFilename(s);
 		final Pattern pattern = Pattern.compile(filenameRegex);
-		log.info("directory=" + directory + ",filenameRegex=" + filenameRegex);
+		if (s.contains("**/")) {
+			int i = s.indexOf("**/");
+			int j = s.lastIndexOf("/", i);
+			File directoryBase;
+			if (j != -1)
+				directoryBase = new File(s.substring(0, j + 1));
+			else
+				directoryBase = new File(System.getProperty("user.dir"));
 
-		File directoryFile = new File(directory);
+			String wildcardDirectoryNameStart;
+			if (j == i - 1)
+				wildcardDirectoryNameStart = "";
+			else
+				wildcardDirectoryNameStart = s.substring(j + 1, i);
+
+			final Pattern wildcardDirectoryPattern = Pattern
+					.compile(wildcardDirectoryNameStart + ".*");
+
+			directories.addAll(getMatchingDirectories(directoryBase,
+					wildcardDirectoryPattern));
+		} else {
+			String directory = getDirectory(s);
+			File dir = new File(directory);
+			directories.add(dir);
+		}
+		for (File dir : directories) {
+			log.info("directory=" + dir + ",filenameRegex=" + filenameRegex);
+			File[] files = getMatchingFiles(pattern, dir);
+			result.addAll(Arrays.asList(files));
+		}
+		return result;
+	}
+
+	private static List<File> getMatchingDirectories(File directoryBase,
+			Pattern wildcardDirectoryPattern) {
+		List<File> directories = Lists.newArrayList();
+		for (File file : directoryBase.listFiles()) {
+			if (file.isDirectory()
+					&& (wildcardDirectoryPattern == null || wildcardDirectoryPattern
+							.matcher(file.getName()).matches())) {
+				directories.add(file);
+				// recurse withing the found directory to add its subdirectories
+				directories.addAll(getMatchingDirectories(file, null));
+			}
+		}
+		return directories;
+	}
+
+	private static File[] getMatchingFiles(final Pattern pattern,
+			File directoryFile) {
 		File[] files = directoryFile.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -52,7 +102,7 @@ public class Util {
 		});
 		if (files == null)
 			throw new RuntimeException("directory not found: " + directoryFile);
-		return Arrays.asList(files);
+		return files;
 	}
 
 	/**
