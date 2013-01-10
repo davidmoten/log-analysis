@@ -335,8 +335,10 @@ public class Database {
 		log.info(query.toString());
 		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
 				query.getSql());
+		long t = System.currentTimeMillis();
 		List<ODocument> result = db.query(sqlQuery);
-		log.info("query result returned");
+		log.info("query result returned, queryTimeMs="
+				+ (System.currentTimeMillis() - t) + "ms");
 		Buckets buckets = new Buckets(query);
 		int i = 0;
 		for (ODocument doc : result) {
