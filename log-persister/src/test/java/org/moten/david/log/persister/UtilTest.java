@@ -82,6 +82,10 @@ public class UtilTest {
 		assertTrue(set.contains("b.log"));
 	}
 
+	// TODO add unit tests for when directory wildcard is followed by another
+	// directory
+	// for example src/test/resources/matching-test-2/apps/**/logs/.*\\.log
+
 	private static Set<String> toSet(Collection<File> files) {
 		Set<String> set = Sets.newHashSet();
 		for (File file : files)
