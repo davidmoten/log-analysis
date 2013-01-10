@@ -50,6 +50,10 @@ import com.orientechnologies.orient.core.storage.OStorage;
  */
 public class Database {
 
+	private static final String DATABASE_STORAGE_TYPE_LOCAL = "local";
+
+	private static final String DATABASE_TYPE_DOCUMENT = "document";
+
 	private static final String ROOT_PASSWORD = "B8172764CBADA2F68674EE690B9D0F01A2EA7EB73005A738DE0DDD052538153F";
 
 	private static final int NETWORK_CONNECTION_POOL_SIZE_MAX = 15;
@@ -99,8 +103,10 @@ public class Database {
 		try {
 			log.info("creating database " + hostPart + "/" + databaseName
 					+ " if does not exist");
-			new OServerAdmin(url).connect("root", ROOT_PASSWORD)
-					.createDatabase(databaseName, "local").close();
+			new OServerAdmin(hostPart)
+					.connect("root", ROOT_PASSWORD)
+					.createDatabase(databaseName, DATABASE_TYPE_DOCUMENT,
+							DATABASE_STORAGE_TYPE_LOCAL).close();
 			log.info("created");
 		} catch (RuntimeException e) {
 			log.info("could not create database, perhaps it exists already: "
