@@ -113,6 +113,30 @@ Create a config file as per [here](https://raw.github.com/davidmoten/log-analysi
     export PERSISTER_CONFIG=~/.log-analysis/persister-config.xml
     ./start-persister.sh
     
+File matching
+==================
+The paths of log files to be persisted is specified in the &lt;log&gt; element of the persister configuration file as below:
+
+    <log source="test">
+        <path>PATH/FILENAME_REGEX</path>
+	</log>
+
+* PATH is the directory path or paths matching an ANT style wildcard path. 
+* FILENAME_REGEX is a java regular expression for matching the filename part of the log file.
+
+An example using directory wildcards and a regular expression:
+
+    <log source="test">
+        <path>/var/log/myapps/**/log/my.*\.log</path>
+	</log>
+
+This breaks down into a PATH of 
+    /var/log/myapps/**
+and a FILENAME_REGEX of 
+    my.*\.log
+
+Note that for a PATH, * denotes any directory and ** denotes any nested sequence of directories including the current.
+
 Pattern matching
 ===================
 The *log-persister* configuration file ([here](https://raw.github.com/davidmoten/log-analysis/master/log-persister/src/test/resources/persister-configuration-test.xml)) refers to two patterns. Here's a fragment concerning patterns:
