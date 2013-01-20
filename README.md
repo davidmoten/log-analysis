@@ -130,15 +130,13 @@ An example using directory wildcards and a regular expression:
         <path>/var/log/myapps/**/log/my.*\.log</path>
 	</log>
 
-This breaks down into a PATH of 
+This breaks down into a PATH of <code>/var/log/myapps/**</code> which means <code>/var/log/myapps</code> and all its subdirectories. Note that for a PATH, * denotes any directory and ** denotes any nested sequence of directories including the current.
 
-    /var/log/myapps/**
-
-and a FILENAME_REGEX of 
+The FILENAME_REGEX is
 
     my.*\.log
 
-Note that for a PATH, * denotes any directory and ** denotes any nested sequence of directories including the current.
+which matches all filenames starting with *my* and ending in *.log*.
 
 Pattern matching
 ===================
