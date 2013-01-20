@@ -121,7 +121,7 @@ The paths of log files to be persisted is specified in the &lt;log&gt; element o
         <path>PATH/FILENAME_REGEX</path>
 	</log>
 
-* PATH is the directory path or paths matching an ANT style wildcard path. 
+* PATH is the ANT style wildcard path of the directory. 
 * FILENAME_REGEX is a java regular expression for matching the filename part of the log file.
 
 An example using directory wildcards and a regular expression:
