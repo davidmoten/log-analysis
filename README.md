@@ -131,8 +131,11 @@ An example using directory wildcards and a regular expression:
 	</log>
 
 This breaks down into a PATH of 
+
     /var/log/myapps/**
+
 and a FILENAME_REGEX of 
+
     my.*\.log
 
 Note that for a PATH, * denotes any directory and ** denotes any nested sequence of directories including the current.
