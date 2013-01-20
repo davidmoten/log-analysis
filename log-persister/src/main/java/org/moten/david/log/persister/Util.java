@@ -1,13 +1,16 @@
 package org.moten.david.log.persister;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Arrays;
+import java.io.FileFilter;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import org.apache.tools.ant.DirectoryScanner;
+
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Persiter utility methods.
@@ -40,69 +43,44 @@ public class Util {
 	 * @return
 	 */
 	static List<File> getFilesFromPathWithRegexFilename(String s) {
-		List<File> result = Lists.newArrayList();
-		List<File> directories = Lists.newArrayList();
 		String filenameRegex = getFilename(s);
+		String directoryPath = getDirectory(s);
+		System.out.println(directoryPath + ":" + filenameRegex);
 		final Pattern pattern = Pattern.compile(filenameRegex);
-		if (s.contains("**/")) {
-			int i = s.indexOf("**/");
-			int j = s.lastIndexOf("/", i);
-			File directoryBase;
-			if (j != -1)
-				directoryBase = new File(s.substring(0, j + 1));
-			else
-				directoryBase = new File(System.getProperty("user.dir"));
-
-			String wildcardDirectoryNameStart;
-			if (j == i - 1)
-				wildcardDirectoryNameStart = "";
-			else
-				wildcardDirectoryNameStart = s.substring(j + 1, i);
-
-			final Pattern wildcardDirectoryPattern = Pattern
-					.compile(wildcardDirectoryNameStart + ".*");
-
-			directories.addAll(getMatchingDirectories(directoryBase,
-					wildcardDirectoryPattern));
-		} else {
-			String directory = getDirectory(s);
-			File dir = new File(directory);
-			directories.add(dir);
-		}
-		for (File dir : directories) {
-			log.info("directory=" + dir + ",filenameRegex=" + filenameRegex);
-			File[] files = getMatchingFiles(pattern, dir);
-			result.addAll(Arrays.asList(files));
+		List<File> directories = getDirectories(directoryPath);
+		System.out.println("dirs=" + directories);
+		List<File> result = Lists.newArrayList();
+		for (File d : directories) {
+			File[] fileList = d.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File file) {
+					return !file.isDirectory()
+							&& pattern.matcher(file.getName()).matches();
+				}
+			});
+			if (fileList != null)
+				for (File f : fileList)
+					result.add(f);
 		}
 		return result;
 	}
 
-	private static List<File> getMatchingDirectories(File directoryBase,
-			Pattern wildcardDirectoryPattern) {
-		List<File> directories = Lists.newArrayList();
-		for (File file : directoryBase.listFiles()) {
-			if (file.isDirectory()
-					&& (wildcardDirectoryPattern == null || wildcardDirectoryPattern
-							.matcher(file.getName()).matches())) {
-				directories.add(file);
-				// recurse withing the found directory to add its subdirectories
-				directories.addAll(getMatchingDirectories(file, null));
-			}
+	private static List<File> getDirectories(String directoryPath) {
+		Set<File> directories = Sets.newHashSet();
+		DirectoryScanner scanner = new DirectoryScanner();
+		scanner.setIncludes(new String[] { directoryPath });
+		if (directoryPath.startsWith("/"))
+			scanner.setBasedir("/");
+		else
+			scanner.setBasedir(System.getProperty("user.dir"));
+		scanner.setCaseSensitive(false);
+		scanner.scan();
+		String[] paths = scanner.getIncludedFiles();
+		for (String p : paths) {
+			File file = new File(p);
+			directories.add(file.getParentFile());
 		}
-		return directories;
-	}
-
-	private static File[] getMatchingFiles(final Pattern pattern,
-			File directoryFile) {
-		File[] files = directoryFile.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return pattern.matcher(name).matches();
-			}
-		});
-		if (files == null)
-			throw new RuntimeException("directory not found: " + directoryFile);
-		return files;
+		return Lists.newArrayList(directories);
 	}
 
 	/**
