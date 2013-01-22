@@ -34,14 +34,15 @@ public class Main {
 
 		Configuration configuration = getConfiguration();
 		setupLogging();
-		// TODO put username and password into configuration
 		DatabaseFactory provider = new DatabaseFactory(
 				configuration.connection.url,
 				configuration.connection.username,
 				configuration.connection.password);
 
 		Watcher w = new Watcher(provider, configuration);
+		log.info("starting watcher");
 		w.start();
+		log.info("finished");
 	}
 
 	private static void setupLogging() throws IOException {

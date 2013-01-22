@@ -28,6 +28,30 @@ public class UtilTest {
 	}
 
 	@Test
+	public void testGetDirectoriesUsingRelativePath() {
+
+		List<File> list = Util
+				.getDirectories("src/test/resources/matching-test/**");
+		Set<String> set = toSet(list);
+		System.out.println(set);
+		assertTrue(set.contains("test1"));
+		assertTrue(set.contains("test2"));
+		assertEquals(7, set.size());
+	}
+
+	@Test
+	public void testGetDirectoriesUsingAbsolutePath() {
+
+		File file = new File("src/test/resources/matching-test/**");
+		List<File> list = Util.getDirectories(file.getAbsolutePath());
+		Set<String> set = toSet(list);
+		System.out.println(set);
+		assertTrue(set.contains("test1"));
+		assertTrue(set.contains("test2"));
+		assertEquals(7, set.size());
+	}
+
+	@Test
 	public void testStringContains() {
 		assertEquals(1, "abc".indexOf("bc"));
 	}

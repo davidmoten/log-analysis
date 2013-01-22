@@ -9,11 +9,12 @@ import java.util.regex.Pattern;
 
 import org.apache.tools.ant.DirectoryScanner;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
- * Persiter utility methods.
+ * Persister utility methods.
  * 
  * @author dave
  * 
@@ -45,10 +46,10 @@ public class Util {
 	static List<File> getFilesFromPathWithRegexFilename(String s) {
 		String filenameRegex = getFilename(s);
 		String directoryPath = getDirectory(s);
-		System.out.println(directoryPath + ":" + filenameRegex);
+		log.info(directoryPath + ":" + filenameRegex);
 		final Pattern pattern = Pattern.compile(filenameRegex);
 		List<File> directories = getDirectories(directoryPath);
-		System.out.println("dirs=" + directories);
+		log.info("dirs=" + directories);
 		List<File> result = Lists.newArrayList();
 		for (File d : directories) {
 			File[] fileList = d.listFiles(new FileFilter() {
@@ -65,20 +66,25 @@ public class Util {
 		return result;
 	}
 
-	private static List<File> getDirectories(String directoryPath) {
+	@VisibleForTesting
+	static List<File> getDirectories(String directoryPath) {
 		Set<File> directories = Sets.newHashSet();
 		DirectoryScanner scanner = new DirectoryScanner();
-		scanner.setIncludes(new String[] { directoryPath });
-		if (directoryPath.startsWith("/"))
+		if (directoryPath.startsWith("/")) {
 			scanner.setBasedir("/");
-		else
+			// drop the leading / from the directory path for the includes
+			scanner.setIncludes(new String[] { directoryPath.substring(1) });
+		} else {
 			scanner.setBasedir(System.getProperty("user.dir"));
+			scanner.setIncludes(new String[] { directoryPath });
+
+		}
 		scanner.setCaseSensitive(false);
 		scanner.scan();
-		String[] paths = scanner.getIncludedFiles();
+		String[] paths = scanner.getIncludedDirectories();
 		for (String p : paths) {
 			File file = new File(p);
-			directories.add(file.getParentFile());
+			directories.add(file);
 		}
 		return Lists.newArrayList(directories);
 	}
