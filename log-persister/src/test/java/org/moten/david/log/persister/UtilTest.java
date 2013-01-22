@@ -19,12 +19,22 @@ public class UtilTest {
 			.getLogger(UtilTest.class.getName());
 
 	@Test
-	public void testGetLogsNoWildcards() {
+	public void testGetLogsNoWildcardsRelativePath() {
 
 		List<File> files = Util
 				.getFilesFromPathWithRegexFilename("src/test/resources/test.log");
 		assertEquals("test.log", files.get(0).getName());
 		assertEquals(1, files.size());
+	}
+
+	@Test
+	public void testGetLogsNoWildcardsAbsolutePath() {
+		File file = new File("src/test/resources/test.log");
+		List<File> files = Util.getFilesFromPathWithRegexFilename(file
+				.getAbsolutePath());
+		Set<String> set = toSet(files);
+		assertTrue(set.contains("test.log"));
+		assertEquals(1, set.size());
 	}
 
 	@Test

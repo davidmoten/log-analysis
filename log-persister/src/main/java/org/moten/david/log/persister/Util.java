@@ -68,25 +68,28 @@ public class Util {
 
 	@VisibleForTesting
 	static List<File> getDirectories(String directoryPath) {
-		Set<File> directories = Sets.newHashSet();
-		DirectoryScanner scanner = new DirectoryScanner();
-		if (directoryPath.startsWith("/")) {
-			scanner.setBasedir("/");
-			// drop the leading / from the directory path for the includes
-			scanner.setIncludes(new String[] { directoryPath.substring(1) });
-		} else {
-			scanner.setBasedir(System.getProperty("user.dir"));
-			scanner.setIncludes(new String[] { directoryPath });
-
+		if (!directoryPath.contains("*"))
+			return Lists.newArrayList(new File(directoryPath));
+		else {
+			Set<File> directories = Sets.newHashSet();
+			DirectoryScanner scanner = new DirectoryScanner();
+			if (directoryPath.startsWith("/")) {
+				scanner.setBasedir("/");
+				// drop the leading / from the directory path for the includes
+				scanner.setIncludes(new String[] { directoryPath.substring(1) });
+			} else {
+				scanner.setBasedir(System.getProperty("user.dir"));
+				scanner.setIncludes(new String[] { directoryPath });
+			}
+			scanner.setCaseSensitive(false);
+			scanner.scan();
+			String[] paths = scanner.getIncludedDirectories();
+			for (String p : paths) {
+				File file = new File(p);
+				directories.add(file);
+			}
+			return Lists.newArrayList(directories);
 		}
-		scanner.setCaseSensitive(false);
-		scanner.scan();
-		String[] paths = scanner.getIncludedDirectories();
-		for (String p : paths) {
-			File file = new File(p);
-			directories.add(file);
-		}
-		return Lists.newArrayList(directories);
 	}
 
 	/**
