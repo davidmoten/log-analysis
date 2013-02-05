@@ -8,7 +8,7 @@ import java.util.Map;
  * @author dave
  * 
  */
-class LogEntry {
+public class LogEntry {
 
 	private final long time;
 	private final Map<String, String> properties;

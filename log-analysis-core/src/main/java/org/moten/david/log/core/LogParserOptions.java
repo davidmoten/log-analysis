@@ -105,12 +105,20 @@ public class LogParserOptions {
 		if (group.parser != null)
 			parser = group.parser;
 
-		Pattern pattern = Pattern.compile(parser.pattern);
-		Pattern messagePattern = Pattern.compile(parser.messagePattern);
-		DateFormat df = new SimpleDateFormat(parser.timestampFormat);
-		BiMap<String, Integer> patternGroups = createGroupMap(parser.patternGroups);
+		return load(parser.pattern, parser.patternGroups,
+				parser.messagePattern, parser.timestampFormat, parser.timezone,
+				parser.multiline);
+	}
+
+	public static LogParserOptions load(String pPattern, String pPatternGroups,
+			String pMessagePattern, String pTimestampFormat, String pTimezone,
+			boolean pMultiline) {
+		Pattern pattern = Pattern.compile(pPattern);
+		Pattern messagePattern = Pattern.compile(pMessagePattern);
+		DateFormat df = new SimpleDateFormat(pTimestampFormat);
+		BiMap<String, Integer> patternGroups = createGroupMap(pPatternGroups);
 		return new LogParserOptions(pattern, patternGroups, messagePattern, df,
-				parser.timezone, parser.multiline);
+				pTimezone, pMultiline);
 	}
 
 	/**
