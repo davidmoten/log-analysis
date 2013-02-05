@@ -57,7 +57,7 @@ public class Database {
 
 	private static final String ROOT_PASSWORD = "B8172764CBADA2F68674EE690B9D0F01A2EA7EB73005A738DE0DDD052538153F";
 
-	private static final int NETWORK_CONNECTION_POOL_SIZE_MAX = 15;
+	private static final int NETWORK_CONNECTION_POOL_SIZE_MAX = 100;
 
 	private static final int NETWORK_CONNECTION_POOL_SIZE_MIN = 2;
 
@@ -130,6 +130,7 @@ public class Database {
 		if (firstTime)
 			configureDatabase(db);
 		firstTime = false;
+		log.info("connected to database");
 		return db;
 	}
 
@@ -497,8 +498,9 @@ public class Database {
 	}
 
 	public static void main(String[] args) {
-		createDatabaseIfDoesNotExist("remote:localhost/logs");
-		Database d = new Database("remote:localhost/logs", "admin", "admin");
+		String host = "jenkins.amsa.gov.au";
+		createDatabaseIfDoesNotExist("remote:" + host + "/logs");
+		Database d = new Database("remote:" + host + "/logs", "admin", "admin");
 		HashMap<String, String> map = Maps.newHashMap();
 		map.put("timeToCreateMs", "1200");
 		d.persist(new LogEntry(System.currentTimeMillis(), map));
