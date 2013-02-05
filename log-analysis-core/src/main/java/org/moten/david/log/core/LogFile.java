@@ -116,6 +116,7 @@ public class LogFile {
 					LogEntry entry = parser.parse(source, line);
 					if (entry != null) {
 						db.persist(entry);
+						log.info("persisted");
 						incrementCounter();
 					}
 				} catch (Throwable e) {
