@@ -31,6 +31,7 @@ import com.orientechnologies.orient.client.remote.OServerAdmin;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.exception.ODatabaseException;
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
@@ -109,6 +110,7 @@ public class Database {
 					.createDatabase(databaseName, DATABASE_TYPE_DOCUMENT,
 							DATABASE_STORAGE_TYPE_LOCAL).close();
 			log.info("created");
+			ODatabaseException r;
 		} catch (RuntimeException e) {
 			log.info("could not create database, perhaps it exists already: "
 					+ e.getMessage());

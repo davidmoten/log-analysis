@@ -42,7 +42,7 @@ public class Main {
 		Watcher w = new Watcher(provider, configuration);
 		log.info("starting watcher");
 		w.start();
-		log.info("finished");
+		log.info("started");
 	}
 
 	private static void setupLogging() throws IOException {

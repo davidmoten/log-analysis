@@ -77,6 +77,7 @@ public class LogFile {
 		tailer = new Tailer(file, listener, checkIntervalMs, false);
 
 		// start in separate thread
+		log.info("starting tailer thread");
 		executor.execute(tailer);
 	}
 
@@ -105,12 +106,11 @@ public class LogFile {
 			@Override
 			public void fileRotated() {
 				log.info("file rotated");
-
 			}
 
 			@Override
 			public synchronized void handle(String line) {
-				log.fine(source + ": " + line);
+				log.info(source + ": " + line);
 				try {
 					db.useInCurrentThread();
 					LogEntry entry = parser.parse(source, line);
