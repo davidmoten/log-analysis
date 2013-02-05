@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -496,9 +497,11 @@ public class Database {
 	}
 
 	public static void main(String[] args) {
-		createDatabaseIfDoesNotExist("remote:jenkins.amsa.gov.au/logs");
-		Database d = new Database("remote:jenkins.amsa.gov.au/logs", "admin",
-				"admin");
+		createDatabaseIfDoesNotExist("remote:localhost/logs");
+		Database d = new Database("remote:localhost/logs", "admin", "admin");
+		HashMap<String, String> map = Maps.newHashMap();
+		map.put("timeToCreateMs", "1200");
+		d.persist(new LogEntry(System.currentTimeMillis(), map));
 		d.close();
 	}
 
