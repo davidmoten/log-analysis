@@ -1,3 +1,4 @@
+:with_toc_data
 log-analysis
 ============
 Analyzes log files for the purposes of time series analysis.
