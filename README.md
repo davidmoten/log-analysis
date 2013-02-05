@@ -1,7 +1,6 @@
 log-analysis
 ============
 Analyzes log files for the purposes of time series analysis.
-:with_toc_data
 
 Uses [orientdb](https://github.com/nuvolabase/orientdb) for high speed persistence and querying and [flot](http://www.flotcharts.org/) for javascript graphs.
 
