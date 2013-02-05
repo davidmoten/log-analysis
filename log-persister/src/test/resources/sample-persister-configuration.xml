@@ -21,6 +21,7 @@
 		<log source="cts">
 			<path>/ausdev/container/logs/cts/cts.log</path>
 		</log>
+		<!-- 
 		<log watch="false" source="cts">
 			<path>/ausdev/container/logs/cts/cts.log\..*</path>
 		</log>
@@ -38,5 +39,6 @@
 			<path>/ausdev/container/logs/cts/cts-adapter-flight-info-service.log\..*
 			</path>
 		</log>
+		-->
 	</group>
 </ns2:configuration>

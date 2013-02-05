@@ -72,6 +72,7 @@ public class LogFile {
 	public void tail(DatabaseFactory factory) {
 
 		TailerListener listener = createListener(factory.create());
+
 		// tail from the start of the file
 		tailer = new Tailer(file, listener, checkIntervalMs, false);
 
@@ -109,6 +110,7 @@ public class LogFile {
 
 			@Override
 			public synchronized void handle(String line) {
+				log.fine(source + ": " + line);
 				try {
 					db.useInCurrentThread();
 					LogEntry entry = parser.parse(source, line);
@@ -116,7 +118,7 @@ public class LogFile {
 						db.persist(entry);
 						incrementCounter();
 					}
-				} catch (RuntimeException e) {
+				} catch (Throwable e) {
 					log.log(Level.WARNING, e.getMessage(), e);
 					// reconnect
 					try {
