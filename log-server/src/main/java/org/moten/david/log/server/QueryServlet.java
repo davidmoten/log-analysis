@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.moten.david.log.core.Database;
+import org.moten.david.log.core.DatabaseOrient;
 import org.moten.david.log.core.Field;
 import org.moten.david.log.orientdb.SqlSelect;
 import org.moten.david.log.query.BucketQuery;
@@ -96,7 +97,7 @@ public class QueryServlet extends HttpServlet {
 
 		setupLogging();
 		System.setProperty("network.lockTimeout", "10000");
-		Database db = new Database("remote:localhost/logs", "admin", "admin");
+		Database db = new DatabaseOrient("remote:localhost/logs", "admin", "admin");
 
 		String json = getJson(db, "select " + Field.TIMESTAMP + ", "
 				+ Field.PROPS + "[specialNumber]." + Field.VALUE + " as "

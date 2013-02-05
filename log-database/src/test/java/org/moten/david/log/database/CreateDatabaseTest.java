@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.moten.david.log.core.Database;
+import org.moten.david.log.core.DatabaseOrient;
 
 public class CreateDatabaseTest {
 
@@ -28,7 +29,7 @@ public class CreateDatabaseTest {
 		} catch (IOException e) {
 			// do nothing
 		}
-		Database db = new Database(dbDirectory);
+		Database db = new DatabaseOrient(dbDirectory);
 		db.close();
 	}
 }

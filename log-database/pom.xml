@@ -14,6 +14,10 @@
 		<max.heap.size>3500m</max.heap.size>
 		<java.opts>-Xmx${max.heap.size} -Dfile.mmap.maxMemory=6.4gb
 			-Dnetwork.lockTimeout=${orientdb.network.lockTimeout}</java.opts>
+		<orientdb.server>${project.build.directory}/orientdb-${orientdb.version}/bin/${command}.sh</orientdb.server>
+		<orientdb.dir>${project.build.directory}/orientdb-${orientdb.version}/bin/</orientdb.dir>
+		<executable>${orientdb.server}</executable>
+		<executable.working.dir>${orientdb.dir}</executable.working.dir>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -49,8 +53,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<executable>${project.build.directory}/orientdb-${orientdb.version}/bin/${command}.sh</executable>
-					<workingDirectory>${project.build.directory}/orientdb-${orientdb.version}/bin/</workingDirectory>
+					<executable>${executable}</executable>
+					<workingDirectory>${executable.working.dir}</workingDirectory>
 					<environmentVariables>
 						<JAVA_OPTS>${java.opts}</JAVA_OPTS>
 					</environmentVariables>

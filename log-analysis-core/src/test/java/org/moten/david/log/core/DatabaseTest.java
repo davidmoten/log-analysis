@@ -31,7 +31,7 @@ public class DatabaseTest {
 
 	@Test
 	public void testCreateDbAndPersistRecords() {
-		Database p = new Database(new File("target/test1"));
+		Database p = new DatabaseOrient(new File("target/test1"));
 		long t = 0;
 		for (int i = 1; i <= 1000; i++) {
 			Map<String, String> map = Maps.newHashMap();
@@ -51,7 +51,7 @@ public class DatabaseTest {
 
 		final String lineMessage = " INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor - fixes queue size = 0";
 		System.out.println("creating database");
-		Database p = new Database(new File("target/test2"));
+		Database p = new DatabaseOrient(new File("target/test2"));
 		LogParser parser = new LogParser(LogParserOptions.load());
 		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT_DEFAULT);
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -106,7 +106,7 @@ public class DatabaseTest {
 		File f = new File(filename);
 		// create file not a directory
 		f.createNewFile();
-		Database.createDatabase(f);
+		DatabaseOrient.createDatabase(f);
 	}
 
 	@Test
@@ -123,8 +123,8 @@ public class DatabaseTest {
 	}
 
 	static Database createAndConnectTo(String path) {
-		new Database(new File(path)).close();
-		return new Database("local:" + path, "admin", "admin");
+		new DatabaseOrient(new File(path)).close();
+		return new DatabaseOrient("local:" + path, "admin", "admin");
 	}
 
 	@Test(expected = NullPointerException.class)

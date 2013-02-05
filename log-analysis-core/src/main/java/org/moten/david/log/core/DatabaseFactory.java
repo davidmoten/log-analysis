@@ -3,7 +3,7 @@ package org.moten.david.log.core;
 import java.io.File;
 
 /**
- * Factory for creating instances of {@link Database}.
+ * Factory for creating instances of {@link DatabaseOrient}.
  * 
  * @author dave
  * 
@@ -46,7 +46,7 @@ public class DatabaseFactory {
 
 	private synchronized Database getFileDb() {
 		if (fileDb == null)
-			fileDb = new Database(file);
+			fileDb = new DatabaseOrient(file);
 		return fileDb;
 	}
 
@@ -57,7 +57,7 @@ public class DatabaseFactory {
 	 */
 	public Database create() {
 		if (file == null)
-			return new Database(url, username, password);
+			return new DatabaseOrient(url, username, password);
 		else
 			return getFileDb();
 	}
