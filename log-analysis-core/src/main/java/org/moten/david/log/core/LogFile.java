@@ -110,13 +110,13 @@ public class LogFile {
 
 			@Override
 			public synchronized void handle(String line) {
-				log.info(source + ": " + line);
+				log.fine(source + ": " + line);
 				try {
 					db.useInCurrentThread();
 					LogEntry entry = parser.parse(source, line);
 					if (entry != null) {
 						db.persist(entry);
-						log.info("persisted");
+						log.fine("persisted");
 						incrementCounter();
 					}
 				} catch (Throwable e) {
