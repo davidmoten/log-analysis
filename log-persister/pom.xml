@@ -68,7 +68,6 @@
 							<value>${orientdb.network.lockTimeout}</value>
 						</systemProperty>
 					</systemProperties>
-					<
 				</configuration>
 			</plugin>
 		</plugins>

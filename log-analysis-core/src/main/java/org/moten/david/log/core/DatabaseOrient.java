@@ -134,7 +134,9 @@ public class DatabaseOrient implements Database {
 		return db;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#reconnect()
 	 */
 	@Override
@@ -230,7 +232,9 @@ public class DatabaseOrient implements Database {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#useInCurrentThread()
 	 */
 	@Override
@@ -253,7 +257,7 @@ public class DatabaseOrient implements Database {
 		ODocument d = new ODocument(TABLE_ENTRY);
 		d.field(Field.TIMESTAMP, timestamp, OType.LONG);
 		d.field(Field.LOG_ID, id);
-		d.field(Field.TEXT, getString(entry.getProperties()));
+		d.field(Field.TEXT, Util.getString(entry.getProperties()));
 
 		Map<String, ODocument> map = Maps.newHashMap();
 		for (Entry<String, String> e : entry.getProperties().entrySet()) {
@@ -274,20 +278,12 @@ public class DatabaseOrient implements Database {
 		return key.replace(" ", "_");
 	}
 
-	private String getString(Map<String, String> properties) {
-		StringBuilder s = new StringBuilder();
-		s.append(properties.get(Field.LEVEL));
-		s.append(" ");
-		s.append(properties.get(Field.LOGGER));
-		s.append(" ");
-		s.append(properties.get(Field.METHOD));
-		s.append(" ");
-		s.append(properties.get(Field.MSG));
-		return s.toString();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.moten.david.log.core.Database#persist(org.moten.david.log.core.LogEntry)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.moten.david.log.core.Database#persist(org.moten.david.log.core.LogEntry
+	 * )
 	 */
 	@Override
 	public void persist(LogEntry entry) {
@@ -329,8 +325,11 @@ public class DatabaseOrient implements Database {
 		return new ValueAndType(s, OType.STRING);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.moten.david.log.core.Database#execute(org.moten.david.log.query.BucketQuery)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.moten.david.log.core.Database#execute(org.moten.david.log.query.
+	 * BucketQuery)
 	 */
 	@Override
 	public Buckets execute(BucketQuery query) {
@@ -366,7 +365,9 @@ public class DatabaseOrient implements Database {
 		return buckets;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#size()
 	 */
 	@Override
@@ -375,7 +376,9 @@ public class DatabaseOrient implements Database {
 		return db.getSize();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#getNumEntries()
 	 */
 	@Override
@@ -383,7 +386,9 @@ public class DatabaseOrient implements Database {
 		return db.countClass(TABLE_ENTRY);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#close()
 	 */
 	@Override
@@ -391,7 +396,9 @@ public class DatabaseOrient implements Database {
 		db.close();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#getKeys()
 	 */
 	@Override
@@ -400,7 +407,9 @@ public class DatabaseOrient implements Database {
 		return Sets.newHashSet("specialNumber");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#persistDummyRecords(long)
 	 */
 	@Override
@@ -447,7 +456,9 @@ public class DatabaseOrient implements Database {
 		log.info("database size=" + db.getSize());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.moten.david.log.core.Database#getLogs(long, long)
 	 */
 	@Override
@@ -511,8 +522,8 @@ public class DatabaseOrient implements Database {
 	public static void main(String[] args) {
 		String host = "jenkins.amsa.gov.au";
 		createDatabaseIfDoesNotExist("remote:" + host + "/logs");
-		Database d = new DatabaseOrient("remote:" + host + "/logs",
-				"admin", "admin");
+		Database d = new DatabaseOrient("remote:" + host + "/logs", "admin",
+				"admin");
 		HashMap<String, String> map = Maps.newHashMap();
 		map.put("timeToCreateMs", "1200");
 		d.persist(new LogEntry(System.currentTimeMillis(), map));
