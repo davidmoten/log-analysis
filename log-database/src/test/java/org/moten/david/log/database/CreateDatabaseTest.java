@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -31,5 +32,10 @@ public class CreateDatabaseTest {
 		}
 		Database db = new DatabaseOrient(dbDirectory);
 		db.close();
+	}
+
+	@Test
+	public void testCreateH2() throws SQLException, InterruptedException {
+
 	}
 }
