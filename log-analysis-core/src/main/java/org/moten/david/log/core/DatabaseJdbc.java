@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
@@ -12,6 +13,9 @@ import java.util.logging.Logger;
 
 import org.moten.david.log.query.BucketQuery;
 import org.moten.david.log.query.Buckets;
+
+import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 
 public class DatabaseJdbc implements Database {
 
@@ -87,8 +91,36 @@ public class DatabaseJdbc implements Database {
 
 	@Override
 	public Buckets execute(BucketQuery query) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info(query.toString());
+		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
+				query.getSql());
+		long t = System.currentTimeMillis();
+		List<ODocument> result = db.query(sqlQuery);
+		log.info("query result returned, queryTimeMs="
+				+ (System.currentTimeMillis() - t) + "ms");
+		Buckets buckets = new Buckets(query);
+		int i = 0;
+		for (ODocument doc : result) {
+			i++;
+			if (i % 10000 == 0)
+				log.info(i + " records");
+			Long timestamp = doc.field(Field.TIMESTAMP);
+			if (doc.field(Field.VALUE) != null) {
+				try {
+					Object o = doc.field(Field.VALUE);
+					double value;
+					if (o instanceof Number) {
+						value = ((Number) o).doubleValue();
+					} else
+						value = Double.parseDouble(o.toString());
+					buckets.add(timestamp, value);
+				} catch (NumberFormatException e) {
+					// not a number don't care about it
+				}
+			}
+		}
+		log.info("found " + result.size() + " records");
+		return buckets;
 	}
 
 	@Override
