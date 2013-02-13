@@ -287,7 +287,10 @@ public class DatabaseOrient implements Database {
 	 */
 	@Override
 	public void persist(LogEntry entry) {
-		persist(entry, true);
+		synchronized (this) {
+			useInCurrentThread();
+			persist(entry, true);
+		}
 	}
 
 	private static class ValueAndType {
@@ -333,36 +336,39 @@ public class DatabaseOrient implements Database {
 	 */
 	@Override
 	public Buckets execute(BucketQuery query) {
-		log.info(query.toString());
-		OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
-				query.getSql());
-		long t = System.currentTimeMillis();
-		List<ODocument> result = db.query(sqlQuery);
-		log.info("query result returned, queryTimeMs="
-				+ (System.currentTimeMillis() - t) + "ms");
-		Buckets buckets = new Buckets(query);
-		int i = 0;
-		for (ODocument doc : result) {
-			i++;
-			if (i % 10000 == 0)
-				log.info(i + " records");
-			Long timestamp = doc.field(Field.TIMESTAMP);
-			if (doc.field(Field.VALUE) != null) {
-				try {
-					Object o = doc.field(Field.VALUE);
-					double value;
-					if (o instanceof Number) {
-						value = ((Number) o).doubleValue();
-					} else
-						value = Double.parseDouble(o.toString());
-					buckets.add(timestamp, value);
-				} catch (NumberFormatException e) {
-					// not a number don't care about it
+		synchronized (this) {
+			useInCurrentThread();
+			log.info(query.toString());
+			OSQLSynchQuery<ODocument> sqlQuery = new OSQLSynchQuery<ODocument>(
+					query.getSql());
+			long t = System.currentTimeMillis();
+			List<ODocument> result = db.query(sqlQuery);
+			log.info("query result returned, queryTimeMs="
+					+ (System.currentTimeMillis() - t) + "ms");
+			Buckets buckets = new Buckets(query);
+			int i = 0;
+			for (ODocument doc : result) {
+				i++;
+				if (i % 10000 == 0)
+					log.info(i + " records");
+				Long timestamp = doc.field(Field.TIMESTAMP);
+				if (doc.field(Field.VALUE) != null) {
+					try {
+						Object o = doc.field(Field.VALUE);
+						double value;
+						if (o instanceof Number) {
+							value = ((Number) o).doubleValue();
+						} else
+							value = Double.parseDouble(o.toString());
+						buckets.add(timestamp, value);
+					} catch (NumberFormatException e) {
+						// not a number don't care about it
+					}
 				}
 			}
+			log.info("found " + result.size() + " records");
+			return buckets;
 		}
-		log.info("found " + result.size() + " records");
-		return buckets;
 	}
 
 	/*
@@ -372,8 +378,10 @@ public class DatabaseOrient implements Database {
 	 */
 	@Override
 	public long size() {
-
-		return db.getSize();
+		synchronized (this) {
+			useInCurrentThread();
+			return db.getSize();
+		}
 	}
 
 	/*
@@ -383,7 +391,10 @@ public class DatabaseOrient implements Database {
 	 */
 	@Override
 	public long getNumEntries() {
-		return db.countClass(TABLE_ENTRY);
+		synchronized (this) {
+			useInCurrentThread();
+			return db.countClass(TABLE_ENTRY);
+		}
 	}
 
 	/*
@@ -403,8 +414,11 @@ public class DatabaseOrient implements Database {
 	 */
 	@Override
 	public Set<String> getKeys() {
-		// TODO implement getKeys
-		return Sets.newHashSet("specialNumber");
+		synchronized (this) {
+			useInCurrentThread();
+			// TODO implement getKeys
+			return Sets.newHashSet("specialNumber");
+		}
 	}
 
 	/*
@@ -414,46 +428,50 @@ public class DatabaseOrient implements Database {
 	 */
 	@Override
 	public void persistDummyRecords(long n) {
-		log.info("persisting dummy values");
-		db.declareIntent(new OIntentMassiveInsert());
-		long t = System.currentTimeMillis();
-		Random r = new Random();
-		for (long i = 0; i < n; i++) {
-			long time = t - TimeUnit.HOURS.toMillis(1)
-					+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
-			long specialNumber = i % (r.nextInt(100) + 1);
-			{
-				Map<String, String> map = Maps.newHashMap();
-				LogEntry entry = new LogEntry(time, map);
-				map.put(Field.SOURCE, "dummy");
-				map.put(Field.LOGGER, "something.stuff");
-				map.put(Field.LEVEL, "INFO");
-				double x = specialNumber * Math.random();
-				map.put(Field.MSG, "specialNumber=" + specialNumber
-						+ ",executionTimeSeconds=" + x);
-				map.put("specialNumber", x + "");
-				map.put("executionTimeSeconds", x + "");
-				persist(entry, false);
+		synchronized (this) {
+			useInCurrentThread();
+			log.info("persisting dummy values");
+			db.declareIntent(new OIntentMassiveInsert());
+			long t = System.currentTimeMillis();
+			Random r = new Random();
+			for (long i = 0; i < n; i++) {
+				long time = t - TimeUnit.HOURS.toMillis(1)
+						+ r.nextInt((int) TimeUnit.HOURS.toMillis(2));
+				long specialNumber = i % (r.nextInt(100) + 1);
+				{
+					Map<String, String> map = Maps.newHashMap();
+					LogEntry entry = new LogEntry(time, map);
+					map.put(Field.SOURCE, "dummy");
+					map.put(Field.LOGGER, "something.stuff");
+					map.put(Field.LEVEL, "INFO");
+					double x = specialNumber * Math.random();
+					map.put(Field.MSG, "specialNumber=" + specialNumber
+							+ ",executionTimeSeconds=" + x);
+					map.put("specialNumber", x + "");
+					map.put("executionTimeSeconds", x + "");
+					persist(entry, false);
+				}
+				{
+					Map<String, String> map = Maps.newHashMap();
+					LogEntry entry = new LogEntry(time, map);
+					map.put(Field.LOGGER, "another.logger");
+					map.put(Field.SOURCE, "dummy");
+					map.put(Field.LEVEL, "DEBUG");
+					long m = Math.round(100 * Math.random());
+					map.put(Field.MSG, "numberProcessed=" + m);
+					map.put("numberProcessed", m + "");
+					persist(entry, false);
+				}
+				if (i % 1000 == 0)
+					log.info("written " + i + " records");
 			}
-			{
-				Map<String, String> map = Maps.newHashMap();
-				LogEntry entry = new LogEntry(time, map);
-				map.put(Field.LOGGER, "another.logger");
-				map.put(Field.SOURCE, "dummy");
-				map.put(Field.LEVEL, "DEBUG");
-				long m = Math.round(100 * Math.random());
-				map.put(Field.MSG, "numberProcessed=" + m);
-				map.put("numberProcessed", m + "");
-				persist(entry, false);
-			}
-			if (i % 1000 == 0)
-				log.info("written " + i + " records");
+			db.declareIntent(null);
+			db.commit();
+			log.info("persisted " + n
+					+ " random values from the last hour to table "
+					+ TABLE_ENTRY);
+			log.info("database size=" + db.getSize());
 		}
-		db.declareIntent(null);
-		db.commit();
-		log.info("persisted " + n
-				+ " random values from the last hour to table " + TABLE_ENTRY);
-		log.info("database size=" + db.getSize());
 	}
 
 	/*
@@ -463,30 +481,34 @@ public class DatabaseOrient implements Database {
 	 */
 	@Override
 	public Iterable<String> getLogs(long startTime, long finishTime) {
-		OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
-				"select from " + TABLE_ENTRY + " where " + Field.TIMESTAMP
-						+ " between " + startTime + " and " + finishTime
-						+ " order by " + Field.TIMESTAMP);
-		List<ODocument> entries = db.query(query);
-		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		df.setTimeZone(TimeZone.getTimeZone("UTC"));
+		synchronized (this) {
+			useInCurrentThread();
+			OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>(
+					"select from " + TABLE_ENTRY + " where " + Field.TIMESTAMP
+							+ " between " + startTime + " and " + finishTime
+							+ " order by " + Field.TIMESTAMP);
+			List<ODocument> entries = db.query(query);
+			final DateFormat df = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss.SSS");
+			df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-		final Iterator<String> it = Iterators.transform(entries.iterator(),
-				new Function<ODocument, String>() {
+			final Iterator<String> it = Iterators.transform(entries.iterator(),
+					new Function<ODocument, String>() {
 
-					@Override
-					public String apply(ODocument input) {
-						return getLine(df, input);
-					}
-				});
+						@Override
+						public String apply(ODocument input) {
+							return getLine(df, input);
+						}
+					});
 
-		return new Iterable<String>() {
+			return new Iterable<String>() {
 
-			@Override
-			public Iterator<String> iterator() {
-				return it;
-			}
-		};
+				@Override
+				public Iterator<String> iterator() {
+					return it;
+				}
+			};
+		}
 	}
 
 	private static String getLine(DateFormat df, ODocument d) {

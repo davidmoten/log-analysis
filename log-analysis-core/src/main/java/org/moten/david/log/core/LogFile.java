@@ -112,7 +112,6 @@ public class LogFile {
 			public synchronized void handle(String line) {
 				log.fine(source + ": " + line);
 				try {
-					db.useInCurrentThread();
 					LogEntry entry = parser.parse(source, line);
 					if (entry != null) {
 						db.persist(entry);
