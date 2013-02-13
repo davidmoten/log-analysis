@@ -272,6 +272,7 @@ public class DatabaseOrient implements Database {
 		d.save();
 		if (commit)
 			db.commit();
+		db.close();
 	}
 
 	private String cleanKey(String key) {
