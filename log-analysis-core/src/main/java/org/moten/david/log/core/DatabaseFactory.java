@@ -15,6 +15,7 @@ public class DatabaseFactory {
 	private final String password;
 	private final File file;
 	private Database fileDb;
+	private Database remoteDb;
 
 	/**
 	 * Constructor.
@@ -51,13 +52,28 @@ public class DatabaseFactory {
 	}
 
 	/**
+	 * Return singleton instance of remote Database.
+	 * 
+	 * @param url
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	private synchronized Database getRemoteDb(String url, String username,
+			String password) {
+		if (remoteDb == null)
+			remoteDb = new DatabaseOrient(url, username, password);
+		return remoteDb;
+	}
+
+	/**
 	 * Creates an instance of the logs database including fields and indexes.
 	 * 
 	 * @return
 	 */
 	public Database create() {
 		if (file == null)
-			return new DatabaseOrient(url, username, password);
+			return getRemoteDb(url, username, password);
 		else
 			return getFileDb();
 	}
