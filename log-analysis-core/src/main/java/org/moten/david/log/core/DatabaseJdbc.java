@@ -34,18 +34,19 @@ public class DatabaseJdbc implements Database {
 		this.password = password;
 		try {
 			connection = DriverManager.getConnection(url, username, password);
+			createDatabase(connection);
 			connection.setAutoCommit(false);
 			stmtInsertEntry = connection
-					.prepareStatement("insert into Entry(entry_id,text, entry_time) values(?,?,?)");
+					.prepareStatement("insert into Entry(entry_id, time,text) values(?,?,?)");
 			stmtInsertProperty = connection
-					.prepareStatement("insert into Property(entry_id,name,val) values(?,?,?)");
+					.prepareStatement("insert into Property(entry_id,name,numeric_Value,text_Value) values(?,?,?,?)");
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public DatabaseJdbc(File file) {
-		this("jdbc:h2:mem:", "", "");
+		this("jdbc:h2:" + file.getAbsolutePath(), "", "");
 	}
 
 	@Override
