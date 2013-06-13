@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,17 +20,17 @@ import org.moten.david.log.query.Buckets;
 
 import com.google.common.collect.Maps;
 
-public class DatabaseTest {
+public class DatabaseJdbcTest {
 
-	private static final String DATABASE_TEST_CREATE = "target/test-create";
-	private static final String DATABASE_TEST_CREATE_2 = "target/test-create2";
-	private static final String DATABASE_TEST_PERSIST_DUMMY = "target/test-persist";
+	private static final String DATABASE_TEST_CREATE = "target/test-jdbc-create";
+	private static final String DATABASE_TEST_CREATE_2 = "target/test-jdbc-create2";
+	private static final String DATABASE_TEST_PERSIST_DUMMY = "target/jdbc-test-persist";
 	private static final String DATABASE_TEST_BUCKET_QUERY = "target/test-bucket-query";
 	private static final String DATABASE_TEST_BUCKET_QUERY_NULL = "target/test-bucket-query-null";
 
 	@Test
 	public void testCreateDbAndPersistRecords() {
-		Database p = new DatabaseOrient(new File("target/test1"));
+		Database p = new DatabaseJdbc(new File("target/test1"));
 		long t = 0;
 		for (int i = 1; i <= 1000; i++) {
 			Map<String, String> map = Maps.newHashMap();
@@ -51,7 +50,7 @@ public class DatabaseTest {
 
 		final String lineMessage = " INFO  au.gov.amsa.er.craft.tracking.actor.FixesPersisterActor - fixes queue size = 0";
 		System.out.println("creating database");
-		Database p = new DatabaseOrient(new File("target/test2"));
+		Database p = new DatabaseJdbc(new File("target/test2"));
 		LogParser parser = new LogParser(LogParserOptions.load());
 		DateFormat df = new SimpleDateFormat(LogParser.DATE_FORMAT_DEFAULT);
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -99,16 +98,6 @@ public class DatabaseTest {
 		db.close();
 	}
 
-	@Test(expected = RuntimeException.class)
-	public void testCreateDatabaseCannotDeleteDirectoryBeforeCreationAndShouldThrowRuntimeException()
-			throws IOException {
-		String filename = "target/testCreateCannot";
-		File f = new File(filename);
-		// create file not a directory
-		f.createNewFile();
-		DatabaseOrient.createDatabase(f);
-	}
-
 	@Test
 	public void testPersistDummyRecords() {
 		Database db = createAndConnectTo(DATABASE_TEST_PERSIST_DUMMY);
@@ -123,8 +112,8 @@ public class DatabaseTest {
 	}
 
 	static Database createAndConnectTo(String path) {
-		new DatabaseOrient(new File(path)).close();
-		return new DatabaseOrient("local:" + path, "admin", "admin");
+		new DatabaseJdbc(new File(path)).close();
+		return new DatabaseJdbc("local:" + path, "admin", "admin");
 	}
 
 	@Test(expected = NullPointerException.class)

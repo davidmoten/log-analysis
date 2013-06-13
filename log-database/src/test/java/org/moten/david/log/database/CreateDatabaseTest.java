@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.moten.david.log.core.Database;
-import org.moten.david.log.core.DatabaseOrient;
+import org.moten.david.log.core.DatabaseJdbc;
 
 public class CreateDatabaseTest {
 
@@ -30,7 +30,7 @@ public class CreateDatabaseTest {
 		} catch (IOException e) {
 			// do nothing
 		}
-		Database db = new DatabaseOrient(dbDirectory);
+		Database db = new DatabaseJdbc(dbDirectory);
 		db.close();
 	}
 

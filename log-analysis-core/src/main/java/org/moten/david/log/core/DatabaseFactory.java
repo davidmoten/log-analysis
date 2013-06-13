@@ -47,7 +47,7 @@ public class DatabaseFactory {
 
 	private synchronized Database getFileDb() {
 		if (fileDb == null)
-			fileDb = new DatabaseOrient(file);
+			fileDb = new DatabaseJdbc(file);
 		return fileDb;
 	}
 
@@ -62,7 +62,7 @@ public class DatabaseFactory {
 	private synchronized Database getRemoteDb(String url, String username,
 			String password) {
 		if (remoteDb == null)
-			remoteDb = new DatabaseOrient(url, username, password);
+			remoteDb = new DatabaseJdbc(url, username, password);
 		return remoteDb;
 	}
 

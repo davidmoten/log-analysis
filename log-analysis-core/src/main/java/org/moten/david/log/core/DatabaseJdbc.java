@@ -1,5 +1,6 @@
 package org.moten.david.log.core;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -43,6 +44,10 @@ public class DatabaseJdbc implements Database {
 		}
 	}
 
+	public DatabaseJdbc(File file) {
+		this("jdbc:h2:mem:", "", "");
+	}
+
 	@Override
 	public Database reconnect() {
 		if (connection != null)
@@ -52,6 +57,29 @@ public class DatabaseJdbc implements Database {
 				log.log(Level.WARNING, e.getMessage(), e);
 			}
 		return new DatabaseJdbc(url, username, password);
+	}
+
+	public static void createDatabase(Connection con) {
+
+		execute(con,
+				"create table if not exists entry( entry_id varchar2(255) primary key, time timestamp not null,text varchar2(4000) not null)");
+		execute(con,
+				"create table if not exists property("
+						+ " entry_id varchar2(255) not null,"
+						+ " name varchar2(255) not null,"
+						+ " numeric_value double,"
+						+ " text_value varchar2(1000)"
+						+ ", primary key (entry_id, name) "
+						+ ", constraint fk_property_entry_id foreign key (entry_id) references entry(entry_id) "
+						+ ")");
+	}
+
+	private static void execute(Connection con, String sql) {
+		try {
+			con.prepareStatement(sql).execute();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
